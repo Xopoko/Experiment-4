@@ -1,0 +1,85 @@
+{
+  "shape": [
+    2,
+    2,
+    2
+  ],
+  "cases": [
+    {
+      "spec": {
+        "name": "cube_free",
+        "shape": [
+          2,
+          2,
+          2
+        ],
+        "boundary_conditions": [
+          "free",
+          "free",
+          "free"
+        ],
+        "n_sites": 8
+      },
+      "num_edges": 12,
+      "energy_histogram": {
+        "-12": 2,
+        "-6": 16,
+        "-4": 30,
+        "-2": 48,
+        "0": 64,
+        "2": 48,
+        "4": 30,
+        "6": 16,
+        "12": 2
+      },
+      "validation": {
+        "K_values": [
+          -1.0,
+          -0.4,
+          0.0,
+          0.6,
+          1.2
+        ],
+        "max_abs_error": 1.862645149230957e-09
+      }
+    },
+    {
+      "spec": {
+        "name": "cube_pbc",
+        "shape": [
+          2,
+          2,
+          2
+        ],
+        "boundary_conditions": [
+          "pbc",
+          "pbc",
+          "pbc"
+        ],
+        "n_sites": 8
+      },
+      "num_edges": 12,
+      "energy_histogram": {
+        "-12": 2,
+        "-6": 16,
+        "-4": 30,
+        "-2": 48,
+        "0": 64,
+        "2": 48,
+        "4": 30,
+        "6": 16,
+        "12": 2
+      },
+      "validation": {
+        "K_values": [
+          -1.0,
+          -0.4,
+          0.0,
+          0.6,
+          1.2
+        ],
+        "max_abs_error": 1.862645149230957e-09
+      }
+    }
+  ]
+}
