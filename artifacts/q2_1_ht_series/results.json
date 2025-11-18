@@ -1,0 +1,1592 @@
+{
+  "density_by_edges": {
+    "8": "438",
+    "6": "44",
+    "4": "6"
+  },
+  "clusters": [
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 8,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 8,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 4,
+      "num_vertices": 4,
+      "count_origin_embeddings": 8,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 4,
+      "num_vertices": 4,
+      "count_origin_embeddings": 8,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 8,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 8,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 16,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 4,
+      "num_vertices": 4,
+      "count_origin_embeddings": 8,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 6,
+      "num_vertices": 6,
+      "count_origin_embeddings": 12,
+      "density_per_site": "2"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 8,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 8,
+      "count_origin_embeddings": 8,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    },
+    {
+      "num_edges": 8,
+      "num_vertices": 7,
+      "count_origin_embeddings": 7,
+      "density_per_site": "1"
+    }
+  ],
+  "series_expr": "300031*K**8/840 + 541*K**6/15 + 23*K**4/4 + 3*K**2/2 + log(2)",
+  "coefficients": {
+    "a_0": "log(2)",
+    "a_1": "3/2",
+    "a_2": "23/4",
+    "a_3": "541/15",
+    "a_4": "300031/840"
+  },
+  "num_clusters": 262,
+  "max_coord": 2,
+  "notes": "Counts include simple loops (length 4/6/8) and two-plaquette figure-eights."
+}
