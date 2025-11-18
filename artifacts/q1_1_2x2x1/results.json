@@ -1,0 +1,133 @@
+{
+  "lattice": [
+    2,
+    2,
+    1
+  ],
+  "results": {
+    "free": {
+      "boundary_conditions": {
+        "bc_x": "free",
+        "bc_y": "free",
+        "bc_z": "free"
+      },
+      "num_bonds": 4,
+      "terms": [
+        {
+          "bond_sum": -4,
+          "magnetization": 0,
+          "degeneracy": 2
+        },
+        {
+          "bond_sum": 0,
+          "magnetization": -2,
+          "degeneracy": 4
+        },
+        {
+          "bond_sum": 0,
+          "magnetization": 0,
+          "degeneracy": 4
+        },
+        {
+          "bond_sum": 0,
+          "magnetization": 2,
+          "degeneracy": 4
+        },
+        {
+          "bond_sum": 4,
+          "magnetization": -4,
+          "degeneracy": 1
+        },
+        {
+          "bond_sum": 4,
+          "magnetization": 4,
+          "degeneracy": 1
+        }
+      ],
+      "energy_histogram": {
+        "-4": 2,
+        "0": 12,
+        "4": 2
+      },
+      "validation": {
+        "check_points": [
+          [
+            0.3,
+            -0.1
+          ],
+          [
+            0.0,
+            0.5
+          ],
+          [
+            1.0,
+            0.0
+          ]
+        ],
+        "max_abs_partition_error": 7.105427357601002e-15
+      }
+    },
+    "pbc_xy": {
+      "boundary_conditions": {
+        "bc_x": "pbc",
+        "bc_y": "pbc",
+        "bc_z": "free"
+      },
+      "num_bonds": 8,
+      "terms": [
+        {
+          "bond_sum": -8,
+          "magnetization": 0,
+          "degeneracy": 2
+        },
+        {
+          "bond_sum": 0,
+          "magnetization": -2,
+          "degeneracy": 4
+        },
+        {
+          "bond_sum": 0,
+          "magnetization": 0,
+          "degeneracy": 4
+        },
+        {
+          "bond_sum": 0,
+          "magnetization": 2,
+          "degeneracy": 4
+        },
+        {
+          "bond_sum": 8,
+          "magnetization": -4,
+          "degeneracy": 1
+        },
+        {
+          "bond_sum": 8,
+          "magnetization": 4,
+          "degeneracy": 1
+        }
+      ],
+      "energy_histogram": {
+        "-8": 2,
+        "0": 12,
+        "8": 2
+      },
+      "validation": {
+        "check_points": [
+          [
+            0.3,
+            -0.1
+          ],
+          [
+            0.0,
+            0.5
+          ],
+          [
+            1.0,
+            0.0
+          ]
+        ],
+        "max_abs_partition_error": 7.105427357601002e-15
+      }
+    }
+  }
+}
