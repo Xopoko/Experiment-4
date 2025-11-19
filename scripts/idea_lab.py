@@ -18,11 +18,14 @@ idea_lab.py — минимальный фреймворк «операторов
 
 from __future__ import annotations
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional, Callable
+import argparse
 import itertools
+import json
 import math
 import random
-import json
+
 import numpy as np
 
 
@@ -577,6 +580,145 @@ def _toy_example() -> Dict[str, Any]:
     return {"divergence": div, "convergence": conv, "recombination": recomb, "uzzi_z": uzzi}
 
 
+def generate_task_trace(task_description: str, random_seed: int = 42) -> Dict[str, Any]:
+    """Сборка трассы операторов под конкретную формулировку задачи."""
+    target = IdeaGraph(
+        goals={
+            "task": task_description,
+            "order_target": "K^10",
+            "runtime_budget_min": 10,
+        },
+        constraints={"only_python": True, "max_patch": "2x3x3"},
+    )
+    target.add_node("Task", description=task_description)
+    target.add_node("Enumerators", role="algorithm", focus="cluster_series")
+    target.add_node("Series", role="artifact", metric="χ(K)")
+    target.add_node("Validation", role="check", method="finite_patch")
+    target.add_edge("Task", "Enumerators", "requires")
+    target.add_edge("Enumerators", "Series", "produces")
+    target.add_edge("Series", "Validation", "checked_by")
+
+    base = IdeaGraph()
+    base.add_node("SAW", domain="self_avoiding_walks")
+    base.add_node("Counting", domain="transfer_matrix")
+    base.add_node("Benchmarks", domain="2D_series")
+    base.add_edge("SAW", "Counting", "requires")
+    base.add_edge("Counting", "Benchmarks", "checked_by")
+    base.add_edge("SAW", "Benchmarks", "produces")
+
+    engine = IdeaEngine(random_seed=random_seed)
+    morph_axes = {
+        "lattice_patch": ["2x3x3", "3x3x3", "2x3x4"],
+        "state_repr": ["python_dfs", "frontier_dp", "polymer_basis"],
+        "pruning": ["none", "connectivity", "symmetry_orbits"],
+        "validation": ["small_lattice", "HT_series_crosscheck", "autocheck"],
+        "acceleration": ["single_core", "multiprocessing", "gpu_like"],
+    }
+    divergence = engine.run_divergence(
+        target,
+        morph_axes=morph_axes,
+        cca_rule=lambda cfg: not (
+            cfg["lattice_patch"] == "3x3x3" and cfg["state_repr"] == "python_dfs"
+        ),
+        top_k=8,
+        triz=("order_depth", "runtime"),
+        analogize=(target, base, ["requires", "produces", "checked_by"]),
+        blend=(target, base, [("Enumerators", "Counting"), ("Validation", "Benchmarks")]),
+        serendipity_sources=[
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP",
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: graph homology pruning",
+        ],
+        k=4,
+        abduct=(
+            "runtime_explosion",
+            [
+                {"name": "lack_pruning", "prior": 0.4, "likelihood": 0.7},
+                {"name": "python_overhead", "prior": 0.3, "likelihood": 0.5},
+                {"name": "memory_pressure", "prior": 0.3, "likelihood": 0.6},
+            ],
+        ),
+    )
+
+    convergence = engine.run_convergence(
+        target,
+        aspect=("abstraction", +0.5),
+        re_represent={"remove": ["only_python"], "decompose": []},
+        invariant=(["translation", "parity"], "enforce"),
+        extreme=("max_edges", "inf"),
+        thought=(
+            ["connected_only"],
+            "wraparound_edges",
+            ["cycle_basis_filter", "bridge_prune"],
+        ),
+        surprise=(np.array([0.5, 0.3, 0.2]), np.array([0.2, 0.5, 0.3])),
+    )
+
+    recomb = recombination_metrics(
+        [
+            ["frontier_dp", "pbc_wrap", "symmetry_orbits"],
+            ["dfs_walks", "loop_hash", "autocheck"],
+            ["frontier_dp", "polymer_basis", "reweighting"],
+        ]
+    )
+    uzzi = uzzi_zscore(
+        pair_counts={
+            ("frontier_dp", "symmetry_orbits"): 2,
+            ("dfs_walks", "loop_hash"): 5,
+        },
+        marginals={"frontier_dp": 10, "symmetry_orbits": 2, "dfs_walks": 15, "loop_hash": 8},
+        pair=("frontier_dp", "symmetry_orbits"),
+    )
+
+    return {
+        "task": task_description,
+        "divergence": divergence,
+        "convergence": convergence,
+        "recombination": recomb,
+        "uzzi_z": uzzi,
+    }
+
+
+def parse_cli_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="IdeaLab operator trace generator")
+    parser.add_argument(
+        "--task",
+        required=True,
+        help="Краткое текстовое описание эксперимента/вопроса",
+    )
+    parser.add_argument(
+        "--json-out",
+        type=Path,
+        help="Путь для сохранения JSON-трассы",
+    )
+    parser.add_argument(
+        "--text-out",
+        type=Path,
+        help="Путь для сохранения текстового представления",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Сид генератора случайностей для IdeaEngine",
+    )
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_cli_args()
+    trace = generate_task_trace(args.task, args.seed)
+    formatted = json.dumps(trace, indent=2, ensure_ascii=False)
+    print(formatted)
+    if args.json_out:
+        args.json_out.parent.mkdir(parents=True, exist_ok=True)
+        args.json_out.write_text(formatted + "\n", encoding="utf-8")
+    if args.text_out:
+        args.text_out.parent.mkdir(parents=True, exist_ok=True)
+        args.text_out.write_text(formatted + "\n", encoding="utf-8")
+
+
 if __name__ == "__main__":
-    trace = _toy_example()
-    print(json.dumps(trace, indent=2, ensure_ascii=False))
+    main()
