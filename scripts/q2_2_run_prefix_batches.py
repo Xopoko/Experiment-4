@@ -11,7 +11,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Sequence, Tuple
+from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 import sympy as sp
 
@@ -73,6 +73,8 @@ class PrefixJob:
     sequence: Tuple[int, ...]
     weight: int
     label: str | None = None
+    endpoint: Tuple[int, int, int] | None = None
+    stats: Dict[str, float] | None = None
 
 
 def build_series(counts_by_length: Dict[int, int], max_edges: int) -> tuple[str, Dict[str, str]]:
@@ -89,6 +91,22 @@ def build_series(counts_by_length: Dict[int, int], max_edges: int) -> tuple[str,
     for n in range((max_edges // 2) + 1):
         coeffs[f"c_{n}"] = str(sp.simplify(expanded.coeff(K, 2 * n)))
     return str(series), coeffs
+
+
+def parse_bounds(triple: Optional[str]) -> Optional[Tuple[Optional[int], Optional[int], Optional[int]]]:
+    if triple is None:
+        return None
+    parts = triple.split(",")
+    if len(parts) != 3:
+        raise ValueError("Bounds must have exactly three comma-separated entries")
+    parsed: List[Optional[int]] = []
+    for token in parts:
+        token = token.strip()
+        if token in ("", "*"):
+            parsed.append(None)
+        else:
+            parsed.append(int(token))
+    return tuple(parsed)  # type: ignore[return-value]
 
 
 def parse_args() -> argparse.Namespace:
@@ -142,6 +160,21 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Path to JSON with canonical prefix states (overrides --enable-symmetry)",
     )
+    parser.add_argument(
+        "--endpoint-min",
+        type=str,
+        help="Comma-separated minimum endpoint bounds (x,y,z); use '*' to skip a coordinate",
+    )
+    parser.add_argument(
+        "--endpoint-max",
+        type=str,
+        help="Comma-separated maximum endpoint bounds (x,y,z); use '*' to skip a coordinate",
+    )
+    parser.add_argument(
+        "--bridge-leaf-threshold",
+        type=int,
+        help="Skip state classes that have >= this number of non-terminal leaf vertices",
+    )
     return parser.parse_args()
 
 
@@ -156,12 +189,62 @@ def build_prefix_jobs(prefix_length: int, use_symmetry: bool) -> List[PrefixJob]
     return [PrefixJob(sequence=key, weight=weight) for key, weight in counts.items()]
 
 
-def load_state_library(path: Path, prefix_length: int) -> List[PrefixJob]:
+def analyze_state_geometry(edges: Iterable[Tuple[Tuple[int, int, int], Tuple[int, int, int]]]) -> Dict[str, float]:
+    degrees: Dict[Tuple[int, int, int], int] = {}
+    for a, b in edges:
+        degrees[a] = degrees.get(a, 0) + 1
+        degrees[b] = degrees.get(b, 0) + 1
+    leaf_count = 0
+    endpoint = None
+    if degrees:
+        for vertex, degree in degrees.items():
+            if vertex == (0, 0, 0):
+                continue
+            if degree % 2 == 1:
+                endpoint = vertex
+        if endpoint is None:
+            endpoint = max(degrees.keys(), key=lambda v: degrees[v])
+        for vertex, degree in degrees.items():
+            if vertex in ((0, 0, 0), endpoint):
+                continue
+            if degree == 1:
+                leaf_count += 1
+    return {"leaf_count": float(leaf_count), "endpoint": endpoint or (0, 0, 0)}
+
+
+def endpoint_within_bounds(
+    endpoint: Tuple[int, int, int] | None,
+    min_bounds: Optional[Tuple[Optional[int], Optional[int], Optional[int]]],
+    max_bounds: Optional[Tuple[Optional[int], Optional[int], Optional[int]]],
+) -> bool:
+    if endpoint is None:
+        return True
+    coords = endpoint
+    if min_bounds:
+        for idx, bound in enumerate(min_bounds):
+            if bound is not None and coords[idx] < bound:
+                return False
+    if max_bounds:
+        for idx, bound in enumerate(max_bounds):
+            if bound is not None and coords[idx] > bound:
+                return False
+    return True
+
+
+def load_state_library(
+    path: Path,
+    prefix_length: int,
+    endpoint_min: Optional[Tuple[Optional[int], Optional[int], Optional[int]]],
+    endpoint_max: Optional[Tuple[Optional[int], Optional[int], Optional[int]]],
+    bridge_leaf_threshold: Optional[int],
+) -> List[PrefixJob]:
     data = json.loads(path.read_text(encoding="utf-8"))
     lib_len = int(data.get("prefix_length", -1))
     if lib_len != prefix_length:
         raise ValueError(f"State library length {lib_len} != requested {prefix_length}")
     jobs: List[PrefixJob] = []
+    filtered_endpoint = 0
+    filtered_bridge = 0
     for state in data.get("states", []):
         sequence = tuple(int(x) for x in state.get("sample_sequence", []))
         if len(sequence) != prefix_length:
@@ -169,9 +252,42 @@ def load_state_library(path: Path, prefix_length: int) -> List[PrefixJob]:
         weight = int(state.get("orbit_size", len(state.get("sequences", [])) or 1))
         state_id = state.get("id")
         label = f"state_{state_id}" if state_id is not None else None
-        jobs.append(PrefixJob(sequence=sequence, weight=weight, label=label))
+        edges = []
+        for edge in state.get("edges", []):
+            a = tuple(edge.get("a", [0, 0, 0]))
+            b = tuple(edge.get("b", [0, 0, 0]))
+            edges.append((a, b))
+        geometry = analyze_state_geometry(edges)
+        endpoint = geometry["endpoint"] if isinstance(geometry["endpoint"], tuple) else tuple(geometry["endpoint"])  # type: ignore[arg-type]
+        if not endpoint_within_bounds(endpoint, endpoint_min, endpoint_max):
+            filtered_endpoint += 1
+            continue
+        if bridge_leaf_threshold is not None and geometry.get("leaf_count", 0.0) >= bridge_leaf_threshold:
+            filtered_bridge += 1
+            continue
+        jobs.append(
+            PrefixJob(
+                sequence=sequence,
+                weight=weight,
+                label=label,
+                endpoint=endpoint,
+                stats={"leaf_count": geometry.get("leaf_count", 0.0)},
+            )
+        )
     if not jobs:
         raise ValueError(f"State library {path} contains no states")
+    if filtered_endpoint or filtered_bridge:
+        print(
+            json.dumps(
+                {
+                    "state_library": str(path),
+                    "filtered_by_endpoint": filtered_endpoint,
+                    "filtered_by_bridge": filtered_bridge,
+                    "states_kept": len(jobs),
+                },
+                ensure_ascii=False,
+            )
+        )
     return jobs
 
 
@@ -188,14 +304,24 @@ def main() -> None:
     base_data = json.loads(args.base_counts.read_text(encoding="utf-8"))
     base_counts = {int(k): int(v) for k, v in base_data.get("counts_by_length", {}).items()}
 
+    endpoint_min = parse_bounds(args.endpoint_min)
+    endpoint_max = parse_bounds(args.endpoint_max)
     if args.state_library:
-        prefix_jobs_all = load_state_library(args.state_library, args.prefix_length)
+        prefix_jobs_all = load_state_library(
+            args.state_library,
+            args.prefix_length,
+            endpoint_min,
+            endpoint_max,
+            args.bridge_leaf_threshold,
+        )
         use_symmetry = True
         state_library_path = str(args.state_library)
     else:
         state_library_path = None
         use_symmetry = bool(args.enable_symmetry)
         prefix_jobs_all = build_prefix_jobs(args.prefix_length, use_symmetry)
+        if endpoint_min or endpoint_max or args.bridge_leaf_threshold is not None:
+            print("Warning: endpoint/bridge filters require --state-library")
     prefix_job_classes = len(prefix_jobs_all)
     prefix_jobs = sorted(prefix_jobs_all, key=lambda job: (-job.weight, job.sequence))
     total_sequences = 6 ** args.prefix_length if args.prefix_length > 0 else 1

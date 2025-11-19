@@ -1,0 +1,21 @@
+{
+  "max_edges": 10,
+  "prefix_length": 6,
+  "state_library": "artifacts/q2_2_prefix_states/len6.json",
+  "state_jobs_run": 12,
+  "coverage_ratio": 0.011831275720164609,
+  "avg_runtime_s": 0.6227221488952637,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 3630,
+    "6": 432,
+    "7": 3768,
+    "8": 35760,
+    "9": 556488,
+    "10": 9379584
+  },
+  "notes": "Filtered len6 run: endpoint∈[0,3]^3, bridge_leaf_count<5; covers ≈1.18% веса для разведки K>=10."
+}
