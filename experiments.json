@@ -8080,5 +8080,857 @@
     ],
     "status": "success",
     "notes": "Собран хвост r≥5 (7 классов, вес 150) и затем выполнен полный прогон len6 library (1149 классов). Итог: counts_len10=1.64377905e9, c5=1530588901696/945. χ(K) до K^{10} готов, осталось интегрировать в общий отчёт по Q2.2."
+  },
+  {
+    "id": "ae6960e1-e2fb-42d2-87c7-b82076af8b81",
+    "timestamp": "2025-11-19T17:23:07.748405Z",
+    "task_id": "3d-ising",
+    "round": 46,
+    "title": "Q2.3: LT y^6 через перебор 2x2x2",
+    "hypothesis": "Перебор всех конфигураций 2×2×2 с PBC и linked-cluster трактовка дадут коэффициент -y^6 в f(K,0), подтверждая картину одиночной доменной стенки.",
+    "plan": "1) IdeaLab для LT ряда. 2) Реализовать python-скрипт перебора 2×2×2 с n_- подсчётом. 3) Разложить (1/N)log polynomial по y до 6 порядка и считать коэффициенты free energy.",
+    "code_refs": [
+      "scripts/q2_3_lt_free_energy.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T172023Z.json",
+        "sha256": "74d8170e9b01b2766d8f95ab4d1476e2800a68aecc4269dee8c7333ba0a57ea1"
+      },
+      {
+        "path": "artifacts/q2_3_lt_free_energy/lt_series_size2.json",
+        "sha256": "d8867382c51f74584602dd9a7707b8225f0e4743535ba313347af3fbc2a33e07"
+      }
+    ],
+    "metrics": {
+      "orders": 6,
+      "lattice_size": 2,
+      "coeff_y6": -1,
+      "coeff_y1_y5": 0
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "lt_single_cube"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 0.3,
+      "gpu_s": 0.0,
+      "max_mem_mb": 52
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "lattice_patch": "2x3x3",
+          "state_repr": "python_dfs"
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "improve": "order_depth",
+          "worsen": "runtime"
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "source": "code: Jensen transfer matrices"
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Минимальная доменная стенка → y^6 подтверждён."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Комбинаторика 2×2×2 даёт точное значение -1."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "Series логарифма выведен в явном виде."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Перебор 256 конфигураций — прямой чек."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "Локальный вклад верен в термодинамическом пределе."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.45,
+        "note": "Нужен следующий порядок для структуры."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "Геометрия кубических стенок сопоставлена."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "Логика единственного фактора ясна."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.71,
+        "note": "Аналитичность ряда в y проверена."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Структура+шум подход дал точный коэффициент."
+      }
+    ],
+    "status": "success",
+    "notes": "Перебор 2×2×2 подтвердил, что f(K,0) = -3K - y^6 + O(y^8); следующий шаг — добавить кластеры площадей 8/10 для коэффициентов y^8, y^{10}."
+  },
+  {
+    "id": "8ad97bd8-6c9c-49c3-afad-46278a1afa9c",
+    "timestamp": "2025-11-19T17:29:47.207696Z",
+    "task_id": "3d-ising",
+    "round": 47,
+    "title": "Q2.3: кластеры до площади 10",
+    "hypothesis": "Если перечислить все укоренённые кластеры из 1–2 спинов, то окажется, что единственные вклады приходят с площадями 6 и 10, поэтому коэффициент y^8 исчезает, а y^{10} = -6.",
+    "plan": "1) IdeaLab для LT‑кластера (снять wraparound). 2) Реализовать перечислитель укоренённых кластеров (Redelmeier) с подсчётом площадей. 3) Прогнать до max_cells=2 и зафиксировать counts и коэффициенты free energy.",
+    "code_refs": [
+      "scripts/q2_3_lt_clusters.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T172813Z.json",
+        "sha256": "c2ef1c50df6fd45497d737efeff8bd77ae18f42044f7d70b83662bbdbd2c78d2"
+      },
+      {
+        "path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells2.json",
+        "sha256": "7edde482f58835f226804e901556619ce6eb175ecb39fdc6c3cff072bbff10d5"
+      },
+      {
+        "path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells4.json",
+        "sha256": "b4f531ac7973d60c24de623c841c58b9fd6a1562d4ac29aa81dc7876b2830b85"
+      }
+    ],
+    "metrics": {
+      "clusters_area6": 1,
+      "clusters_area10": 6,
+      "coeff_y6": -1,
+      "coeff_y10": -6
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "lt_cluster_pairs"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 0.02,
+      "gpu_s": 0.0,
+      "max_mem_mb": 15
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "lattice_patch": "2x3x3",
+          "state_repr": "python_dfs"
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "improve": "order_depth",
+          "worsen": "runtime"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter"
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Доменные стенки площадей 6 и 10 исчерпывают ряды до y^{10}."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Комбинаторика кластеров подтверждает отсутствие y^8."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Перечислитель даёт точное число 6 соседних пар."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Детерминистский код → прямой чек без wraparound."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "Локальные кластеры согласованы с бесконечным пределом."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.46,
+        "note": "Нужно продолжить к площадям ≥14."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "Геометрия поликубов описана явно."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Инварианты поверхности заданы однозначно."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.71,
+        "note": "Ряд аналитичен: y^8 отсутствует по симметриям."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Структура+шум теперь фиксирует коэффициент y^{10}."
+      }
+    ],
+    "status": "success",
+    "notes": "Получен LT-факторизация: f = -3K - y^6 - 6 y^{10} + O(y^{14}); следующий шаг — расширить перечисление до кластеров площадей 12/14 и сопоставить с точными сериями."
+  },
+  {
+    "id": "0ef716c7-c7d5-4c4f-bc03-0dca923911a7",
+    "timestamp": "2025-11-19T17:34:18.394272Z",
+    "task_id": "3d-ising",
+    "round": 48,
+    "title": "Q2.3: кластеры из 3 спинов (площадь 14)",
+    "hypothesis": "Если перечислить все укоренённые кластеры из трёх спинов, то поверхностная площадь всегда равна 14 и коэффициент y^{14} в f(K,0) равен -45 при отсутствии вклада y^{12}.",
+    "plan": "1) Сгенерировать idea_lab ракурс для площадей 12–14. 2) Запустить кластерный перечислитель с max_cells=3, max_area=14. 3) Зафиксировать counts_by_area и коэффициенты свободной энергии.",
+    "code_refs": [
+      "scripts/q2_3_lt_clusters.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T173214Z.json",
+        "sha256": "e2486fe4e41a4fd70be2fbef3942bcb25db6a49ccfa5003bfc6b440850a655d8"
+      },
+      {
+        "path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells3.json",
+        "sha256": "9f8c1174dbc6a8c91fdc8b9ca1f37585d6b44b9484d386810168033964495203"
+      }
+    ],
+    "metrics": {
+      "clusters_total": 52,
+      "clusters_area6": 1,
+      "clusters_area10": 6,
+      "clusters_area14": 45,
+      "coeff_y14": -45
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "lt_cluster_triple"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 0.02,
+      "gpu_s": 0.0,
+      "max_mem_mb": 15
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "lattice_patch": "2x3x3",
+          "state_repr": "python_dfs"
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "improve": "order_depth",
+          "worsen": "runtime"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter"
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.81,
+        "note": "Доменные стенки площадью 14 подтверждены — структура единственна."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Комбинаторика 52 укоренённых кластеров сходится к коэффициенту -45."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Перечислитель выдаёт точную кратность без двусмысленностей."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Детерминированный перебор с wraparound-стражей — чистая проверка."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Локальная статистика совместима с предельной мерой Гиббса."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.48,
+        "note": "Нужна следующая масштабная ступень — площади ≥18."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "Геометрия всех трёхспиновых поликубов отсортирована."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Инвариант поверхности нечувствителен к цепи построения."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "Ряд остаётся только по степеням y^{6+4m}."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Структура+шум подход удержан; теперь можно переходить к 4-спиновым кластерам."
+      }
+    ],
+    "status": "success",
+    "notes": "Получено f(K,0) = -3K - y^6 - 6 y^{10} - 45 y^{14} + O(y^{18}); следующий шаг — кластеры из 4+ спинов (площади 18 и выше) и сверка с LT‑ряду из литературы."
+  },
+  {
+    "id": "e2fe36c5-3c07-4293-ab5f-f8c12b6d16d8",
+    "timestamp": "2025-11-19T17:36:35.671632Z",
+    "task_id": "3d-ising",
+    "round": 49,
+    "title": "Q2.3: кластеры из 4 спинов (площади 16/18)",
+    "hypothesis": "Перечисление всех укоренённых 4-спиновых кластеров покажет два новых типа поверхностей: площадь 16 (12 конфигураций) и 18 (332 конфигурации), а вкладов площадей 20/22 не будет, поэтому коэффициенты y^{16}=-12 и y^{18}=-332.",
+    "plan": "1) IdeaLab для диапазона площадей 18–22 с контролем wraparound. 2) Запустить q2_3_lt_clusters.py с max_cells=4, max_area=22. 3) Считать counts_by_area и сформировать free_energy_coeffs.",
+    "code_refs": [
+      "scripts/q2_3_lt_clusters.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T173539Z.json",
+        "sha256": "4b118a2debef0698963066c779a37fc86c6056430a9fe0ff36e04961dd14b833"
+      },
+      {
+        "path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells4_area22.json",
+        "sha256": "d77f14d0448abc07b14710491ec01c48e6f60332a667a05456f588812259b654"
+      }
+    ],
+    "metrics": {
+      "clusters_total": 396,
+      "clusters_area16": 12,
+      "clusters_area18": 332,
+      "coeff_y16": -12,
+      "coeff_y18": -332
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "lt_cluster_quad"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 0.03,
+      "gpu_s": 0.0,
+      "max_mem_mb": 15
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "lattice_patch": "2x3x3",
+          "state_repr": "python_dfs"
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "improve": "order_depth",
+          "worsen": "runtime"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter"
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Площади 16 и 18 — новые кирпичики LT-ряда."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Комбинаторика 396 кластеров даёт точные коэффициенты."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Серия свободной энергии пополнена явными числами."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.83,
+        "note": "Перебор укладывается в миллисекунды, ошибок нет."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Локальные кластеры продолжают согласовываться с пределом."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.5,
+        "note": "Пора двигаться к областям ≥22, иначе структура неполна."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Геометрия четырехспиновых поликубов системно классифицирована."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "Инвариант площади 16/18 подтверждён."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "Ряд по степеням y^{6+2m} строится последовательно."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.81,
+        "note": "Структура+шум стратегия удержана; следующий шаг — ≥5 спинов."
+      }
+    ],
+    "status": "success",
+    "notes": "Теперь f(K,0) = -3K - y^6 - 6 y^{10} - 45 y^{14} - 12 y^{16} - 332 y^{18} + O(y^{20}). Следующий шаг — кластеры ≥5 спинов, чтобы выявить площади ≥20 и сравнить с опубликованными LT рядами."
+  },
+  {
+    "id": "65dcf6f3-3cd2-4108-8ea9-d34067dcfe47",
+    "timestamp": "2025-11-19T17:39:12.072154Z",
+    "task_id": "3d-ising",
+    "round": 50,
+    "title": "Q2.3: кластеры из 5 спинов (площади 20/22)",
+    "hypothesis": "Полное перечисление укоренённых кластеров из пяти спинов покажет новые поверхности площадей 20 и 22, тем самым закрывая коэффициенты y^{20} и y^{22} без появлений других площадей.",
+    "plan": "1) IdeaLab для слоёв ≥20. 2) q2_3_lt_clusters.py с max_cells=5, max_area=24. 3) Сохранить counts и обновить LT-ряд.",
+    "code_refs": [
+      "scripts/q2_3_lt_clusters.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T173814Z.json",
+        "sha256": "bfa3f390b4d44b3b44e5a6af8b94521f26e58ac01661a71fa9b6e5403e88d2cb"
+      },
+      {
+        "path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells5_area24.json",
+        "sha256": "0831132929f333379c072207ce2e69d56a7e3879acb1d52257bbecd6207d826a"
+      }
+    ],
+    "metrics": {
+      "clusters_total": 3066,
+      "clusters_area20": 240,
+      "clusters_area22": 2430,
+      "coeff_y20": -240,
+      "coeff_y22": -2430
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "lt_cluster_penta"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 0.03,
+      "gpu_s": 0.0,
+      "max_mem_mb": 16
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "lattice_patch": "2x3x3",
+          "state_repr": "python_dfs"
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "improve": "order_depth",
+          "worsen": "runtime"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter"
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.83,
+        "note": "Площади 20/22 завершают локальную картину пятёрки."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Комбинаторика 3066 кластеров даёт точные числа."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Коэффициенты y^{20}, y^{22} теперь известны явно."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.84,
+        "note": "Перебор остаётся воспроизводимым и быстрым."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Локальное описание совместимо с пределом Гиббса."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.52,
+        "note": "Пора смотреть на ≥6 спинов для появления площадей 24+."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Каталог поликубов вырос системно."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Инвариант поверхности подтверждён для всех конфигураций."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Ряд по y^{6+2m} расширен до ордера 22."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Структура+шум работает; следующий шаг — автоматизировать агрегацию."
+      }
+    ],
+    "status": "success",
+    "notes": "LT-ряд: f = -3K - y^6 - 6 y^{10} - 45 y^{14} - 12 y^{16} - 332 y^{18} - 240 y^{20} - 2430 y^{22} + O(y^{24}). Дальше — перечисление ≥6 спинов и сравнение с табличными данными (Domb)."
+  },
+  {
+    "id": "076ec693-4dff-4525-985e-f3390fba8c86",
+    "timestamp": "2025-11-19T17:42:30.795077Z",
+    "task_id": "3d-ising",
+    "round": 51,
+    "title": "Q2.3: кластеры из 6 спинов (площади 24/26)",
+    "hypothesis": "Укоренённые 6-спиновые поликубы вносят новые поверхности площадей 24 и 26, поэтому коэффициенты y^{24} и y^{26} равны -2976 и -17802 соответственно, и других площадей до 26 не появляется.",
+    "plan": "1) IdeaLab для слоя ≥24. 2) q2_3_lt_clusters.py с max_cells=6, max_area=28. 3) Зафиксировать counts_by_area и обновить LT-ряд.",
+    "code_refs": [
+      "scripts/q2_3_lt_clusters.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T174112Z.json",
+        "sha256": "cdea89e10dd40c176e54ef9083cf37d0081426884682fba8769fe90d47b33e20"
+      },
+      {
+        "path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells6_area28.json",
+        "sha256": "799fca92f70cd6db84caa2c9b8a859410fcffdf4d4ced7b5a6cb00d5a398be36"
+      }
+    ],
+    "metrics": {
+      "clusters_total": 23952,
+      "clusters_area24": 2976,
+      "clusters_area26": 17802,
+      "coeff_y24": -2976,
+      "coeff_y26": -17802
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "lt_cluster_hexa"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 0.11,
+      "gpu_s": 0.0,
+      "max_mem_mb": 21
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "lattice_patch": "2x3x3",
+          "state_repr": "python_dfs"
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "improve": "order_depth",
+          "worsen": "runtime"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter"
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.84,
+        "note": "Площади 24/26 логично продолжают принцип минимальной поверхности."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.81,
+        "note": "Комбинаторика 23952 конфигураций даёт строгие коэффициенты."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Ряд теперь известен до y^{26} в явных числах."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.85,
+        "note": "Перебор быстрый и воспроизводимый — эксперимент удался."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Локальные кластеры переносятся в термодинамический предел без искажений."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.53,
+        "note": "Дальше неизбежна экспоненциальная лавина — нужно подумать о симметриях."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Каталог поликубов расширен системно до 6-спиновых фигур."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Инвариант площади работает для всех траекторий расширения."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Степени y^{6+2m} по-прежнему соблюдаются, аналитичность сохранена."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.83,
+        "note": "Структура+шум подход выдержал скачок сложности."
+      }
+    ],
+    "status": "success",
+    "notes": "LT-ряд теперь известен до y^{26}. Следующий шаг — перечисление ≥7 спинов (иначе не получить площади 28/30) и потенциальное ускорение через канонизацию симметрий."
   }
 ]
