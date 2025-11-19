@@ -1,0 +1,19 @@
+{
+  "max_edges": 6,
+  "prefix_length": 6,
+  "state_jobs": 1149,
+  "coverage_ratio": 1.0,
+  "state_count_total": 142932,
+  "total_runtime_s": 456.3248255252838,
+  "avg_runtime_s": 0.397149543538106,
+  "runtime_p95_s": 0.4033212661743164,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 3630,
+    "6": 61230
+  },
+  "notes": "Full sweep of len6 canonical states with state_id metadata; baseline before bridge_prune."
+}

@@ -1,0 +1,18 @@
+{
+  "max_edges": 6,
+  "prefix_length": 5,
+  "state_jobs_run": 16,
+  "state_job_classes": 226,
+  "coverage_ratio": 0.10185185185185185,
+  "state_count_total": 10221,
+  "avg_runtime_s": 0.34206077456474304,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 552,
+    "6": 4800
+  },
+  "notes": "Coverage limited to top-weighted 16 classes to validate state_id plumbing."
+}

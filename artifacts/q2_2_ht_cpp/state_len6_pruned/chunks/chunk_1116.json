@@ -1,0 +1,38 @@
+{
+  "max_edges": 6,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 3630,
+    "6": 4
+  },
+  "target_hist": [],
+  "series_expr": "-2858*K**6/3 + 17404*K**5/5 + 706*K**4 + 148*K**3 + 30*K**2 + 6*K + 1",
+  "coefficients": {
+    "c_0": "1",
+    "c_1": "30",
+    "c_2": "706",
+    "c_3": "-2858/3"
+  },
+  "state_count": 86,
+  "notes": "Counts aggregated from C++ DFS backend with prefix splitting",
+  "prefix_length": 6,
+  "prefix_sequence": [
+    0,
+    2,
+    3,
+    3,
+    1,
+    1
+  ],
+  "prefix_weight": 24,
+  "prefix_state_id": "state_893",
+  "prefix_endpoint": [
+    -1,
+    -1,
+    0
+  ],
+  "bridge_leaf_count": 0
+}

@@ -1,0 +1,508 @@
+{
+  "max_edges": 6,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 3630,
+    "6": 1632
+  },
+  "series_expr": "2026*K**6/3 + 17404*K**5/5 + 706*K**4 + 148*K**3 + 30*K**2 + 6*K + 1",
+  "coefficients": {
+    "c_0": "1",
+    "c_1": "30",
+    "c_2": "706",
+    "c_3": "2026/3"
+  },
+  "state_count": 4851,
+  "prefix_length": 6,
+  "prefix_jobs": 32,
+  "prefix_job_classes": 1149,
+  "prefix_total_sequences": 46656,
+  "symmetry_used": true,
+  "state_library": "artifacts/q2_2_prefix_states/len6.json",
+  "chunk_runs": [
+    {
+      "chunk": 0,
+      "runtime_s": 0.31435585021972656,
+      "state_count": 137,
+      "prefix_weight": 144,
+      "prefix_sequence": [
+        0,
+        1,
+        2,
+        0,
+        3,
+        4
+      ],
+      "prefix_state_id": "state_336"
+    },
+    {
+      "chunk": 1,
+      "runtime_s": 0.31553053855895996,
+      "state_count": 226,
+      "prefix_weight": 144,
+      "prefix_sequence": [
+        0,
+        2,
+        3,
+        4,
+        2,
+        5
+      ],
+      "prefix_state_id": "state_927"
+    },
+    {
+      "chunk": 2,
+      "runtime_s": 0.3120393753051758,
+      "state_count": 108,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "prefix_state_id": "state_88"
+    },
+    {
+      "chunk": 3,
+      "runtime_s": 0.30086278915405273,
+      "state_count": 137,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        0,
+        2,
+        1,
+        3,
+        4
+      ],
+      "prefix_state_id": "state_138"
+    },
+    {
+      "chunk": 4,
+      "runtime_s": 0.30054664611816406,
+      "state_count": 49,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        1,
+        0,
+        2,
+        1,
+        3
+      ],
+      "prefix_state_id": "state_258"
+    },
+    {
+      "chunk": 5,
+      "runtime_s": 0.29691076278686523,
+      "state_count": 108,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        1,
+        0,
+        2,
+        3,
+        4
+      ],
+      "prefix_state_id": "state_269"
+    },
+    {
+      "chunk": 6,
+      "runtime_s": 0.2999119758605957,
+      "state_count": 49,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        1,
+        1,
+        2,
+        0,
+        3
+      ],
+      "prefix_state_id": "state_295"
+    },
+    {
+      "chunk": 7,
+      "runtime_s": 0.30478644371032715,
+      "state_count": 88,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        1,
+        2,
+        0,
+        3,
+        2
+      ],
+      "prefix_state_id": "state_334"
+    },
+    {
+      "chunk": 8,
+      "runtime_s": 0.3180670738220215,
+      "state_count": 169,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        1,
+        2,
+        3,
+        0,
+        4
+      ],
+      "prefix_state_id": "state_396"
+    },
+    {
+      "chunk": 9,
+      "runtime_s": 0.3010244369506836,
+      "state_count": 169,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        1,
+        2,
+        3,
+        1,
+        4
+      ],
+      "prefix_state_id": "state_400"
+    },
+    {
+      "chunk": 10,
+      "runtime_s": 0.3010077476501465,
+      "state_count": 168,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        0
+      ],
+      "prefix_state_id": "state_401"
+    },
+    {
+      "chunk": 11,
+      "runtime_s": 0.29494667053222656,
+      "state_count": 168,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        1
+      ],
+      "prefix_state_id": "state_402"
+    },
+    {
+      "chunk": 12,
+      "runtime_s": 0.31229257583618164,
+      "state_count": 231,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        1,
+        2,
+        4,
+        3,
+        5
+      ],
+      "prefix_state_id": "state_428"
+    },
+    {
+      "chunk": 13,
+      "runtime_s": 0.3013780117034912,
+      "state_count": 214,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        3
+      ],
+      "prefix_state_id": "state_438"
+    },
+    {
+      "chunk": 14,
+      "runtime_s": 0.3059048652648926,
+      "state_count": 121,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        0,
+        1,
+        4,
+        5
+      ],
+      "prefix_state_id": "state_492"
+    },
+    {
+      "chunk": 15,
+      "runtime_s": 0.33765363693237305,
+      "state_count": 150,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        0,
+        4,
+        1,
+        5
+      ],
+      "prefix_state_id": "state_551"
+    },
+    {
+      "chunk": 16,
+      "runtime_s": 0.2987651824951172,
+      "state_count": 69,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        1,
+        0,
+        4,
+        5
+      ],
+      "prefix_state_id": "state_600"
+    },
+    {
+      "chunk": 17,
+      "runtime_s": 0.29684901237487793,
+      "state_count": 141,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        1,
+        3,
+        1,
+        4
+      ],
+      "prefix_state_id": "state_655"
+    },
+    {
+      "chunk": 18,
+      "runtime_s": 0.29560208320617676,
+      "state_count": 132,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        0
+      ],
+      "prefix_state_id": "state_656"
+    },
+    {
+      "chunk": 19,
+      "runtime_s": 0.3158714771270752,
+      "state_count": 152,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        1,
+        3,
+        4,
+        1
+      ],
+      "prefix_state_id": "state_657"
+    },
+    {
+      "chunk": 20,
+      "runtime_s": 0.29260778427124023,
+      "state_count": 126,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        1,
+        4,
+        0,
+        5
+      ],
+      "prefix_state_id": "state_664"
+    },
+    {
+      "chunk": 21,
+      "runtime_s": 0.29514527320861816,
+      "state_count": 215,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        1,
+        4,
+        5,
+        3
+      ],
+      "prefix_state_id": "state_692"
+    },
+    {
+      "chunk": 22,
+      "runtime_s": 0.3040175437927246,
+      "state_count": 226,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        2,
+        3,
+        4,
+        5
+      ],
+      "prefix_state_id": "state_792"
+    },
+    {
+      "chunk": 23,
+      "runtime_s": 0.2996842861175537,
+      "state_count": 231,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        2,
+        4,
+        3,
+        5
+      ],
+      "prefix_state_id": "state_816"
+    },
+    {
+      "chunk": 24,
+      "runtime_s": 0.3289046287536621,
+      "state_count": 174,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        3,
+        2,
+        4,
+        5
+      ],
+      "prefix_state_id": "state_886"
+    },
+    {
+      "chunk": 25,
+      "runtime_s": 0.3179774284362793,
+      "state_count": 230,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        2
+      ],
+      "prefix_state_id": "state_942"
+    },
+    {
+      "chunk": 26,
+      "runtime_s": 0.302473783493042,
+      "state_count": 248,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        3
+      ],
+      "prefix_state_id": "state_943"
+    },
+    {
+      "chunk": 27,
+      "runtime_s": 0.3399384021759033,
+      "state_count": 222,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        4,
+        1,
+        5,
+        3
+      ],
+      "prefix_state_id": "state_1011"
+    },
+    {
+      "chunk": 28,
+      "runtime_s": 0.3202686309814453,
+      "state_count": 221,
+      "prefix_weight": 96,
+      "prefix_sequence": [
+        0,
+        2,
+        4,
+        3,
+        5,
+        3
+      ],
+      "prefix_state_id": "state_1080"
+    },
+    {
+      "chunk": 29,
+      "runtime_s": 0.28414273262023926,
+      "state_count": 49,
+      "prefix_weight": 72,
+      "prefix_sequence": [
+        0,
+        0,
+        1,
+        2,
+        0,
+        3
+      ],
+      "prefix_state_id": "state_72"
+    },
+    {
+      "chunk": 30,
+      "runtime_s": 0.3040449619293213,
+      "state_count": 88,
+      "prefix_weight": 72,
+      "prefix_sequence": [
+        0,
+        0,
+        2,
+        1,
+        3,
+        2
+      ],
+      "prefix_state_id": "state_136"
+    },
+    {
+      "chunk": 31,
+      "runtime_s": 0.3015322685241699,
+      "state_count": 35,
+      "prefix_weight": 72,
+      "prefix_sequence": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        3
+      ],
+      "prefix_state_id": "state_248"
+    }
+  ],
+  "notes": "Aggregated from multiple prefix-split runs via q2_2_run_prefix_batches.py"
+}

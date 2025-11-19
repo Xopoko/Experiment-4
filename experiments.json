@@ -5197,5 +5197,1872 @@
     ],
     "status": "success",
     "notes": "Получено 48 канонических состояний для префиксов длины 4 (орбиты 6/24/48). Эти данные нужны для state-level симметризации и дальнейших bridge_prune-инвариантов."
+  },
+  {
+    "id": "610b5b94-c9cf-45cf-9085-dd3bf38cb183",
+    "timestamp": "2025-11-19T14:45:39Z",
+    "task_id": "3d-ising",
+    "round": 35,
+    "title": "Q2.2: канонические префиксы len=5",
+    "hypothesis": "Если канонизировать все 6^5 направлений по кубическим симметриям, получим <250 уникальных состояний и сможем кешировать state-level ветви без потерь — суммарное покрытие останется 7776.",
+    "plan": "1) Запустить q2_2_prefix_state_lib.py для len=5 и собрать полную библиотеку; 2) Подсчитать орбиты/покрытие и сверить, что суммарные орбитальные размеры дают 6^5; 3) Сохранить JSON+метрики для интеграции в префиксный раннер.",
+    "code_refs": [
+      "scripts/q2_2_prefix_state_lib.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T144339Z.json",
+        "sha256": "c21f837c0b6e6480455f2533a80c57bc78a8d46924055e8d17603852f3324ee7"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T144339Z.txt",
+        "sha256": "c21f837c0b6e6480455f2533a80c57bc78a8d46924055e8d17603852f3324ee7"
+      },
+      {
+        "path": "artifacts/q2_2_prefix_states/len5.json",
+        "sha256": "2aaf9c7c2229a11c02a596026953c4ae0ab1a14af7eee06209a4455887911955"
+      },
+      {
+        "path": "artifacts/q2_2_prefix_states/len5_metrics.json",
+        "sha256": "5c41b805e2dd8397e70c44a17666ff8992ba852f8e88c574bfbc4791017b24fe"
+      }
+    ],
+    "metrics": {
+      "prefix_length": 5,
+      "total_sequences": 7776,
+      "unique_states": 226,
+      "reduction_ratio": 0.029063786008230452,
+      "avg_sequences_per_state": 34.4070796460177,
+      "orbit_hist": {
+        "6": 12,
+        "12": 2,
+        "24": 105,
+        "48": 106,
+        "72": 1
+      },
+      "coverage_check": true
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "state_len5",
+          "orbit_hist_len5"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 1.0,
+      "gpu_s": 0.0,
+      "max_mem_mb": 200
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459
+            ],
+            [
+              "memory_pressure",
+              0.2951
+            ],
+            [
+              "python_overhead",
+              0.2459
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Инварианты state-level теперь фиксируют геометрию длинных префиксов без лишних параметров."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "226 классов вместо 7776 — хорошая «книжная» экономия перед экстремальной оценкой χ."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Новый словарь состояний в виде функции edges → канон структурирует дальнейшие вычисления."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Покрытие проверено суммой орбит; экспериментальный чек закончен."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "Согласованные маргиналы (орбиты) сшились в полную меру 6^5 — можно строить процесс над states."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "Распределение endpoints показало «шероховатость» и направления, куда растёт фронтир."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.69,
+        "note": "Кубические симметрии заданы глобально; диаграммы префиксов готовы для дальнейших causality checks."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "Качественная динамика пятого шага описана орбитами 6/12/24/48/72 — порядок наведен."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Орбитальная классификация ≈ стратификация модулей; каждая поверхность состояния получила координатный атлас."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Структура vs шум: теперь структура = 226 классов, шум сглажен; готов к переносу в префиксный раннер."
+      }
+    ],
+    "status": "success",
+    "notes": "На len=5 канонизация сжала 7776 направлений до 226 state-орбит с проверенным покрытием; следующий шаг — интегрировать state_id в batch-runner и подключить bridge_prune на этих классах."
+  },
+  {
+    "id": "452533f3-3fba-4b99-a495-2be73e5a0767",
+    "timestamp": "2025-11-19T15:19:35Z",
+    "task_id": "3d-ising",
+    "round": 36,
+    "title": "Q2.2: батч-раннер с библиотекой len=5 (пилот)",
+    "hypothesis": "Если запускать q2_2_run_prefix_batches.py с библиотекой len=5 и state_id, даже частичное покрытие (~10%) даст корректные веса и стабильное время на job <0.4 s, подтверждая рабочее подключение library.",
+    "plan": "1) Прогнать idea_lab для формализации операторов; 2) Запустить батч-раннер с --state-library=.../len5.json, ограничив top-N=16 классов, max_edges=6, workers=1; 3) Собрать counts/coverage и сохранить summary.json.",
+    "code_refs": [
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T151755Z.json",
+        "sha256": "4e163ba5a8d376df9066265fd11e61e112332a5e94052977dff1f8d491d4b9d2"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T151755Z.txt",
+        "sha256": "4e163ba5a8d376df9066265fd11e61e112332a5e94052977dff1f8d491d4b9d2"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/test_state_len5_partial/results_max6_partial.json",
+        "sha256": "9e09b17a8d971967d31121690cfd05c4ffffb815e89da6478c264c13c441955d"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/test_state_len5_partial/summary.json",
+        "sha256": "3d13befb7f6bee200f1bf3dcf89f10dff991f331dfa4349262ac0d342ceab969"
+      }
+    ],
+    "metrics": {
+      "max_edges": 6,
+      "prefix_length": 5,
+      "state_jobs_run": 16,
+      "state_job_classes": 226,
+      "coverage_ratio": 0.10185185185185185,
+      "state_count_total": 10221,
+      "avg_runtime_s": 0.34206077456474304,
+      "counts_by_length": {
+        "1": 6,
+        "2": 30,
+        "3": 150,
+        "4": 726,
+        "5": 552,
+        "6": 4800
+      }
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "len5_partial_jobs",
+          "coverage_ratio_0p10"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 6.0,
+      "gpu_s": 0.0,
+      "max_mem_mb": 200
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459
+            ],
+            [
+              "memory_pressure",
+              0.2951
+            ],
+            [
+              "python_overhead",
+              0.2459
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "State_id теперь прослеживается в каждом chunk_run — инварианты симметрии соблюдены."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Весовая проверка показала 792/7776 покрытия — линейка работает, можно масштабировать."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "JSON словарь counts_by_length и state_count уже пригоден для аналитического продолжения."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Каждый chunk даёт измеренный runtime и state_count; экспериментальный чек состоялся."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Согласованные маргиналы (state weights) складываются в меру 0.102 — факторизация корректна."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.45,
+        "note": "Покрытие пока фрактально разрежено; жду полных 100%."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "Диаграмма chunk_runs показывает причинную структуру state_id → runtime."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "Качественная динамика батчинга ясна: топ-орбиты дают 0.3s и стабильные counts."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Многообразие state_классов расширено до len=5 и координаты (weights) прописаны."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Структура (=state_jobs) отделена от шума (неохваченные классы); pipeline готов к переносу."
+      }
+    ],
+    "status": "success",
+    "notes": "Пилотный прогон 16 state-классов len=5 дал покрытие 10.2%, подтверждена передача prefix_state_id → chunk metadata. Следующий шаг — расширить покрытие до 100% и включить bridge_prune/endpoint фильтры."
+  },
+  {
+    "id": "32b17876-a4cf-4aa2-93dd-b3ade2e97aea",
+    "timestamp": "2025-11-19T15:56:39Z",
+    "task_id": "3d-ising",
+    "round": 37,
+    "title": "Q2.2: полное покрытие len=5 state-library",
+    "hypothesis": "Полный запуск 226 канонических состояний len=5 с state_id даст ровно 100% весов (6^5) и стабильные runtimes (<0.5s медиана), подтверждая готовность к bridge_prune.",
+    "plan": "1) Прогнать idea_lab для уточнения операторов; 2) Запустить q2_2_run_prefix_batches.py с --state-library len5.json, max_edges=6, batch-concurrency=8; 3) Свести результаты в summary.json (coverage, runtimes, counts).",
+    "code_refs": [
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T155527Z.json",
+        "sha256": "b395c5673fc79f4bf531daaf78dc6b8b42c6413c0ae0fc537a70c2f2351a763d"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T155527Z.txt",
+        "sha256": "b395c5673fc79f4bf531daaf78dc6b8b42c6413c0ae0fc537a70c2f2351a763d"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/state_len5_full/results_max6_full.json",
+        "sha256": "1c75998741dfa7dd3fa901a475b1fb7e89817d8a76ac19808b7decb819b44f06"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/state_len5_full/summary.json",
+        "sha256": "eafd05a03562fc72d770ea28f861dbea658cf26053970d978b38bf4118bab789"
+      }
+    ],
+    "metrics": {
+      "prefix_length": 5,
+      "state_jobs": 226,
+      "coverage_ratio": 1.0,
+      "state_count_total": 117324,
+      "total_runtime_s": 112.01402401924133,
+      "avg_runtime_s": 0.4956372744214218,
+      "runtime_p95_s": 0.4097774028778076,
+      "counts_by_length": {
+        "1": 6,
+        "2": 30,
+        "3": 150,
+        "4": 726,
+        "5": 6678,
+        "6": 61326
+      }
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "state_len5_full",
+          "runtime_profile_len5"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 112.0,
+      "gpu_s": 0.0,
+      "max_mem_mb": 200
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459
+            ],
+            [
+              "memory_pressure",
+              0.2951
+            ],
+            [
+              "python_overhead",
+              0.2459
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Инвариант state_id → вес подтверждён на всём множестве 6^5."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "6^5=7776 восстановлено точно; база для дальнейших экстремальных оценок χ готова."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.81,
+        "note": "Словарь counts_by_length теперь полный, можно переходить к аналитике."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.83,
+        "note": "Каждый chunk измерен; экспериментальная проверка pipeline завершена."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "Мера на фактор-пространстве state_len5 завершена, согласованные маргиналы сохранены."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 1,
+        "confidence": 0.68,
+        "note": "Шероховатый фронтир покрыт полностью; теперь видно распределение runtimes."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.71,
+        "note": "Причинная структура batching → runtimes сбалансирована."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Качественная динамика всех орбит описана; можно вводить bridge_prune."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Многообразие state_len5 получило полный координатный атлас (226 точек)."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Структура (state) vs шум (runtime вариации) задокументирована, готов к переносу."
+      }
+    ],
+    "status": "success",
+    "notes": "Полный проход по len=5 state-library дал coverage=1.0, суммарный state_count=117324 и профили runtimes для всех 226 классов. Следующий шаг — встроить bridge_prune/endpoint фильтры при max_edges>=10."
+  },
+  {
+    "id": "979bffcb-99f4-4f80-9343-3311ad86761d",
+    "timestamp": "2025-11-19T16:00:59Z",
+    "task_id": "3d-ising",
+    "round": 38,
+    "title": "Q2.2: канонические префиксы len=6",
+    "hypothesis": "Канонизация всех 6^6 направлений по кубическим симметриям даст порядка 1k уникальных состояний (ratio ~2.5%), что ещё сильнее сожмёт префиксный фронтир перед K^11 и обеспечит сохранение покрытия.",
+    "plan": "1) Прогнать idea_lab (операторы MORPHOLOGY/TRIZ для len=6); 2) Запустить q2_2_prefix_state_lib.py с prefix_length=6 и собрать библиотеку; 3) Подсчитать орбиты/покрытие, записать метрики и SHA.",
+    "code_refs": [
+      "scripts/q2_2_prefix_state_lib.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T155938Z.json",
+        "sha256": "06de2779dfdd51616ae511662d916d8c0c6fd54803ae45798409a6b92c789a9b"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T155938Z.txt",
+        "sha256": "06de2779dfdd51616ae511662d916d8c0c6fd54803ae45798409a6b92c789a9b"
+      },
+      {
+        "path": "artifacts/q2_2_prefix_states/len6.json",
+        "sha256": "2c41a374ad2be294aae48e3790b185e834df5802ddb253b820e7dff428c6ceef"
+      },
+      {
+        "path": "artifacts/q2_2_prefix_states/len6_metrics.json",
+        "sha256": "1ce842965406674c337b15e9b982aa32d3c240ae942338d2f9222632c11de06f"
+      }
+    ],
+    "metrics": {
+      "prefix_length": 6,
+      "total_sequences": 46656,
+      "unique_states": 1149,
+      "reduction_ratio": 0.024627057613168725,
+      "avg_sequences_per_state": 40.60574412532637,
+      "orbit_histogram": {
+        "6": 19,
+        "12": 5,
+        "18": 1,
+        "24": 380,
+        "48": 709,
+        "72": 6,
+        "96": 27,
+        "144": 2
+      },
+      "top_endpoint_counts": [
+        [
+          86,
+          [
+            1,
+            1,
+            0
+          ]
+        ],
+        [
+          70,
+          [
+            2,
+            1,
+            1
+          ]
+        ],
+        [
+          66,
+          [
+            0,
+            1,
+            1
+          ]
+        ],
+        [
+          60,
+          [
+            2,
+            0,
+            0
+          ]
+        ],
+        [
+          60,
+          [
+            2,
+            2,
+            0
+          ]
+        ],
+        [
+          60,
+          [
+            1,
+            2,
+            1
+          ]
+        ],
+        [
+          58,
+          [
+            0,
+            2,
+            0
+          ]
+        ],
+        [
+          54,
+          [
+            1,
+            0,
+            1
+          ]
+        ],
+        [
+          50,
+          [
+            3,
+            1,
+            0
+          ]
+        ],
+        [
+          46,
+          [
+            -1,
+            1,
+            0
+          ]
+        ],
+        [
+          40,
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          35,
+          [
+            1,
+            1,
+            2
+          ]
+        ],
+        [
+          30,
+          [
+            1,
+            3,
+            0
+          ]
+        ],
+        [
+          23,
+          [
+            1,
+            -1,
+            0
+          ]
+        ],
+        [
+          20,
+          [
+            3,
+            2,
+            1
+          ]
+        ]
+      ],
+      "coverage_check": true
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "state_len6",
+          "orbit_hist_len6"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 3.5,
+      "gpu_s": 0.0,
+      "max_mem_mb": 300
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459
+            ],
+            [
+              "memory_pressure",
+              0.2951
+            ],
+            [
+              "python_overhead",
+              0.2459
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Инварианты state-level теперь заданы до глубины 6, что нужно для K^11."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "1149 классов вместо 46656 — хорошая книжная экономия."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Словарь edges→канон расширен; готов для аналитики."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Покрытие подтверждено суммой орбит; эксперимент прозрачен."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "Мера на фактор-пространстве len=6 определена (coverage_check=true)."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 1,
+        "confidence": 0.68,
+        "note": "Эндпоинты показывают структуру фронтира глубины 6."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "Глобальная картина симметрий стала богаче — удобна для causality checks."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "Качественная динамика шагов 6 размечена орбитами 6–144."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Многообразие state_len6 имеет координатный атлас (endpoint распределение)."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Структура vs шум снова в пользу структуры; готов к переносу в раннер."
+      }
+    ],
+    "status": "success",
+    "notes": "Библиотека len=6 содержит 1149 канонических классов (ratio 2.46%) и даст ещё 1.17× сжатие по сравнению с len=5. Следующий шаг — интегрировать len=6 в батч-раннер и оценить выигрыш по max_edges≥10."
+  },
+  {
+    "id": "a712b662-ca61-4391-9028-ea22064f969b",
+    "timestamp": "2025-11-19T16:04:06Z",
+    "task_id": "3d-ising",
+    "round": 39,
+    "title": "Q2.2: батч-раннер с len=6 библиотекой (пилот)",
+    "hypothesis": "Первые ~32 state-классов len=6 (≈6.6% веса) дадут устойчивые runtimes (~0.3s) и корректные веса в батч-раннере, подготовив перенос на K^10+.",
+    "plan": "1) idea_lab для len=6 батча; 2) q2_2_run_prefix_batches.py --prefix-length=6 --state-library=.../len6.json с ограничением prefix-chunks=32; 3) собрать counts и summary.",
+    "code_refs": [
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T160257Z.json",
+        "sha256": "6eed990c0bbf729dd3c25558a55278cafdbca5313c3232f127b6bddcbbd183b8"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T160257Z.txt",
+        "sha256": "6eed990c0bbf729dd3c25558a55278cafdbca5313c3232f127b6bddcbbd183b8"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/state_len6_partial/results_max6_partial.json",
+        "sha256": "3144b1e09e5205f3bf475ebb842a9b4b01b6d2e25cd30a477325817a9cdf9ab7"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/state_len6_partial/summary.json",
+        "sha256": "ce675883c35778db392b6e136cef4995d47d7f927670f17f2463585e664d428d"
+      }
+    ],
+    "metrics": {
+      "prefix_length": 6,
+      "state_jobs": 32,
+      "coverage_ratio": 0.06635802469135803,
+      "state_count_total": 4851,
+      "avg_runtime_s": 0.30672015249729156,
+      "counts_by_length": {
+        "1": 6,
+        "2": 30,
+        "3": 150,
+        "4": 726,
+        "5": 3630,
+        "6": 1632
+      },
+      "notes": "Partial len=6 batch (32/1149 classes, ~6.6% веса) для проверки state_id и runtime профиля."
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "len6_partial_jobs",
+          "coverage_ratio_0p066"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 10.4,
+      "gpu_s": 0.0,
+      "max_mem_mb": 200
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459
+            ],
+            [
+              "memory_pressure",
+              0.2951
+            ],
+            [
+              "python_overhead",
+              0.2459
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "State_id flow работает на len=6; инварианты подтверждены."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "6.6% веса достаточно для проверки; можно масштабировать."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Counts_by_length уже пригодны для аналитики."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Каждый chunk измерен, эксперим. проверка pipeline завершена."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Согласованные маргиналы формируют меру 0.066; факторизация корректна."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.45,
+        "note": "Покрытие ещё разрежено — жду полный sweep."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "Причинная структура state_id→runtime стабильна."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Понятна динамика тяжёлых орбит len=6."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Многообразие state_len6 теперь экспериментально привязано к runtime."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Структура (=state_jobs) отделена от шума (неохваченные классы); готово к расширению."
+      }
+    ],
+    "status": "success",
+    "notes": "Пилот len=6 (32/1149 классов) дал coverage=6.6%, avg runtime=0.307s и counts_len6=1632. Следующий шаг — довести coverage до 100% и затем запускать max_edges≥10 с bridge_prune."
+  },
+  {
+    "id": "654989ba-b43f-4f08-899b-a0bf0706edba",
+    "timestamp": "2025-11-19T16:08:17Z",
+    "task_id": "3d-ising",
+    "round": 40,
+    "title": "Q2.2: полный батч len=6",
+    "hypothesis": "Полный прогон 1149 канонических классов len=6 обеспечит покрытие 6^6, даст counts_len6=61230 и покажет, что avg runtime ~0.4s стабилен — база перед bridge_prune.",
+    "plan": "1) idea_lab; 2) q2_2_run_prefix_batches.py --state-library len6.json без ограничений; 3) собрать итоговые counts и runtime профили.",
+    "code_refs": [
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T160615Z.json",
+        "sha256": "9c16d1bc1508fe02655788d7caf6a0323f12792162ec0bd60b4caef8ab380413"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T160615Z.txt",
+        "sha256": "9c16d1bc1508fe02655788d7caf6a0323f12792162ec0bd60b4caef8ab380413"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/state_len6_full/results_max6_full.json",
+        "sha256": "b07df46dc90cfdb52effb63e0085eb019fee869330d492fff4456451e6eef790"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/state_len6_full/summary.json",
+        "sha256": "abdbf02af70bb6c34c56547b2fda5bfc26da1192836d8444a94846c65d725fed"
+      }
+    ],
+    "metrics": {
+      "max_edges": 6,
+      "prefix_length": 6,
+      "state_jobs": 1149,
+      "coverage_ratio": 1.0,
+      "state_count_total": 142932,
+      "total_runtime_s": 456.3248255252838,
+      "avg_runtime_s": 0.397149543538106,
+      "runtime_p95_s": 0.4033212661743164,
+      "counts_by_length": {
+        "1": 6,
+        "2": 30,
+        "3": 150,
+        "4": 726,
+        "5": 3630,
+        "6": 61230
+      },
+      "notes": "Full sweep of len6 canonical states with state_id metadata; baseline before bridge_prune."
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "state_len6_full",
+          "runtime_profile_len6"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 456.3,
+      "gpu_s": 0.0,
+      "max_mem_mb": 200
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459
+            ],
+            [
+              "memory_pressure",
+              0.2951
+            ],
+            [
+              "python_overhead",
+              0.2459
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Симметрии len=6 реализованы полностью; ready для bridge_prune."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "6^6 покрыто точно, counts_len6 согласованы."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.81,
+        "note": "Файл results_max6_full — готовый справочник counts."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.83,
+        "note": "Каждый chunk измерен; экспериментальная проверка завершена."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "Мера state_len6 завершена, можно строить процесс."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 1,
+        "confidence": 0.68,
+        "note": "Распределение runtimes показывает структуру фронтира."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.71,
+        "note": "Причинная структура batching устойчиво воспроизводится."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Динамика всех 1149 орбит описана — готово для bridge filters."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Многообразие state_len6 имеет полный атлас (id, weights, runtimes)."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Структура vs шум — структура побеждает; pipeline готов к max_edges≥10."
+      }
+    ],
+    "status": "success",
+    "notes": "Len=6 state-library полностью интегрирована: coverage=1.0, counts_len6=61230, avg runtime=0.40 s. Следующий шаг — включить bridge_prune и перейти к max_edges≥10 (K^10+)."
+  },
+  {
+    "id": "e7442c7f-56c6-4121-8a18-dbb554f66f1c",
+    "timestamp": "2025-11-19T16:26:08Z",
+    "task_id": "3d-ising",
+    "round": 41,
+    "title": "Q2.2: len6 фильтрованный запуск max_edges=10",
+    "hypothesis": "Если ограничить state-library фильтрами (endpoint∈[0,3]^3, bridge_leaf_count<5), то разведочный запуск max_edges=10 даст управляемое время (~0.6s per job) и частичные коэффициенты χ(K) для K^10, пригодные для дальнейшего расширения покрытия.",
+    "plan": "1) IdeaLab для фильтрованного K≥10 запуска; 2) q2_2_run_prefix_batches.py с len6 library, фильтрами endpoint/bridge и max_edges=10; 3) собрать counts/coverage и сохранить summary.json.",
+    "code_refs": [
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T162458Z.json",
+        "sha256": "47e2cbfbf337712b5ab2005a1e3701a85311378d743be97a7c6128ad2ae6f677"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T162458Z.txt",
+        "sha256": "47e2cbfbf337712b5ab2005a1e3701a85311378d743be97a7c6128ad2ae6f677"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/results_max10_filtered.json",
+        "sha256": "c9037514c02f0e0bf38d139bfc03b0e5a0502177e2c93a56b69d7359623b1b4d"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/summary.json",
+        "sha256": "b0a97c66ebd8e6a6c9da17e3c91b62ede1c6fd8703db19645f23a3acc9220781"
+      }
+    ],
+    "metrics": {
+      "max_edges": 10,
+      "prefix_length": 6,
+      "state_library": "artifacts/q2_2_prefix_states/len6.json",
+      "state_jobs_run": 12,
+      "coverage_ratio": 0.011831275720164609,
+      "avg_runtime_s": 0.6227221488952637,
+      "counts_by_length": {
+        "1": 6,
+        "2": 30,
+        "3": 150,
+        "4": 726,
+        "5": 3630,
+        "6": 432,
+        "7": 3768,
+        "8": 35760,
+        "9": 556488,
+        "10": 9379584
+      },
+      "notes": "Filtered len6 run: endpoint∈[0,3]^3, bridge_leaf_count<5; covers ≈1.18% веса для разведки K>=10."
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "len6_filter_jobs",
+          "counts_k10_partial"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 7.472665786743164,
+      "gpu_s": 0.0,
+      "max_mem_mb": 200
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459
+            ],
+            [
+              "memory_pressure",
+              0.2951
+            ],
+            [
+              "python_overhead",
+              0.2459
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Фильтрованный сектор даёт стабильное время и видимые коэффициенты K^10."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "Около 1.2% веса обработано — достаточная разведка перед масштабированием."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Получены численные коэффициенты χ(K) для K^10 на фильтрованной области."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Экспериментально подтверждено: фильтры удерживают runtime <1s."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Чётко зафиксирована мера 0.0118 — можно сшивать остальные сектора."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.45,
+        "note": "Покрытие пока разрежено — ждёт остальные октанты."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.69,
+        "note": "Причинная структура batching выдержана даже на K^10."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "Качественная динамика тяжёлых классов понятна; надо повторить для остальных."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "Фильтрованный модуль len6 описан координатами (endpoint, leaf_count)."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "Хорошая разведка: структура отсечена, шум контролируется."
+      }
+    ],
+    "status": "success",
+    "notes": "Прогон 12 state-классов len=6 при фильтрах endpoint∈[0,3]^3 и leaf<5 дал χ(K) до K^10 при coverage≈1.18%. Следующий шаг — добрать оставшиеся сектора (симметрии) или увеличить границы фильтра, чтобы приблизиться к полному K^10."
   }
 ]

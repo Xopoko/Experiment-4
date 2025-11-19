@@ -1,0 +1,44 @@
+{
+  "max_edges": 10,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 3630,
+    "6": 1,
+    "7": 7,
+    "8": 55,
+    "9": 695,
+    "10": 9012
+  },
+  "target_hist": [],
+  "series_expr": "7767187*K**10/945 + 6673864*K**9/945 + 96421*K**8/105 - 622999*K**7/105 - 2867*K**6/3 + 17404*K**5/5 + 706*K**4 + 148*K**3 + 30*K**2 + 6*K + 1",
+  "coefficients": {
+    "c_0": "1",
+    "c_1": "30",
+    "c_2": "706",
+    "c_3": "-2867/3",
+    "c_4": "96421/105",
+    "c_5": "7767187/945"
+  },
+  "state_count": 7561454,
+  "notes": "Counts aggregated from C++ DFS backend with prefix splitting",
+  "prefix_length": 6,
+  "prefix_sequence": [
+    0,
+    1,
+    1,
+    2,
+    0,
+    3
+  ],
+  "prefix_weight": 96,
+  "prefix_state_id": "state_295",
+  "prefix_endpoint": [
+    0,
+    0,
+    0
+  ],
+  "bridge_leaf_count": 0
+}

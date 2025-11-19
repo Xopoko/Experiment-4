@@ -1,0 +1,33 @@
+{
+  "max_edges": 6,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 3630,
+    "6": 0
+  },
+  "target_hist": [],
+  "series_expr": "0",
+  "coefficients": {},
+  "state_count": 0,
+  "notes": "Skipped prefix due to endpoint_filter",
+  "prefix_length": 6,
+  "prefix_sequence": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "prefix_weight": 6,
+  "prefix_state_id": "",
+  "prefix_endpoint": [
+    6,
+    0,
+    0
+  ],
+  "bridge_leaf_count": 0
+}

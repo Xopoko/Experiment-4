@@ -1,0 +1,20 @@
+{
+  "max_edges": 6,
+  "prefix_length": 5,
+  "state_library": "artifacts/q2_2_prefix_states/len5.json",
+  "state_jobs": 226,
+  "coverage_ratio": 1.0,
+  "state_count_total": 117324,
+  "total_runtime_s": 112.01402401924133,
+  "avg_runtime_s": 0.4956372744214218,
+  "runtime_p95_s": 0.4097774028778076,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 6678,
+    "6": 61326
+  },
+  "notes": "Full sweep of 226 len5 canonical states; baseline for integrating bridge_prune."
+}

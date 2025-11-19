@@ -1,0 +1,16 @@
+{
+  "prefix_length": 6,
+  "state_jobs": 32,
+  "coverage_ratio": 0.06635802469135803,
+  "state_count_total": 4851,
+  "avg_runtime_s": 0.30672015249729156,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 3630,
+    "6": 1632
+  },
+  "notes": "Partial len=6 batch (32/1149 classes, ~6.6% веса) для проверки state_id и runtime профиля."
+}
