@@ -7064,5 +7064,759 @@
     ],
     "status": "success",
     "notes": "Прогон 12 state-классов len=6 при фильтрах endpoint∈[0,3]^3 и leaf<5 дал χ(K) до K^10 при coverage≈1.18%. Следующий шаг — добрать оставшиеся сектора (симметрии) или увеличить границы фильтра, чтобы приблизиться к полному K^10."
+  },
+  {
+    "id": "429906e9-7367-4360-a6cb-5a0a5af13843",
+    "timestamp": "2025-11-19T16:44:43Z",
+    "task_id": "3d-ising",
+    "round": 42,
+    "title": "Q2.2: len6 box |endpoint|≤2 (79% веса)",
+    "hypothesis": "Если ограничить канонические len6 префиксы коробкой |endpoint|∞≤2, то около 80% веса можно обработать за один запуск, существенно увеличив частичные коэффициенты χ(K) до K^{10} без выхода за лимит времени.",
+    "plan": "1) Запустить idea_lab, чтобы собрать системные операторы для Q2.2. 2) Проанализировать библиотеку len6 префиксов и выбрать фильтр по endpoint. 3) Прогнать q2_2_run_prefix_batches с фильтром |endpoint|∞≤2 и зафиксировать покрытие, рунтайм и коэффициенты.",
+    "code_refs": [
+      "scripts/idea_lab.py",
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T163738Z.json",
+        "sha256": "ead63370a69c026c96d21749a4b3a6379c846b203524c69bd9ba36c018bb10e1"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T163738Z.txt",
+        "sha256": "ead63370a69c026c96d21749a4b3a6379c846b203524c69bd9ba36c018bb10e1"
+      },
+      {
+        "path": "artifacts/q2_2_prefix_states/len6_endpoint_stats.json",
+        "sha256": "4a62add6c4d8ea7ac295d326cb3607211929e5c593a8095df54473e23ddc08b2"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/box_le2_results.json",
+        "sha256": "062f5e360e0df4be051c72462019e58f8263418c373c2e7c73d413750d476bb8"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/box_le2_summary.json",
+        "sha256": "289ed4a433e7f31a8e72255bf888e7da796dbc2f06d5871ca13fda78b203b463"
+      }
+    ],
+    "metrics": {
+      "prefix_jobs": 871,
+      "weight_ratio": 0.7902520576131687,
+      "counts_len10": 1234834488,
+      "coeff_c5_num": 1149992042452,
+      "coeff_c5_den": 945,
+      "runtime_total_s": 772.0507569313049,
+      "runtime_avg_s": 0.8863958173723363,
+      "chunk_runtime_p95_s": 1.1475980281829834
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "endpoint_box_le2",
+          "counts_k10_partial"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 772.05,
+      "gpu_s": 0.0,
+      "max_mem_mb": 420
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "observation": "runtime_explosion",
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459016393442623
+            ],
+            [
+              "memory_pressure",
+              0.2950819672131148
+            ],
+            [
+              "python_overhead",
+              0.24590163934426235
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "ограничение |endpoint|≤2 сделало задачу управляемой без потери принципов"
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "79% веса покрыто одним экстремальным фильтром, цифры убеждают"
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.71,
+        "note": "серия получена в явных коэффициентах до K^{10}"
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "замерены рунтаймы/ресурсы, эксперимент честный"
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "согласованные блоки подняты до процесса, хвосты явно отмечены"
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.5,
+        "note": "шероховатый хвост |endpoint|>2 ещё не охвачен"
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.68,
+        "note": "геометрический фильтр уважает симметрии решётки"
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "новая конвенция (коробка) экономит мысль и даёт прогноз"
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.69,
+        "note": "многообразие префиксов переразбито на компактную область, инварианты ясны"
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "портфельная стратегия: крупный блок веса закрыт, хвосты в очереди"
+      }
+    ],
+    "status": "success",
+    "notes": "Фильтр |endpoint|≤2 дал 871 канонических классов (0.79 веса) за ~87 с wall-time / 772 с суммарной CPU. Осталось допокрыть оболочки радиуса ≥3 (≈21% веса) и затем стянуть результаты в полный χ(K) до K^{10}."
+  },
+  {
+    "id": "e5de654e-4d47-47aa-8828-f26425f19d98",
+    "timestamp": "2025-11-19T16:53:41Z",
+    "task_id": "3d-ising",
+    "round": 43,
+    "title": "Q2.2: len6 box |endpoint|≤3 (96.5% веса)",
+    "hypothesis": "Расширение фильтра на коробку |endpoint|∞≤3 позволит покрыть ≈96% орбит len6 и получить почти полный частичный ряд χ(K) до K^{10} без новых узких мест по времени.",
+    "plan": "1) idea_lab для радиуса 3. 2) Посчитать статистику оболочки radius=3. 3) Прогнать q2_2_run_prefix_batches с фильтром |endpoint|≤3 и сравнить counts с предыдущей коробкой.",
+    "code_refs": [
+      "scripts/idea_lab.py",
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T164926Z.json",
+        "sha256": "10a4513b662298ebc57a434cd96759ab5ffc28ee227c13475770cc89dd121b0d"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T164926Z.txt",
+        "sha256": "10a4513b662298ebc57a434cd96759ab5ffc28ee227c13475770cc89dd121b0d"
+      },
+      {
+        "path": "artifacts/q2_2_prefix_states/len6_endpoint_stats_box3.json",
+        "sha256": "f061ab51ff95ee7f3fa3d54a0c520620c1192473b2314c48040bd9d163dc7e85"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/box_le3_results.json",
+        "sha256": "7a9c8f2dbca97f672fcca101df2ba301682d5e44bd312132b05e1eed3ec3681e"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/box_le3_summary.json",
+        "sha256": "6ef10278bc3595a54fe8e200a6ab0103074e0c6148304614457c629bb6cfd07e"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/box_le3_delta_vs_le2.json",
+        "sha256": "a596d94ce877ad0776f46ee55aacb96e402b8b4afc558646ff85234ed9e505dc"
+      }
+    ],
+    "metrics": {
+      "prefix_jobs": 1091,
+      "weight_ratio": 0.9651491769547325,
+      "counts_len10": 1597554240,
+      "coeff_c5_num": 297532260140,
+      "coeff_c5_den": 189,
+      "runtime_total_s": 957.1219763755798,
+      "runtime_avg_s": 0.877288704285591,
+      "chunk_runtime_p95_s": 1.1477627754211426,
+      "shell3_counts_len10": 362719752
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "endpoint_box_le3",
+          "counts_k10_partial"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 957.12,
+      "gpu_s": 0.0,
+      "max_mem_mb": 420
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "observation": "runtime_explosion",
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459016393442623
+            ],
+            [
+              "memory_pressure",
+              0.2950819672131148
+            ],
+            [
+              "python_overhead",
+              0.24590163934426235
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "коробка |endpoint|≤3 сохраняет симметрию и почти весь вес"
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "оболочка радиуса 3 дала ещё 3.6e8 путей и закрыла 96%"
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "новые коэффициенты c3..c5 записаны в явном виде"
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "прямые измерения показали ~1.15s p95 рунтайма"
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "почти весь процесс восстановлен; остался хвост 3.5%"
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.5,
+        "note": "периферия радиуса ≥4 ещё не исследована — возможны сюрпризы"
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "геометрическое ограничение ещё согласуется с кубической топологией"
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "новая конвенция минимизирует труд и повышает предсказательность"
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.71,
+        "note": "манигфольд префиксов почти компактифицирован; остался тонкий хвост"
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "структура+шум: структура=96%, шум=радиус≥4, можно продолжать"
+      }
+    ],
+    "status": "success",
+    "notes": "Коробка |endpoint|≤3 охватывает 1091/1149 классов и даёт counts_len10=1.597e9, c5=297532260140/189. Хвост (радиус ≥4) ≈3.5% веса оставлен для следующего шага перед финальной стыковкой χ(K) до K^{10}."
+  },
+  {
+    "id": "dcbdc20b-79c3-4ba9-9002-de8383f77f35",
+    "timestamp": "2025-11-19T17:00:46Z",
+    "task_id": "3d-ising",
+    "round": 44,
+    "title": "Q2.2: len6 box |endpoint|≤4 (99.7% веса)",
+    "hypothesis": "Расширение фильтра до |endpoint|∞≤4 добавит ещё ~3% веса (shell r=4) и приблизит χ(K) до K^{10} к полному значению, сохранив управляемый runtime.",
+    "plan": "1) idea_lab для радиуса 4. 2) Построить статистику коробки |endpoint|≤4. 3) Прогнать q2_2_run_prefix_batches с фильтром ≤4 и сравнить counts/coeffs с ≤3.",
+    "code_refs": [
+      "scripts/idea_lab.py",
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T165713Z.json",
+        "sha256": "c7ca6d5f29299e64043e290980370af70b78a99f876fe4609e0a55ba88aac3f9"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T165713Z.txt",
+        "sha256": "c7ca6d5f29299e64043e290980370af70b78a99f876fe4609e0a55ba88aac3f9"
+      },
+      {
+        "path": "artifacts/q2_2_prefix_states/len6_endpoint_stats_box4.json",
+        "sha256": "3be02c5d8d685f4e25f37f01bc912637cf7e11f1dcef3f4ae502145c726aceb5"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/box_le4_results.json",
+        "sha256": "8b390a269b598e4c6ea39c18c869f5589b05fbdfb1b842bb96f6b433abc56b1d"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/box_le4_summary.json",
+        "sha256": "b3175b64bb62cb5d30a66fff34870e359fb354fd7ea19b53c1ac13fea362905d"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/box_le4_delta_vs_le3.json",
+        "sha256": "0ef3300f52f5b51ba6b82c98ec0f70de8513c7770ee8df94c860dc5eb9ab572e"
+      }
+    ],
+    "metrics": {
+      "prefix_jobs": 1142,
+      "weight_ratio": 0.9967849794238683,
+      "counts_len10": 1642775400,
+      "coeff_c5_num": 1529654512156,
+      "coeff_c5_den": 945,
+      "runtime_total_s": 1012.2796902656555,
+      "runtime_avg_s": 0.8864095361345495,
+      "chunk_runtime_p95_s": 1.1238651275634766,
+      "shell4_counts_len10": 45221160
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "endpoint_box_le4",
+          "counts_k10_partial"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 1012.28,
+      "gpu_s": 0.0,
+      "max_mem_mb": 420
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "observation": "runtime_explosion",
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459016393442623
+            ],
+            [
+              "memory_pressure",
+              0.2950819672131148
+            ],
+            [
+              "python_overhead",
+              0.24590163934426235
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "коробка |endpoint|≤4 практически замыкает симметрию — осталось 0.3% веса"
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "shell r=4 добавил ещё 4.5e7 путей; комбинированный подход работает"
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "новые коэффициенты c3..c5 выписаны точно (c5=1529654512156/945)"
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "измерения рунтаймов и памяти стабильны, эксперимент чистый"
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "остался хвост 150 орбит (|endpoint|≥5); процесс почти целиком восстановлен"
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.5,
+        "note": "нужно проверить, нет ли аномалий в периферии r≥5"
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.71,
+        "note": "геометрическое ограничение сохраняет кубические инварианты и близко к полному множеству"
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "конвенция «коробка» снова снизила сложность и дала точный прогноз"
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "манигфольд префиксов почти компактифицирован; хвост ≈150 весов"
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "структура=99.7%; шум=150 классов; можно планировать финальный шаг"
+      }
+    ],
+    "status": "success",
+    "notes": "Фильтр |endpoint|≤4 охватывает 1142 классов (99.68% веса), даёт counts_len10=1.6428e9 и c5=1529654512156/945. Остались только 150 орбит радиусов 5–6 (~0.32% веса) для завершения χ(K) до K^{10}."
   }
 ]

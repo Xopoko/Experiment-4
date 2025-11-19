@@ -55,9 +55,7 @@ cache/                  # временные файлы/загрузки
    Выполни:
 
 ```bash
-   python3 scripts/idea_lab.py --task "<краткое описание>" \
-       --json-out artifacts/tools/tricks_<ts>.json \
-       --text-out artifacts/tools/tricks_<ts>.txt
+   python3 scripts/idea_lab.py --task "<краткое описание>" --json-out artifacts/tools/tricks_<ts>.json 
 ```
 
 Движок генерирует 7 ракурсов из операторальной библиотеки:
