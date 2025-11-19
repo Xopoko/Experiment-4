@@ -4326,5 +4326,375 @@
     ],
     "status": "success",
     "notes": "2×3×3 max_edges=15 считается за ~3.6 мин; counts включают c_15=895034. Задача Q2.2 (HT-ряд до K^15) выполнена на данной геометрии; можно переходить к расширению сеток или оптимизации."
+  },
+  {
+    "id": "b1eb470d-ac6a-4d77-8119-512d2b1e28ab",
+    "timestamp": "2025-11-19T10:54:10.191100Z",
+    "task_id": "3d-ising",
+    "round": 30,
+    "title": "Q2.2: χ(K) до K^10 через prefix-батчинг",
+    "hypothesis": "Параллельный диспетчер префиксных задач (length=3) позволит довести counts до K^10 без переписывания ядра cluster_enum и останется в лимите 10 мин на подзадачу.",
+    "plan": "(1) сформировать новые ракурсы idea_lab → выбрать упор на префиксный батчинг; (2) добавить управляющий скрипт run_prefix_batches.py и проверить на max_edges=6; (3) запустить 18 префиксных чанков до K^10 с одновременным расписанием и собрать коэффициенты.",
+    "code_refs": [
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py",
+      "cpp/cluster_enum.cpp"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T094836Z.json",
+        "sha256": "36b6284f9cd20a2a6d5957d49fa5370d48ea0faadf9ddf65e78c4d13350963d1"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T094836Z.txt",
+        "sha256": "36b6284f9cd20a2a6d5957d49fa5370d48ea0faadf9ddf65e78c4d13350963d1"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/results_max10_prefix3_full.json",
+        "sha256": "676e8dfe014f2036ee97eb26066ae7ffdaef4bad0d7746e3213179283500394d"
+      }
+    ],
+    "metrics": {
+      "counts_len10": 11889452,
+      "counts_len9": 2448836,
+      "counts_len8": 491546,
+      "coeff_c5": "10041892288/945",
+      "state_count": 9111426379,
+      "chunk_jobs": 18,
+      "max_chunk_wall_s": 458.73,
+      "batch_wall_s": 2338
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898223650461363,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "frontier_batches",
+          "prefix_scheduler"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 30158.81,
+      "gpu_s": 0.0,
+      "max_mem_mb": 19200
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": [
+            "requires",
+            "produces",
+            "checked_by"
+          ]
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "observation": "runtime_explosion",
+          "top_cause": "lack_pruning"
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Ограничения заданы принципиально — первая линия теперь про симметричный батчинг и контролируемые граничные случаи."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Простая идея префиксных задач дала резкий скачок — графовые ветки разбиты на управляемые экстремумы."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Добавлен чистый алгоритм run_prefix_batches.py с ясной функцией и формулой коэффициентов."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.85,
+        "note": "Эксперимент честно измерен: wall 38:58, CPU 30k s, state_count зафиксирован, артефакты приложены."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.83,
+        "note": "Сборка из 18 независимых блоков сохраняет согласование распределений до K^10."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.55,
+        "note": "Структура объёма ещё шероховата — нет усечения по масштабному инварианту симметрий."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 0,
+        "confidence": 0.5,
+        "note": "Хотелось бы увидеть геометрический аргумент/схему орбит, а не только диспетчер."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "Качественный портрет: сложная динамика сведена к дискретным отображениям префиксов."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Функционал χ(K) продолжен до K^10 — дальше можно думать о структуре коэффициентов."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Хорошая инженерия переноса: сложный процесс→портфель задач, шум отфильтрован."
+      }
+    ],
+    "status": "success",
+    "notes": "Добавлен скрипт batch-runner, который держит каждую префиксную задачу <10 минут и параллельно собирает 18 чанков. Получены коэффициенты χ(K) до K^10: c5=10041892288/945. Следующий шаг — добавить симметрии и мостовые прунинги, чтобы ускорить K^11."
+  },
+  {
+    "id": "9d85be37-18b4-480b-85a9-597581b28735",
+    "timestamp": "2025-11-19T14:08:12Z",
+    "task_id": "3d-ising",
+    "round": 31,
+    "title": "Q2.2: проверка симметричного батчинга (max_edges=8)",
+    "hypothesis": "Если сгруппировать префиксы по кубической симметрии и домножать результат на размер орбиты, то число задач и runtime упадут без изменения χ(K).",
+    "plan": "1) Снять новые ракурсы idea_lab (TRIZ/MORPH) → выбрать гипотезу про симметрию и мосты; 2) добавить явные префиксы/веса в q2_2_run_prefix_batches.py и q2_2_ht_susceptibility_cpp.py; 3) прогнать max_edges=8 с включённой симметризацией и сравнить с базовой раскладкой без симметрии.",
+    "code_refs": [
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T135422Z.json",
+        "sha256": "104616e9b8697349b745226ad0e8f5c41cf959c1b8888b5b03b5389d6736761c"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T135422Z.txt",
+        "sha256": "104616e9b8697349b745226ad0e8f5c41cf959c1b8888b5b03b5389d6736761c"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/results_max8_prefix3_sym.json",
+        "sha256": "0bd5d10ec30437ea0cffccfb50b8a6446076e85753006412f4c56bc09094e8aa"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/results_max8_prefix3_nosym.json",
+        "sha256": "1105ffd6b9f4fa18f147d305c3ca4bec3b5a64c8387b75aef96f7e8959fc792e"
+      }
+    ],
+    "metrics": {
+      "max_edges": 8,
+      "prefix_length": 3,
+      "sym_jobs": 11,
+      "nosym_jobs": 216,
+      "sym_state": 69105071,
+      "nosym_state": 528678892,
+      "runtime_sum_sym_s": 5.659,
+      "runtime_sum_nosym_s": 107.223,
+      "len5_rel_err": 0.477,
+      "len6_rel_err": 1.095,
+      "len7_rel_err": 1.819,
+      "len8_rel_err": 2.254
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "prefix_symmetry",
+          "nosym_baseline"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 107.223,
+      "gpu_s": 0.0,
+      "max_mem_mb": 0
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 0,
+        "confidence": 0.45,
+        "note": "Получили формальный контрпример: отражение не инвариантно пока нет канонического состояния."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": -1,
+        "confidence": 0.6,
+        "note": "Числа для K^8 разбежались, значит «книжного» веса нет."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 0,
+        "confidence": 0.5,
+        "note": "Новая нотация PrefixJob полезна, но формулы веса неверны."
+      },
+      {
+        "name": "Фейнман",
+        "vote": -1,
+        "confidence": 0.65,
+        "note": "Экспериментализм сказал «нет» — метрика разошлась >200%."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": -1,
+        "confidence": 0.7,
+        "note": "Сравнение распределений показало несогласованность, нужно другое событие на хвосте."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.4,
+        "note": "Видно, что шероховатость групп префиксов сложнее линейного веса."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 0,
+        "confidence": 0.45,
+        "note": "Нужен геометрический объект (орбитальный класс), а не только слова про направления."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 0,
+        "confidence": 0.5,
+        "note": "Качественный анализ показал, где сечение неверно — план pivot."
+      },
+      {
+        "name": "Риман",
+        "vote": 0,
+        "confidence": 0.48,
+        "note": "Без инварианта поверхности префикс не классифицируется."
+      },
+      {
+        "name": "Тао",
+        "vote": 0,
+        "confidence": 0.55,
+        "note": "Инструмент для явных префиксов готов, теперь нужен structural vs random разбор."
+      }
+    ],
+    "status": "fail",
+    "notes": "Явные префиксы и батч-раннер работают, но на max_edges=8 доказано, что простая симметрия по направлениям даёт 2.25× ошибку в counts. Следующий шаг — вводить состояния и орбиты на уровне подграфа или вернуться к мостовым условиям."
   }
 ]

@@ -97,6 +97,18 @@ def parse_args() -> argparse.Namespace:
         default=0,
         help="Chunk index to run (0-based, used with --prefix-chunks)",
     )
+    parser.add_argument(
+        "--prefix-seq",
+        type=str,
+        default="",
+        help="Explicit comma-separated prefix directions (overrides chunk slicing)",
+    )
+    parser.add_argument(
+        "--prefix-weight",
+        type=int,
+        default=1,
+        help="Multiplicity weight associated with explicit prefix (metadata only)",
+    )
     return parser.parse_args()
 
 
@@ -105,11 +117,22 @@ def main() -> None:
     if not args.binary.exists():
         raise FileNotFoundError(f"C++ backend not found at {args.binary}")
     bound = args.bound if args.bound > 0 else args.max_edges
+    explicit_prefix = [
+        int(token)
+        for token in args.prefix_seq.split(",")
+        if token.strip() != ""
+    ]
     prefix_len = max(0, args.prefix_length)
+    if explicit_prefix:
+        if prefix_len not in (0, len(explicit_prefix)):
+            raise ValueError("--prefix-length must match explicit --prefix-seq length")
+        prefix_len = len(explicit_prefix)
     tasks_params: List[Tuple[Path, int, int, Sequence[int] | None, int | None, bool]] = []
     total_chunks = max(1, args.prefix_chunks)
     chunk_index = min(max(0, args.chunk_index), total_chunks - 1)
-    if prefix_len == 0:
+    if explicit_prefix:
+        tasks_params.append((args.binary, args.max_edges, bound, explicit_prefix, None, False))
+    elif prefix_len == 0:
         for idx in range(6):
             tasks_params.append((args.binary, args.max_edges, bound, None, idx, True))
     else:
@@ -162,6 +185,8 @@ def main() -> None:
             else "Counts aggregated from C++ DFS backend"
         ),
         "prefix_length": prefix_len,
+        "prefix_sequence": explicit_prefix,
+        "prefix_weight": int(args.prefix_weight),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, ensure_ascii=False))

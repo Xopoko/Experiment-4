@@ -61,7 +61,7 @@ class ClusterEnumerator {
           parity_(total_vertices_, 0),
           active_pos_(total_vertices_, -1),
           odd_pos_(total_vertices_, -1),
-          vertex_min_dir_(total_vertices_, 6),
+          vertex_min_dir_(total_vertices_, 0),
           counts_(cfg.max_edges + 1, 0) {
         precompute_coords();
         add_active(origin_id_);
@@ -181,9 +181,6 @@ class ClusterEnumerator {
         degrees_[vertex] = before + 1;
         if (before == 0) {
             add_active(vertex);
-            if (vertex != origin_id_) {
-                vertex_min_dir_[vertex] = 6;
-            }
         }
     }
 
@@ -192,7 +189,7 @@ class ClusterEnumerator {
         degrees_[vertex] = before - 1;
         if (vertex != origin_id_ && degrees_[vertex] == 0) {
             remove_active(vertex);
-            vertex_min_dir_[vertex] = 6;
+            vertex_min_dir_[vertex] = 0;
         }
     }
 
@@ -268,7 +265,7 @@ class ClusterEnumerator {
                         continue;
                     }
                 } else {
-                    if (degree_vertex > 0 && dir_idx < vertex_min_dir_[vertex_id]) {
+                    if (dir_idx < vertex_min_dir_[vertex_id]) {
                         continue;
                     }
                 }
@@ -284,11 +281,9 @@ class ClusterEnumerator {
                 std::size_t pos = insert_edge(edge);
                 int prev_min_vertex = vertex_min_dir_[vertex_id];
                 int prev_min_nxt = vertex_min_dir_[nxt_id];
-                if (degree_vertex == 0) {
-                    vertex_min_dir_[vertex_id] = dir_idx;
-                }
+                vertex_min_dir_[vertex_id] = dir_idx;
                 if (degree_nxt == 0) {
-                    vertex_min_dir_[nxt_id] = rev_dir;
+                    vertex_min_dir_[nxt_id] = 0;
                 }
                 increase_degree(vertex_id);
                 increase_degree(nxt_id);

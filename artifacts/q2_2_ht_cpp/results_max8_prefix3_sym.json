@@ -1,0 +1,151 @@
+{
+  "max_edges": 8,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 6606,
+    "6": 61494,
+    "7": 794466,
+    "8": 9101514
+  },
+  "series_expr": "942836086*K**8/105 + 82274396*K**7/105 + 181612*K**6/3 + 32284*K**5/5 + 706*K**4 + 148*K**3 + 30*K**2 + 6*K + 1",
+  "coefficients": {
+    "c_0": "1",
+    "c_1": "30",
+    "c_2": "706",
+    "c_3": "181612/3",
+    "c_4": "942836086/105"
+  },
+  "state_count": 69105071,
+  "prefix_length": 3,
+  "prefix_jobs": 11,
+  "prefix_job_classes": 11,
+  "prefix_total_sequences": 216,
+  "symmetry_used": true,
+  "chunk_runs": [
+    {
+      "chunk": 2,
+      "runtime_s": 0.5485587120056152,
+      "state_count": 8452199,
+      "prefix_weight": 24,
+      "prefix_sequence": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "chunk": 3,
+      "runtime_s": 0.5670080184936523,
+      "state_count": 7491727,
+      "prefix_weight": 24,
+      "prefix_sequence": [
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "chunk": 1,
+      "runtime_s": 0.5791454315185547,
+      "state_count": 8497238,
+      "prefix_weight": 24,
+      "prefix_sequence": [
+        0,
+        0,
+        2
+      ]
+    },
+    {
+      "chunk": 0,
+      "runtime_s": 0.6235771179199219,
+      "state_count": 9608596,
+      "prefix_weight": 48,
+      "prefix_sequence": [
+        0,
+        2,
+        4
+      ]
+    },
+    {
+      "chunk": 7,
+      "runtime_s": 0.45693373680114746,
+      "state_count": 3170620,
+      "prefix_weight": 6,
+      "prefix_sequence": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "chunk": 4,
+      "runtime_s": 0.5438559055328369,
+      "state_count": 6485259,
+      "prefix_weight": 24,
+      "prefix_sequence": [
+        0,
+        2,
+        1
+      ]
+    },
+    {
+      "chunk": 5,
+      "runtime_s": 0.5526316165924072,
+      "state_count": 7319227,
+      "prefix_weight": 24,
+      "prefix_sequence": [
+        0,
+        2,
+        2
+      ]
+    },
+    {
+      "chunk": 6,
+      "runtime_s": 0.5570864677429199,
+      "state_count": 8598933,
+      "prefix_weight": 24,
+      "prefix_sequence": [
+        0,
+        2,
+        3
+      ]
+    },
+    {
+      "chunk": 8,
+      "runtime_s": 0.4095644950866699,
+      "state_count": 3160406,
+      "prefix_weight": 6,
+      "prefix_sequence": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "chunk": 9,
+      "runtime_s": 0.4175832271575928,
+      "state_count": 3160406,
+      "prefix_weight": 6,
+      "prefix_sequence": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "chunk": 10,
+      "runtime_s": 0.40346527099609375,
+      "state_count": 3160460,
+      "prefix_weight": 6,
+      "prefix_sequence": [
+        0,
+        1,
+        1
+      ]
+    }
+  ],
+  "notes": "Aggregated from multiple prefix-split runs via q2_2_run_prefix_batches.py"
+}

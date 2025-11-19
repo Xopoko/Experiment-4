@@ -1,0 +1,71 @@
+{
+  "max_edges": 6,
+  "counts_by_length": {
+    "1": 6,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0
+  },
+  "target_hist": [
+    {
+      "target": [
+        -1,
+        0,
+        0
+      ],
+      "count": 1
+    },
+    {
+      "target": [
+        0,
+        -1,
+        0
+      ],
+      "count": 1
+    },
+    {
+      "target": [
+        0,
+        0,
+        -1
+      ],
+      "count": 1
+    },
+    {
+      "target": [
+        0,
+        0,
+        1
+      ],
+      "count": 1
+    },
+    {
+      "target": [
+        0,
+        1,
+        0
+      ],
+      "count": 1
+    },
+    {
+      "target": [
+        1,
+        0,
+        0
+      ],
+      "count": 1
+    }
+  ],
+  "series_expr": "4*K**5/5 - 2*K**3 + 6*K + 1",
+  "coefficients": {
+    "c_0": "1",
+    "c_1": "0",
+    "c_2": "0",
+    "c_3": "0"
+  },
+  "state_count": 301,
+  "notes": "Counts aggregated from C++ DFS backend",
+  "prefix_length": 0
+}

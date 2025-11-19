@@ -1,0 +1,120 @@
+{
+  "max_edges": 10,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 150,
+    "4": 726,
+    "5": 3822,
+    "6": 19592,
+    "7": 100218,
+    "8": 491546,
+    "9": 2448836,
+    "10": 11889452
+  },
+  "series_expr": "10041892288*K**10/945 + 2099524414*K**9/945 + 47588866*K**8/105 + 9865556*K**7/105 + 55906*K**6/3 + 18364*K**5/5 + 706*K**4 + 148*K**3 + 30*K**2 + 6*K + 1",
+  "coefficients": {
+    "c_0": "1",
+    "c_1": "30",
+    "c_2": "706",
+    "c_3": "55906/3",
+    "c_4": "47588866/105",
+    "c_5": "10041892288/945"
+  },
+  "state_count": 9111426379,
+  "prefix_length": 3,
+  "prefix_chunks": 18,
+  "chunk_runs": [
+    {
+      "chunk": 2,
+      "runtime_s": 267.58174777030945,
+      "state_count": 366536328
+    },
+    {
+      "chunk": 1,
+      "runtime_s": 277.1607482433319,
+      "state_count": 358375458
+    },
+    {
+      "chunk": 0,
+      "runtime_s": 277.4857165813446,
+      "state_count": 333457685
+    },
+    {
+      "chunk": 3,
+      "runtime_s": 263.8412718772888,
+      "state_count": 370354305
+    },
+    {
+      "chunk": 5,
+      "runtime_s": 446.44274044036865,
+      "state_count": 573625454
+    },
+    {
+      "chunk": 4,
+      "runtime_s": 446.794314622879,
+      "state_count": 549667734
+    },
+    {
+      "chunk": 6,
+      "runtime_s": 281.213947057724,
+      "state_count": 365073675
+    },
+    {
+      "chunk": 7,
+      "runtime_s": 314.9350235462189,
+      "state_count": 435902033
+    },
+    {
+      "chunk": 8,
+      "runtime_s": 458.72794365882874,
+      "state_count": 573151153
+    },
+    {
+      "chunk": 9,
+      "runtime_s": 452.18220925331116,
+      "state_count": 613280182
+    },
+    {
+      "chunk": 10,
+      "runtime_s": 237.27738428115845,
+      "state_count": 494993106
+    },
+    {
+      "chunk": 11,
+      "runtime_s": 329.35884404182434,
+      "state_count": 566807514
+    },
+    {
+      "chunk": 12,
+      "runtime_s": 338.61790680885315,
+      "state_count": 519663614
+    },
+    {
+      "chunk": 13,
+      "runtime_s": 340.83054423332214,
+      "state_count": 589626062
+    },
+    {
+      "chunk": 14,
+      "runtime_s": 456.6846733093262,
+      "state_count": 564500561
+    },
+    {
+      "chunk": 15,
+      "runtime_s": 452.39728808403015,
+      "state_count": 620163079
+    },
+    {
+      "chunk": 16,
+      "runtime_s": 445.8017098903656,
+      "state_count": 624603667
+    },
+    {
+      "chunk": 17,
+      "runtime_s": 368.7625515460968,
+      "state_count": 591644769
+    }
+  ],
+  "notes": "Aggregated from multiple prefix-split runs via q2_2_run_prefix_batches.py"
+}
