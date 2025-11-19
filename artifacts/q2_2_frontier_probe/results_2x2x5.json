@@ -1,0 +1,45 @@
+{
+  "dims": [
+    2,
+    2,
+    5
+  ],
+  "max_edges": 10,
+  "counts_by_length": {
+    "1": 36,
+    "2": 96,
+    "3": 260,
+    "4": 620,
+    "5": 2200,
+    "6": 4884,
+    "7": 13288,
+    "8": 27060,
+    "9": 65968,
+    "10": 122096
+  },
+  "states_per_step": [
+    1,
+    2,
+    4,
+    13,
+    26,
+    78,
+    152,
+    280,
+    341,
+    407,
+    460,
+    513,
+    556,
+    599,
+    636,
+    673,
+    700,
+    727,
+    398,
+    60
+  ],
+  "final_state_count": 60,
+  "total_weight": 389329651,
+  "notes": "Prototype without connectivity enforcement; measures frontier state growth only."
+}
