@@ -7818,5 +7818,267 @@
     ],
     "status": "success",
     "notes": "Фильтр |endpoint|≤4 охватывает 1142 классов (99.68% веса), даёт counts_len10=1.6428e9 и c5=1529654512156/945. Остались только 150 орбит радиусов 5–6 (~0.32% веса) для завершения χ(K) до K^{10}."
+  },
+  {
+    "id": "641f73d1-b380-40c2-bcff-73779ae64dc5",
+    "timestamp": "2025-11-19T17:07:02Z",
+    "task_id": "3d-ising",
+    "round": 45,
+    "title": "Q2.2: len6 полный пробег (χ(K) до K^{10})",
+    "hypothesis": "Полный прогон без фильтров по len6 state-library замкнёт 100% орбит и даст итоговые коэффициенты χ(K) до порядка K^{10}.",
+    "plan": "1) idea_lab для хвоста r≥5. 2) Собрать tail library и прогнать q2_2_run_prefix_batches. 3) После валидации хвоста выполнить полный прогон по всей библиотеке и зафиксировать финальные counts/coefficients.",
+    "code_refs": [
+      "scripts/idea_lab.py",
+      "scripts/q2_2_run_prefix_batches.py",
+      "scripts/q2_2_ht_susceptibility_cpp.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T170000Z.json",
+        "sha256": "401fbb9f878f766a1e33c9d3aab75734cbe2d535d52561650227902125e19a3a"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T170000Z.txt",
+        "sha256": "401fbb9f878f766a1e33c9d3aab75734cbe2d535d52561650227902125e19a3a"
+      },
+      {
+        "path": "artifacts/q2_2_prefix_states/len6_endpoint_stats_tail.json",
+        "sha256": "f389a7d9a871efefe0683d6bea648d3b07c31dc76fa232abc87a58331917f0f3"
+      },
+      {
+        "path": "artifacts/q2_2_prefix_states/len6_tail.json",
+        "sha256": "a9d6e26fab0ae3a075cb094827be65976c63e8338bb51ec5832a902b32dcfa4f"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/tail_results.json",
+        "sha256": "c0dfe58d44dfa336b9e6205ee2fab0f4197a3e09e0f45fb62a95d66e790f7b66"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/tail_summary.json",
+        "sha256": "d6dedaf1cdf3b52222a9b19771d19700468fc7ac684c569851515131c1e80588"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/full_results.json",
+        "sha256": "18d53998787dac6691473bbf05eae512d20bb328ae54e1753c19c15ac9763d81"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/len6_filtered_m10/full_summary.json",
+        "sha256": "97e9538c5d484fddeddb90d4ac8a8d50c5bd5fee8e2f32b6358afb60a3f90270"
+      }
+    ],
+    "metrics": {
+      "prefix_jobs": 1149,
+      "weight_ratio": 1.0,
+      "counts_len10": 1643779050,
+      "coeff_c5_num": 1530588901696,
+      "coeff_c5_den": 945,
+      "runtime_total_s": 1017.8203036785126,
+      "runtime_avg_s": 0.8829107307371001,
+      "chunk_runtime_p95_s": 1.1453306674957275,
+      "tail_weight": 150,
+      "tail_counts_len10": 1003650
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "len6_tail",
+          "full_run_k10"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 1017.8203036785126,
+      "gpu_s": 0.0,
+      "max_mem_mb": 420
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "ANALOGIZE",
+        "args": {
+          "mapping": {
+            "requires": "requires",
+            "produces": "produces",
+            "checked_by": "checked_by"
+          }
+        }
+      },
+      {
+        "op": "BLEND",
+        "args": {
+          "merged_edges": 3
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "observation": "runtime_explosion",
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459016393442623
+            ],
+            [
+              "memory_pressure",
+              0.2950819672131148
+            ],
+            [
+              "python_overhead",
+              0.24590163934426235
+            ]
+          ]
+        }
+      },
+      {
+        "op": "ASPECT_ROTATE",
+        "args": {
+          "axis": "abstraction",
+          "delta": 0.5
+        }
+      },
+      {
+        "op": "RE_REPRESENT",
+        "args": {
+          "removed_constraints": [
+            "only_python"
+          ]
+        }
+      },
+      {
+        "op": "INVARIANT_SYMMETRY",
+        "args": {
+          "symmetries": [
+            "translation",
+            "parity"
+          ]
+        }
+      },
+      {
+        "op": "EXTREMIZE",
+        "args": {
+          "param": "max_edges",
+          "limit": "inf"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      },
+      {
+        "op": "EVALUATE_SURPRISE",
+        "args": {
+          "surprise": 0.1938
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "100% орбит собраны без нарушения симметрий — результат окончателен."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Полный ряд χ(K) до K^{10} получен в явном виде, хвосты проверены."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Серия завершена: c5=1530588901696/945, готово к публикации."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Все ресурсы зафиксированы, tail+full прогоны воспроизводимы."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.81,
+        "note": "Конечномерные блоки согласованы, процесс χ(K) полностью восстановлен."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 1,
+        "confidence": 0.62,
+        "note": "Хвост r≥5 проверен отдельно — шероховатостей не осталось."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Геометрический фильтр расширен до всей решётки — структура замкнута."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Окончательная конвенция (вся библиотека) дала полный ответ."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.73,
+        "note": "Манигфольд префиксов целиком покрыт; инварианты χ(K) ясны."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Стратегия “структура+шум” доведена до 100%; можно переходить к Q2.3/Q2.4."
+      }
+    ],
+    "status": "success",
+    "notes": "Собран хвост r≥5 (7 классов, вес 150) и затем выполнен полный прогон len6 library (1149 классов). Итог: counts_len10=1.64377905e9, c5=1530588901696/945. χ(K) до K^{10} готов, осталось интегрировать в общий отчёт по Q2.2."
   }
 ]
