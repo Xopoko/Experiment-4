@@ -4696,5 +4696,506 @@
     ],
     "status": "fail",
     "notes": "Явные префиксы и батч-раннер работают, но на max_edges=8 доказано, что простая симметрия по направлениям даёт 2.25× ошибку в counts. Следующий шаг — вводить состояния и орбиты на уровне подграфа или вернуться к мостовым условиям."
+  },
+  {
+    "id": "eb3df5b4-7234-4313-8e10-ce81e9b73b77",
+    "timestamp": "2025-11-19T14:21:56Z",
+    "task_id": "3d-ising",
+    "round": 32,
+    "title": "Q2.2: анализ орбит префиксов (len=3)",
+    "hypothesis": "Если сгруппировать префиксы по каноническим орбитам направлений и сравнить counts_by_length, станет ясно, что простая симметрия перечисления невалидна (ожидание: значимые расхождения).",
+    "plan": "1) Прогнать idea_lab по радикальным схемам (мосты/фронтир/авто-симметрии); 2) написать скрипт q2_2_prefix_orbit_check.py, группирующий chunk-файлы по орбитам направлений; 3) запустить анализ на полном наборе носим префиксов (6^3) и измерить диапазоны ошибок.",
+    "code_refs": [
+      "scripts/q2_2_prefix_orbit_check.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T141448Z.json",
+        "sha256": "ad675f6b823ffa027a3669b7f05dab917a3727018ef43221ff9b8d7995ef1051"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T141448Z.txt",
+        "sha256": "ad675f6b823ffa027a3669b7f05dab917a3727018ef43221ff9b8d7995ef1051"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/orbit_stats_len3.json",
+        "sha256": "4fa447654636de58436873560d776ecad20856855dfbbfc351a42cfd26c8a08d"
+      }
+    ],
+    "metrics": {
+      "total_prefixes": 216,
+      "canonical_classes": 11,
+      "mismatched_classes": 11,
+      "max_relative_error": 1.0
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "dir_orbits_failure",
+          "state_canonicalization_plan"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 0.6,
+      "gpu_s": 0.0,
+      "max_mem_mb": 200
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "ABDUCT",
+        "args": {
+          "observation": "runtime_explosion",
+          "posterior": [
+            [
+              "lack_pruning",
+              0.459
+            ],
+            [
+              "memory_pressure",
+              0.295
+            ],
+            [
+              "python_overhead",
+              0.246
+            ]
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "Чётко доказано, что один принцип (направление) не задаёт состояние — нужны новые инварианты."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Один орбитальный класс с 6 представителями дал три разные серии — контрпример найден."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "Новая функция орбит — чистое аналитическое средство, формулы в отчёте ясны."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Экспериментализм: скрипт проверил все 216 случаев и нашёл 100% несовпадений."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Мера на орбитах разошлась, значит σ-алгебра префиксов по направлениям неверна."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.45,
+        "note": "Нужно добавить анализ распределения «шероховатости» состояний, но шаг полезен."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 0,
+        "confidence": 0.5,
+        "note": "Жду построения геометрических орбит по активным вершинам, но подсчёт убедителен."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "Качественная картина дана: группа направлений не хватает; готовим новое сечение."
+      },
+      {
+        "name": "Риман",
+        "vote": 0,
+        "confidence": 0.48,
+        "note": "Следующая цель — инвариант многообразия активных точек; пока только диаграмма групп."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Отличный «counterexample factory»: теперь можно перейти к структурной/шумовой декомпозиции."
+      }
+    ],
+    "status": "success",
+    "notes": "Скрипт подтвердил, что все 11 орбит направлений дают разные counts_by_length (max rel err = 100%). Значит, симметрия по последовательностям невозможна; следующий шаг — канонизировать реальное состояние (активные вершины+рёбра) и добавить bridge_prune."
+  },
+  {
+    "id": "834f09c5-9a44-4fc8-8b65-fca57d13676b",
+    "timestamp": "2025-11-19T14:28:01Z",
+    "task_id": "3d-ising",
+    "round": 33,
+    "title": "Q2.2: библиотека канонических префиксных состояний (len=3)",
+    "hypothesis": "Если описать префиксы через канонические наборы рёбер (с учётом всех 48 симметрий), то получим компактный справочник состояний, пригодный для будущей state-level симметризации.",
+    "plan": "1) Прогнать idea_lab про канонизацию len=3; 2) написать скрипт prefix_state_lib.py, который строит орбиты по рёбрам/вершинам; 3) получить JSON с орбитами и показать, что всего 11 уникальных состояний при 6^3 последовательностях.",
+    "code_refs": [
+      "scripts/q2_2_prefix_state_lib.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T142653Z.json",
+        "sha256": "8c8a96fd6e972c0919732a01a0bf1ad25f00365d3fc5ad3a0f80436554b7a029"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T142653Z.txt",
+        "sha256": "8c8a96fd6e972c0919732a01a0bf1ad25f00365d3fc5ad3a0f80436554b7a029"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/prefix_states_len3.json",
+        "sha256": "883c9ab2275e2af52b5f67650f03233f33b1e3a67b914b08ba2102384c1f9f27"
+      }
+    ],
+    "metrics": {
+      "prefix_length": 3,
+      "total_sequences": 216,
+      "unique_states": 11,
+      "orbit_hist": {
+        "6": 4,
+        "24": 6,
+        "48": 1
+      }
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "state_canonicalization",
+          "orbit_library"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 0.2,
+      "gpu_s": 0.0,
+      "max_mem_mb": 50
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Теперь доступны «объекты» (графы), на которых можно строить принципиальные симметрии."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "Справочник орбит — чистое комбинаторное зерно, минимум описаний."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Эдж-листы в канонической форме — ясный аналитический язык."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Эксперимент прозрачен: 6³ → 11, все артефакты открыты."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Теперь можно говорить о согласованных мерах на орбитах — база для доводов."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.5,
+        "note": "Хочется посмотреть на распределение форм (шероховатость), но фундамент положен."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "Наконец получены геометрические объекты, а не только слова про направления."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Сечение пространства префиксов построено, можно планировать новую динамику."
+      },
+      {
+        "name": "Риман",
+        "vote": 0,
+        "confidence": 0.45,
+        "note": "Жду расширения до многообразий длины 4+, но шаг логически чист."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "Хорошее структурное разложение (орбитальная часть + шум), готов к переносам."
+      }
+    ],
+    "status": "success",
+    "notes": "Получена библиотека 11 канонических префиксных состояний (len=3) с орбитами 6/24/48. Данные пригодны для state-level симметризации и для будущей интеграции в C++-ядро."
+  },
+  {
+    "id": "0d564161-c76d-4cca-bfed-dbcdfd0da6c3",
+    "timestamp": "2025-11-19T14:31:34Z",
+    "task_id": "3d-ising",
+    "round": 34,
+    "title": "Q2.2: каноническая библиотека префиксов (len=4)",
+    "hypothesis": "Увеличение длины префикса до 4 и канонизация по рёбрам дадут управляемое число орбит (десятки, а не тысячи), что позволит позже симметризовать задачи.",
+    "plan": "1) idea_lab на тему len=4; 2) запустить prefix_state_lib.py c prefix_length=4; 3) зафиксировать распределение орбит (6/24/48) и подготовить данные для интеграции.",
+    "code_refs": [
+      "scripts/q2_2_prefix_state_lib.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T143010Z.json",
+        "sha256": "06bd2ecf25b6f6712f230a12b4ab6ead4783eef3ea08f9a9b65e281c13fef5af"
+      },
+      {
+        "path": "artifacts/tools/tricks_20251119T143010Z.txt",
+        "sha256": "06bd2ecf25b6f6712f230a12b4ab6ead4783eef3ea08f9a9b65e281c13fef5af"
+      },
+      {
+        "path": "artifacts/q2_2_ht_cpp/prefix_states_len4.json",
+        "sha256": "7e1d91f3bf1406e803775b88017f45ed2be2e10a0d2587b66e4885309bb12787"
+      }
+    ],
+    "metrics": {
+      "prefix_length": 4,
+      "total_sequences": 1296,
+      "unique_states": 48,
+      "orbit_hist": {
+        "6": 8,
+        "24": 28,
+        "48": 12
+      }
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "state_len4",
+          "orbit_hist_len4"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "none",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 0.3,
+      "gpu_s": 0.0,
+      "max_mem_mb": 80
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "count": 8
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "principles": [
+            "Counterweight",
+            "Taking out",
+            "Mechanical vibration",
+            "Partial/Excessive action",
+            "Dynamics"
+          ]
+        }
+      },
+      {
+        "op": "SERENDIPITY_HOOK",
+        "args": {
+          "sources": [
+            "code: Jensen transfer matrices",
+            "paper: diagrammatic Monte Carlo",
+            "paper: 3D Ising HT series",
+            "paper: SAW frontier DP"
+          ]
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter",
+            "bridge_prune"
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Состояния длины 4 всё ещё сжимаются до нескольких десятков — инвариант удержан."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.72,
+        "note": "Комбинаторная структура теперь очевидна: орбиты 6/24/48 задают весь ландшафт."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "Файл с рёбрами — готовый справочник для аналитических преобразований."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Экспериментальный перебор (6^4) + прозрачные данные — убедительно."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.74,
+        "note": "Можно строить согласованные меры на новых орбитах."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.45,
+        "note": "Жду анализа “шероховатости” форм, но база расширена."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.7,
+        "note": "Геометрическое описание обогащено, можно думать о мостах."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Качественное сечение пространства стало богаче — даёт новые рычаги."
+      },
+      {
+        "name": "Риман",
+        "vote": 0,
+        "confidence": 0.48,
+        "note": "Нужно продолже-ние на len=5+, но путь верный."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "“Structure vs noise” теперь масштабируется до len=4."
+      }
+    ],
+    "status": "success",
+    "notes": "Получено 48 канонических состояний для префиксов длины 4 (орбиты 6/24/48). Эти данные нужны для state-level симметризации и дальнейших bridge_prune-инвариантов."
   }
 ]

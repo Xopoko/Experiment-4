@@ -1,0 +1,1174 @@
+{
+  "chunks_dir": "artifacts/q2_2_ht_cpp/nosym_chunks_max8",
+  "prefix_length": 3,
+  "max_edges": 8,
+  "total_prefixes": 216,
+  "canonical_classes": 11,
+  "mismatched_classes": 11,
+  "max_relative_error": 1.0,
+  "lengths": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "mismatches": [
+    {
+      "key": [
+        0,
+        0,
+        0
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            0,
+            0
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            25,
+            153,
+            1031,
+            10659
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_000.json"
+        },
+        {
+          "sequence": [
+            1,
+            1,
+            1
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            25,
+            153,
+            1003,
+            9959
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_043.json"
+        },
+        {
+          "sequence": [
+            2,
+            2,
+            2
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            25,
+            137,
+            728,
+            4929
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_086.json"
+        },
+        {
+          "sequence": [
+            3,
+            3,
+            3
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            25,
+            137,
+            714,
+            4579
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_129.json"
+        },
+        {
+          "sequence": [
+            4,
+            4,
+            4
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            25,
+            121,
+            649,
+            3443
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_172.json"
+        },
+        {
+          "sequence": [
+            5,
+            5,
+            5
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            25,
+            121,
+            649,
+            3443
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_215.json"
+        }
+      ]
+    },
+    {
+      "key": [
+        0,
+        0,
+        1
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            0,
+            1
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            28,
+            620,
+            9740
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_001.json"
+        },
+        {
+          "sequence": [
+            1,
+            1,
+            0
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_042.json"
+        },
+        {
+          "sequence": [
+            2,
+            2,
+            3
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            14,
+            310,
+            4870
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_087.json"
+        },
+        {
+          "sequence": [
+            3,
+            3,
+            2
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_128.json"
+        },
+        {
+          "sequence": [
+            4,
+            4,
+            5
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_173.json"
+        },
+        {
+          "sequence": [
+            5,
+            5,
+            4
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_214.json"
+        }
+      ]
+    },
+    {
+      "key": [
+        0,
+        0,
+        2
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            0,
+            2
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            32,
+            240,
+            2853,
+            33918
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_002.json"
+        },
+        {
+          "sequence": [
+            0,
+            0,
+            3
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            32,
+            221,
+            2519,
+            28052
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_003.json"
+        },
+        {
+          "sequence": [
+            0,
+            0,
+            4
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            32,
+            156,
+            1598,
+            14413
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_004.json"
+        },
+        {
+          "sequence": [
+            0,
+            0,
+            5
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            32,
+            137,
+            1310,
+            9437
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_005.json"
+        },
+        {
+          "sequence": [
+            1,
+            1,
+            2
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            32,
+            240,
+            2814,
+            33023
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_044.json"
+        },
+        {
+          "sequence": [
+            1,
+            1,
+            3
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            32,
+            221,
+            2480,
+            27157
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_045.json"
+        }
+      ]
+    },
+    {
+      "key": [
+        0,
+        1,
+        0
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            1,
+            0
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            28,
+            620,
+            9740
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_006.json"
+        },
+        {
+          "sequence": [
+            1,
+            0,
+            1
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_037.json"
+        },
+        {
+          "sequence": [
+            2,
+            3,
+            2
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            14,
+            310,
+            4870
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_092.json"
+        },
+        {
+          "sequence": [
+            3,
+            2,
+            3
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_123.json"
+        },
+        {
+          "sequence": [
+            4,
+            5,
+            4
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_178.json"
+        },
+        {
+          "sequence": [
+            5,
+            4,
+            5
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_209.json"
+        }
+      ]
+    },
+    {
+      "key": [
+        0,
+        1,
+        1
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            1,
+            1
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            28,
+            620,
+            9740
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_007.json"
+        },
+        {
+          "sequence": [
+            1,
+            0,
+            0
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_036.json"
+        },
+        {
+          "sequence": [
+            2,
+            3,
+            3
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            14,
+            310,
+            4870
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_093.json"
+        },
+        {
+          "sequence": [
+            3,
+            2,
+            2
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_122.json"
+        },
+        {
+          "sequence": [
+            4,
+            5,
+            5
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_179.json"
+        },
+        {
+          "sequence": [
+            5,
+            4,
+            4
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_208.json"
+        }
+      ]
+    },
+    {
+      "key": [
+        0,
+        1,
+        2
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            1,
+            2
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            14,
+            266,
+            4050,
+            50690
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_008.json"
+        },
+        {
+          "sequence": [
+            0,
+            1,
+            3
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            14,
+            266,
+            4050,
+            50666
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_009.json"
+        },
+        {
+          "sequence": [
+            0,
+            1,
+            4
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            14,
+            266,
+            4050,
+            50738
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_010.json"
+        },
+        {
+          "sequence": [
+            0,
+            1,
+            5
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            14,
+            266,
+            4050,
+            50714
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_011.json"
+        },
+        {
+          "sequence": [
+            1,
+            0,
+            2
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_038.json"
+        },
+        {
+          "sequence": [
+            1,
+            0,
+            3
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_039.json"
+        }
+      ]
+    },
+    {
+      "key": [
+        0,
+        2,
+        0
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            2,
+            0
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            36,
+            266,
+            2852,
+            30895
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_012.json"
+        },
+        {
+          "sequence": [
+            0,
+            3,
+            0
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            32,
+            229,
+            2345,
+            25000
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_018.json"
+        },
+        {
+          "sequence": [
+            0,
+            4,
+            0
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            28,
+            178,
+            1354,
+            13824
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_024.json"
+        },
+        {
+          "sequence": [
+            0,
+            5,
+            0
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            24,
+            141,
+            863,
+            8511
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_030.json"
+        },
+        {
+          "sequence": [
+            1,
+            2,
+            1
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            36,
+            266,
+            2755,
+            28631
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_049.json"
+        },
+        {
+          "sequence": [
+            1,
+            3,
+            1
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            32,
+            229,
+            2248,
+            22736
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_055.json"
+        }
+      ]
+    },
+    {
+      "key": [
+        0,
+        2,
+        1
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            2,
+            1
+          ],
+          "counts_tuple": [
+            1,
+            4,
+            27,
+            237,
+            2815,
+            33506
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_013.json"
+        },
+        {
+          "sequence": [
+            0,
+            3,
+            1
+          ],
+          "counts_tuple": [
+            1,
+            4,
+            27,
+            235,
+            2681,
+            30889
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_019.json"
+        },
+        {
+          "sequence": [
+            0,
+            4,
+            1
+          ],
+          "counts_tuple": [
+            1,
+            4,
+            27,
+            233,
+            2467,
+            27452
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_025.json"
+        },
+        {
+          "sequence": [
+            0,
+            5,
+            1
+          ],
+          "counts_tuple": [
+            1,
+            4,
+            27,
+            231,
+            2349,
+            25363
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_031.json"
+        },
+        {
+          "sequence": [
+            1,
+            2,
+            0
+          ],
+          "counts_tuple": [
+            1,
+            4,
+            23,
+            154,
+            1466,
+            17343
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_048.json"
+        },
+        {
+          "sequence": [
+            1,
+            3,
+            0
+          ],
+          "counts_tuple": [
+            1,
+            4,
+            23,
+            152,
+            1332,
+            14759
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_054.json"
+        }
+      ]
+    },
+    {
+      "key": [
+        0,
+        2,
+        2
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            2,
+            2
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            49,
+            365,
+            4102,
+            40661
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_014.json"
+        },
+        {
+          "sequence": [
+            0,
+            3,
+            3
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            41,
+            298,
+            3220,
+            31693
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_021.json"
+        },
+        {
+          "sequence": [
+            0,
+            4,
+            4
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            33,
+            187,
+            1611,
+            12931
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_028.json"
+        },
+        {
+          "sequence": [
+            0,
+            5,
+            5
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            25,
+            120,
+            745,
+            5585
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_035.json"
+        },
+        {
+          "sequence": [
+            1,
+            2,
+            2
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            49,
+            365,
+            4063,
+            39866
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_050.json"
+        },
+        {
+          "sequence": [
+            1,
+            3,
+            3
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            41,
+            298,
+            3181,
+            30898
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_057.json"
+        }
+      ]
+    },
+    {
+      "key": [
+        0,
+        2,
+        3
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            2,
+            3
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            11,
+            225,
+            3508,
+            46008
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_015.json"
+        },
+        {
+          "sequence": [
+            0,
+            3,
+            2
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            3,
+            73,
+            1217,
+            17344
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_020.json"
+        },
+        {
+          "sequence": [
+            0,
+            4,
+            5
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            11,
+            165,
+            2128,
+            23666
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_029.json"
+        },
+        {
+          "sequence": [
+            0,
+            5,
+            4
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            3,
+            45,
+            477,
+            4728
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_034.json"
+        },
+        {
+          "sequence": [
+            1,
+            2,
+            3
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            11,
+            225,
+            3508,
+            46008
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_051.json"
+        },
+        {
+          "sequence": [
+            1,
+            3,
+            2
+          ],
+          "counts_tuple": [
+            0,
+            0,
+            3,
+            73,
+            1217,
+            17344
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_056.json"
+        }
+      ]
+    },
+    {
+      "key": [
+        0,
+        2,
+        4
+      ],
+      "representatives": [
+        {
+          "sequence": [
+            0,
+            2,
+            4
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            50,
+            452,
+            6100,
+            66791
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_016.json"
+        },
+        {
+          "sequence": [
+            0,
+            2,
+            5
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            50,
+            433,
+            5712,
+            60204
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_017.json"
+        },
+        {
+          "sequence": [
+            0,
+            3,
+            4
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            50,
+            438,
+            5585,
+            59608
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_022.json"
+        },
+        {
+          "sequence": [
+            0,
+            3,
+            5
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            50,
+            419,
+            5197,
+            53021
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_023.json"
+        },
+        {
+          "sequence": [
+            0,
+            4,
+            2
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            27,
+            188,
+            2324,
+            26169
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_026.json"
+        },
+        {
+          "sequence": [
+            0,
+            4,
+            3
+          ],
+          "counts_tuple": [
+            1,
+            5,
+            27,
+            188,
+            2148,
+            23303
+          ],
+          "path": "artifacts/q2_2_ht_cpp/nosym_chunks_max8/chunk_027.json"
+        }
+      ]
+    }
+  ]
+}

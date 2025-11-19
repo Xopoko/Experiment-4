@@ -109,6 +109,12 @@ def parse_args() -> argparse.Namespace:
         default=1,
         help="Multiplicity weight associated with explicit prefix (metadata only)",
     )
+    parser.add_argument(
+        "--prefix-state-id",
+        type=str,
+        default="",
+        help="Identifier of canonical prefix state (for logging)",
+    )
     return parser.parse_args()
 
 
@@ -187,6 +193,7 @@ def main() -> None:
         "prefix_length": prefix_len,
         "prefix_sequence": explicit_prefix,
         "prefix_weight": int(args.prefix_weight),
+        "prefix_state_id": args.prefix_state_id,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, ensure_ascii=False))

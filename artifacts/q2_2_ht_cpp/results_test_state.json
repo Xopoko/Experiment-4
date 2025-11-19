@@ -1,0 +1,52 @@
+{
+  "max_edges": 6,
+  "counts_by_length": {
+    "1": 6,
+    "2": 30,
+    "3": 72,
+    "4": 360,
+    "5": 3168,
+    "6": 27456
+  },
+  "series_expr": "80962*K**6/3 + 15484*K**5/5 + 340*K**4 + 70*K**3 + 30*K**2 + 6*K + 1",
+  "coefficients": {
+    "c_0": "1",
+    "c_1": "30",
+    "c_2": "340",
+    "c_3": "80962/3"
+  },
+  "state_count": 49554,
+  "prefix_length": 3,
+  "prefix_jobs": 2,
+  "prefix_job_classes": 11,
+  "prefix_total_sequences": 216,
+  "symmetry_used": true,
+  "state_library": "artifacts/q2_2_ht_cpp/prefix_states_len3.json",
+  "chunk_runs": [
+    {
+      "chunk": 0,
+      "runtime_s": 0.3335549831390381,
+      "state_count": 28185,
+      "prefix_weight": 48,
+      "prefix_sequence": [
+        0,
+        2,
+        4
+      ],
+      "prefix_state_id": "state_None"
+    },
+    {
+      "chunk": 1,
+      "runtime_s": 0.33906054496765137,
+      "state_count": 21369,
+      "prefix_weight": 24,
+      "prefix_sequence": [
+        0,
+        0,
+        2
+      ],
+      "prefix_state_id": "state_None"
+    }
+  ],
+  "notes": "Aggregated from multiple prefix-split runs via q2_2_run_prefix_batches.py"
+}

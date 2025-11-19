@@ -72,6 +72,7 @@ def canonicalize_prefix(seq: Sequence[int]) -> Tuple[int, ...]:
 class PrefixJob:
     sequence: Tuple[int, ...]
     weight: int
+    label: str | None = None
 
 
 def build_series(counts_by_length: Dict[int, int], max_edges: int) -> tuple[str, Dict[str, str]]:
@@ -136,6 +137,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Enable prefix symmetry grouping (requires validated weight map)",
     )
+    parser.add_argument(
+        "--state-library",
+        type=Path,
+        help="Path to JSON with canonical prefix states (overrides --enable-symmetry)",
+    )
     return parser.parse_args()
 
 
@@ -148,6 +154,25 @@ def build_prefix_jobs(prefix_length: int, use_symmetry: bool) -> List[PrefixJob]
         key = canonicalize_prefix(seq) if use_symmetry else tuple(seq)
         counts[key] = counts.get(key, 0) + 1
     return [PrefixJob(sequence=key, weight=weight) for key, weight in counts.items()]
+
+
+def load_state_library(path: Path, prefix_length: int) -> List[PrefixJob]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    lib_len = int(data.get("prefix_length", -1))
+    if lib_len != prefix_length:
+        raise ValueError(f"State library length {lib_len} != requested {prefix_length}")
+    jobs: List[PrefixJob] = []
+    for state in data.get("states", []):
+        sequence = tuple(int(x) for x in state.get("sample_sequence", []))
+        if len(sequence) != prefix_length:
+            raise ValueError(f"State {state.get(id)} has invalid sequence length {len(sequence)}")
+        weight = int(state.get("orbit_size", len(state.get("sequences", [])) or 1))
+        state_id = state.get("id")
+        label = f"state_{state_id}" if state_id is not None else None
+        jobs.append(PrefixJob(sequence=sequence, weight=weight, label=label))
+    if not jobs:
+        raise ValueError(f"State library {path} contains no states")
+    return jobs
 
 
 def format_prefix_arg(seq: Tuple[int, ...]) -> str:
@@ -163,8 +188,14 @@ def main() -> None:
     base_data = json.loads(args.base_counts.read_text(encoding="utf-8"))
     base_counts = {int(k): int(v) for k, v in base_data.get("counts_by_length", {}).items()}
 
-    use_symmetry = bool(args.enable_symmetry)
-    prefix_jobs_all = build_prefix_jobs(args.prefix_length, use_symmetry)
+    if args.state_library:
+        prefix_jobs_all = load_state_library(args.state_library, args.prefix_length)
+        use_symmetry = True
+        state_library_path = str(args.state_library)
+    else:
+        state_library_path = None
+        use_symmetry = bool(args.enable_symmetry)
+        prefix_jobs_all = build_prefix_jobs(args.prefix_length, use_symmetry)
     prefix_job_classes = len(prefix_jobs_all)
     prefix_jobs = sorted(prefix_jobs_all, key=lambda job: (-job.weight, job.sequence))
     total_sequences = 6 ** args.prefix_length if args.prefix_length > 0 else 1
@@ -175,7 +206,7 @@ def main() -> None:
     chunk_meta: List[Dict[str, float]] = []
     total_state_count = 0
 
-    def run_chunk(chunk_index: int, job: PrefixJob) -> tuple[int, float, Dict[str, object]]:
+    def run_chunk(chunk_index: int, job: PrefixJob) -> tuple[int, float, Dict[str, object], PrefixJob]:
         chunk_path = args.chunk_dir / f"chunk_{chunk_index:03d}.json"
         cmd = [
             "python3",
@@ -188,16 +219,18 @@ def main() -> None:
             format_prefix_arg(job.sequence),
             f"--prefix-weight={job.weight}",
         ]
+        if job.label:
+            cmd.append(f"--prefix-state-id={job.label}")
         start = time.time()
         subprocess.run(cmd, check=True)
         runtime = time.time() - start
         chunk_data = json.loads(chunk_path.read_text(encoding="utf-8"))
-        return chunk_index, runtime, chunk_data
+        return chunk_index, runtime, chunk_data, job
 
     with ThreadPoolExecutor(max_workers=max(1, args.batch_concurrency)) as pool:
         futures = [pool.submit(run_chunk, idx, job) for idx, job in enumerate(prefix_jobs)]
         for future in as_completed(futures):
-            chunk_index, runtime, chunk_data = future.result()
+            chunk_index, runtime, chunk_data, job = future.result()
             total_state_count += int(chunk_data["state_count"])
             weight = int(chunk_data.get("prefix_weight", 1))
             for length_str, count in chunk_data["counts_by_length"].items():
@@ -212,6 +245,7 @@ def main() -> None:
                     "state_count": int(chunk_data["state_count"]),
                     "prefix_weight": weight,
                     "prefix_sequence": chunk_data.get("prefix_sequence", []),
+                    "prefix_state_id": job.label,
                 }
             )
 
@@ -235,6 +269,7 @@ def main() -> None:
         "prefix_job_classes": prefix_job_classes,
         "prefix_total_sequences": total_sequences,
         "symmetry_used": use_symmetry,
+        "state_library": state_library_path,
         "chunk_runs": chunk_meta,
         "notes": "Aggregated from multiple prefix-split runs via q2_2_run_prefix_batches.py",
     }
