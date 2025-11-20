@@ -10377,5 +10377,160 @@
     ],
     "status": "success",
     "notes": "n=9 orbit (area≤40, pruned) с детерминированным neighbors завершён за ~32.9 s (без cProfile). Счётчики совпадают с прежними totals. Используем как baseline без профайлера перед введением min-hash каноникализации."
+  },
+  {
+    "id": "90ef5c56-88de-4119-b40c-9db351ae1f86",
+    "timestamp": "2025-11-20T07:09:50Z",
+    "task_id": "3d-ising",
+    "round": 79,
+    "title": "A/B neighbors-order stable vs sorted (n=9/10, no profiler)",
+    "hypothesis": "Устранение итоговой сортировки в neighbors не меняет счётчики и не хуже по времени на n=9/10 orbit (area≤40, pruned).",
+    "plan": "Добавить флаг neighbors-order (stable|sorted); прогнать n=9 и n=10 без профайлера в обоих режимах; сравнить счётчики и wall-time.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "scripts/q2_3_lt_clusters.py", "sha256": "e4074c2b5a41b81bab5cfd01d8dbb38c501b16231cf123f41689599c05cbfd13"},
+      {"path": "artifacts/q2_3_lt_free_energy/run_n9_neighbors_stable.json", "sha256": "630c66985dc071e874418f21bb0373ce31c7fb07c869071b471a1a0bbe363114"},
+      {"path": "artifacts/q2_3_lt_free_energy/run_n9_neighbors_sorted.json", "sha256": "aeddc5eb08ac946b642028d1501b0274b8685339412834277d19dc29e9e8adba"},
+      {"path": "artifacts/q2_3_lt_free_energy/run_n10_neighbors_stable.json", "sha256": "584e28b5f63414ba00ce812472ac228e3eba7c6a711941447ff73c27d80d6751"},
+      {"path": "artifacts/q2_3_lt_free_energy/run_n10_neighbors_sorted.json", "sha256": "5f4100ebd12ba1aade6a1c93dcbcfbc32c779046c1ff10fd8d2b7cf7ddf7bfa5"}
+    ],
+    "metrics": {
+      "n9_elapsed_stable_s": 32.87,
+      "n9_elapsed_sorted_s": 33.32,
+      "n10_elapsed_stable_s": 190.29,
+      "n10_elapsed_sorted_s": 189.97,
+      "n9_max_abs_diff": 0,
+      "n10_max_abs_diff": 0
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["neighbor_order_flag_ab"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 380.0, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "ASPECT_ROTATE", "args": {"axis": "representation", "change": "neighbor_order_flag"}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 9}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 10}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.72, "note": "Симметрия сохранена, флаг позволяет явно фиксировать порядок."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.69, "note": "Счётчики совпали (diff=0) для обоих n — эксперимент чистый."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.7, "note": "Порядок теперь контролируем параметром; формулы не изменились."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.75, "note": "Честный A/B без профайлера: время одинаково в пределах шума."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.68, "note": "Zero diff по площадям — маргинали совпадают, статистика ок."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Гейн по времени не виден; нужен следующий ход (min-hash/Numba)."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Групповые симметрии не усилены; шаг скорее сервисный."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Флаг даёт контроль для тестов; можно безопасно пробовать min-hash."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Нужен формальный аргумент о неизменности при смене порядка."},
+      {"name": "Тао", "vote": 1, "confidence": 0.71, "note": "A/B показал нулевой эффект на счётчики; следующая декомпозиция — ключ/hashing."}
+    ],
+    "status": "success",
+    "notes": "Добавлен флаг neighbors-order (stable|sorted). A/B на n=9/10 без профайлера: diff по счётчикам = 0, wall-time различия в пределах шума (≈32.9 vs 33.3 s для n=9; ≈190.3 vs 190.0 s для n=10). Время не улучшилось заметно, но порядок теперь под контролем для дальнейших экспериментов (min-hash, Numba/C++ для вращений)."
+  },
+  {
+    "id": "82f31b45-18d8-42b2-a3f4-f21cdfd59338",
+    "timestamp": "2025-11-20T07:25:26Z",
+    "task_id": "3d-ising",
+    "round": 80,
+    "title": "A/B canonical-mode scan vs sorted (neighbors stable)",
+    "hypothesis": "Сканирующая каноникализация (scan) без сортировки сохраняет счётчики; влияние на время для n=9/10 измеримо.",
+    "plan": "Ввести флаг canonical-mode (sorted|scan); прогнать n=6 для проверки совпадения, затем n=9 и n=10 (orbit, pruned, area≤40) в обоих режимах при neighbors-order=stable; сравнить diff=0 и wall-time.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "scripts/q2_3_lt_clusters.py", "sha256": "e4074c2b5a41b81bab5cfd01d8dbb38c501b16231cf123f41689599c05cbfd13"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6_scan.json", "sha256": "5f65a1f271b3c7ecbd52e0b02db9d10e38e8b870f34f4ec02c61a4251ff2f678"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6_sorted.json", "sha256": "a875aab26c1d517f4a2d05c8c8f8f03517c29569076c9727998fcabba8a30e68"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6_scan_vs_sorted.json", "sha256": "f79bcdae4bb3b3d88b55ef85514e427effbd412de05c860c96e208778bf48288"},
+      {"path": "artifacts/q2_3_lt_free_energy/run_n9_canon_scan.json", "sha256": "721f8d9bd863dc1637996e77d5fa25d6b27a313da960ca5897a8e703a7be0c9c"},
+      {"path": "artifacts/q2_3_lt_free_energy/run_n9_canon_sorted.json", "sha256": "54ab73044418fb277d65314ea1fa0f0647bf33fd619cef3e1187c02cbcb9fdc3"},
+      {"path": "artifacts/q2_3_lt_free_energy/run_n10_canon_scan.json", "sha256": "8fbd4d5e0e39917c4c2c4df3155b9c2b911611004c3c2ed42d66948359bd0be9"},
+      {"path": "artifacts/q2_3_lt_free_energy/run_n10_canon_sorted2.json", "sha256": "7127e6dd48e7cf202b8f6aee414607af39d4472ebd67e775778d2c956ecd30dc"}
+    ],
+    "metrics": {
+      "n6_max_abs_diff": 0,
+      "n9_max_abs_diff": 0,
+      "n10_max_abs_diff": 0,
+      "n6_elapsed_scan_s": 0.0562,
+      "n6_elapsed_sorted_s": 0.0402,
+      "n9_elapsed_scan_s": 42.26,
+      "n9_elapsed_sorted_s": 32.81,
+      "n10_elapsed_scan_s": 276.82,
+      "n10_elapsed_sorted_s": 190.53
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["canonical_scan_ab"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 519.7, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "ASPECT_ROTATE", "args": {"axis": "representation", "change": "canonical_scan"}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 6}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 9}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 10}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.72, "note": "Инвариант сохранён (diff=0), но scan медленнее — сортировка не главный барьер."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.69, "note": "Двойной счёт совпал; цифры показывают, что scan — регрессия по времени."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.7, "note": "Похоже, обход bounding box дорого — оставляем sorted как базу."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.75, "note": "Эксперимент чистый: diff=0, время выросло → откладываем scan."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.68, "note": "Маргинали совпали; данные полезны как негативный результат."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Рост времени подтверждает опасения; сканирование невыгодно."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Геометрия не упрощена; нужно искать другие симметрии."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Флаг позволяет отвергнуть scan; базовое sorted остаётся."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Нужен более абстрактный ключ; scan не помогает."},
+      {"name": "Тао", "vote": 1, "confidence": 0.71, "note": "Шум отделён: scan хуже, значит возвращаемся к sorted и ищем min-hash/компиляцию."}
+    ],
+    "status": "fail",
+    "notes": "Флаг canonical-mode (sorted|scan) добавлен. Проверка n=6/9/10 показала diff=0, но scan значительно медленнее (n9 +9.4s, n10 +86s). Сканирующий вариант отклонён; оставляем sorted как базу. Дальше — попробовать min-hash или перенос normalize/canonicalize в Numba/C++."
+  },
+  {
+    "id": "79da5553-6309-4658-85d6-864518fe3764",
+    "timestamp": "2025-11-20T07:28:40Z",
+    "task_id": "3d-ising",
+    "round": 81,
+    "title": "Профиль n=9 (neighbors stable, canonical sorted)",
+    "hypothesis": "Свежий cProfile без лишних изменений покажет, что горячие точки остаются normalize_translation/canonicalize_rooted (~35/30 s), задавая целевые функции для оптимизации.",
+    "plan": "Запустить n=9 orbit/pruned (area≤40) с neighbors-order=stable и canonical-mode=sorted под cProfile, сохранить профиль и JSON результатов.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_neighbors_sorted_stable.prof", "sha256": "0e2c0f66b6d6e4d21939818495256193e4002683f606991b0efb95103b2504ac"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_neighbors_sorted_stable.json", "sha256": "0338b36b7bdd549caf11b7118b1df499f7060b1149dd0f6ef743e0ead305bf37"}
+    ],
+    "metrics": {
+      "elapsed_s": 76.62,
+      "rooted_oriented_total": 11867600,
+      "hotspots": {
+        "normalize_translation_cum_s": 34.98,
+        "canonicalize_shape_cum_s": 30.11,
+        "canonicalize_rooted_cum_s": 29.58,
+        "apply_rotation_cum_s": 13.43,
+        "list_sort_cum_s": 9.05
+      }
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["profile_n9_neighbors_sorted_stable"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 76.6, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MEASURE", "args": {"tool": "cProfile", "target": "n9_orbit_pruned", "interesting": ["normalize_translation", "canonicalize_rooted"]}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.72, "note": "Профиль подтвердил узкие места — сантиметр для точечного удара."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.69, "note": "Числа явные: normalize+canonicalize ~65 s — цель оптимизации ясна."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.7, "note": "Суммарные функции выделены; можно переписать их компактно/вне Python."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.75, "note": "Чистый профиль без новых фич — хорошая база для A/B после оптимизации."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.68, "note": "Маргинали совпадают, профиль показал доли времени."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Опять подтверждение старых bottleneck; нужен конструктивный ход."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Симметрий больше не стало; просто измерение."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Профиль — карта для следующего шага (hash/Numba/C++)."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Нужно обобщённое представление, не только измерение."},
+      {"name": "Тао", "vote": 1, "confidence": 0.71, "note": "Отделили структуру от шума: теперь чёткие цели для переноса функций."}
+    ],
+    "status": "success",
+    "notes": "cProfile n=9 (neighbors stable, canonical sorted) подтвердил основные узкие места: normalize_translation (~35 s), canonicalize_shape (~30 s), canonicalize_rooted (~29.6 s), list_sort (~9 s). Эти функции — цели для min-hash или переноса в Numba/C++."
   }
 ]

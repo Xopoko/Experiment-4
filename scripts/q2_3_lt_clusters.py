@@ -19,6 +19,9 @@ DIRS: Tuple[Tuple[int, int, int], ...] = (
     (0, 0, -1),
 )
 
+NEIGH_USE_SORT = False
+CANONICAL_MODE = "sorted"
+
 
 Cell = Tuple[int, int, int]
 Cluster = Tuple[Cell, ...]
@@ -84,12 +87,32 @@ def normalize_translation(cells: Iterable[Cell]) -> Cluster:
     return tuple(normalized)
 
 
+def normalize_translation_scan(cells: Iterable[Cell]) -> Cluster:
+    """Deterministic scan of bounding box without sorting."""
+
+    cells_list = list(cells)
+    xs, ys, zs = zip(*cells_list)
+    min_x, min_y, min_z = min(xs), min(ys), min(zs)
+    max_x, max_y, max_z = max(xs), max(ys), max(zs)
+
+    cluster_set = set(cells_list)
+    ordered: List[Cell] = []
+    for x in range(min_x, max_x + 1):
+        for y in range(min_y, max_y + 1):
+            for z in range(min_z, max_z + 1):
+                if (x, y, z) in cluster_set:
+                    ordered.append((x - min_x, y - min_y, z - min_z))
+    return tuple(ordered)
+
+
 def canonicalize_shape(cells: Sequence[Cell]) -> Cluster:
     """Canonical rotation+translation representative."""
+
+    norm_fn = normalize_translation_scan if CANONICAL_MODE == "scan" else normalize_translation
     best: Cluster | None = None
     for rot in ROTATIONS:
         rotated = (apply_rotation(c, rot) for c in cells)
-        normalized = normalize_translation(rotated)
+        normalized = norm_fn(rotated)
         if best is None or normalized < best:
             best = normalized
     assert best is not None
@@ -113,9 +136,16 @@ def canonicalize(cells: Sequence[Cell]) -> Cluster:
 
 def neighbors(cluster: Cluster) -> List[Cell]:
     cluster_set = set(cluster)
-    # Preserve deterministic iteration order without a global sort:
-    # iterate cells in their stored order and directions in DIRS order,
-    # tracking seen candidates to avoid duplicates.
+    if NEIGH_USE_SORT:
+        neigh: set[Cell] = set()
+        for x, y, z in cluster:
+            for dx, dy, dz in DIRS:
+                cand = (x + dx, y + dy, z + dz)
+                if cand not in cluster_set:
+                    neigh.add(cand)
+        return sorted(neigh)
+
+    # Stable deterministic order without global sort: iterate cells and directions once.
     seen: set[Cell] = set()
     ordered: List[Cell] = []
     for x, y, z in cluster:
@@ -298,12 +328,28 @@ def parse_args() -> argparse.Namespace:
         default="oriented",
         help="oriented = legacy rooted enumeration; orbit = symmetry-reduced shapes with (root, rotation) weights",
     )
+    parser.add_argument(
+        "--neighbors-order",
+        choices=["stable", "sorted"],
+        default="stable",
+        help="Neighbor generation order: stable (no global sort) or sorted (legacy).",
+    )
+    parser.add_argument(
+        "--canonical-mode",
+        choices=["sorted", "scan"],
+        default="sorted",
+        help="Canonicalization: sorted (legacy) or scan bounding box without sorting.",
+    )
     parser.add_argument("--output", type=Path, default=Path("artifacts/q2_3_lt_free_energy/cluster_counts.json"))
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
+    global NEIGH_USE_SORT
+    NEIGH_USE_SORT = args.neighbors_order == "sorted"
+    global CANONICAL_MODE
+    CANONICAL_MODE = args.canonical_mode
     args.output.parent.mkdir(parents=True, exist_ok=True)
     start = time.time()
     counts, meta = enumerate_counts(args.max_cells, args.max_area, args.use_pruned, args.mode)
@@ -314,6 +360,8 @@ def main() -> None:
         "max_area": args.max_area,
         "mode": args.mode,
         "use_pruned": args.use_pruned,
+        "neighbors_order": args.neighbors_order,
+        "canonical_mode": args.canonical_mode,
         "elapsed_s": elapsed,
         **counts,
         **meta,
