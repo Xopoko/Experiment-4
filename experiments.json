@@ -10157,5 +10157,225 @@
     ],
     "status": "fail",
     "notes": "Попытка LRU-кэша normalize_translation повысила time до 179 s → откат. Текущая версия вернулась к ~76.7 s с прежним профилем. Кэширование нормализации признано вредным; фокус далее — хеш-ключ без сортировки или иное представление фронтира."
+  },
+  {
+    "id": "7d789a0c-2684-4f23-a51f-1b0dd13a552c",
+    "timestamp": "2025-11-20T06:47:09Z",
+    "task_id": "3d-ising",
+    "round": 74,
+    "title": "Orbit vs oriented sanity check (n=6)",
+    "hypothesis": "rooted_oriented_by_area из orbit-режима совпадает с counts_by_area ориентированного перебора для max_cells=6, max_area=20 при prune.",
+    "plan": "Прогнать scripts/q2_3_lt_clusters.py в режимах oriented и orbit с max_cells=6, max_area=20, use_pruned; сравнить counts_by_area с rooted_oriented_by_area и зафиксировать max_abs_diff.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T064421Z.json", "sha256": "e5e04daf8c0dd634b2a50a04807984135e15d1f7ea86d127b5f4895504d15424"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_oriented_n6.json", "sha256": "4ef8ed92aeb3868c92d551520a20522f2f4deca59b209af040807c4ed1e77b6d"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6.json", "sha256": "39d6a623c95d1b61af3dbe9d1e1c4c98a99e37f1e3c6046bffc474a842d37291"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_vs_oriented_n6.json", "sha256": "79801946f6923b98103951d8a471c283f10cbe983633c8bae8a497b55e25dada"}
+    ],
+    "metrics": {
+      "max_abs_diff": 0,
+      "areas_tested": [6, 10, 14, 16, 18, 20],
+      "oriented_total": 636,
+      "rooted_oriented_total": 636,
+      "elapsed_oriented_s": 0.0486,
+      "elapsed_orbit_s": 0.0389
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_vs_oriented_n6"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 0.2, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_validation", "max_cells": 6, "max_area": 20}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.75, "note": "Симметрия по ориентациям проверена на конкретном измерении — инвариант работает."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.72, "note": "Двойной подсчёт дал равенство; вероятность ошибки мала."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.73, "note": "Формулы counts и rooted_oriented сошлись по всем площадям."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.78, "note": "Эксперимент прост и воспроизводим — 0 расхождений."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.74, "note": "Согласованы распределения по площадям; вероятностной щели нет."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Пока только малая n=6 — масштабная часть впереди."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Геометрия проверена локально; глобальные симметрии ещё не закреплены."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.7, "note": "Локальное равенство орбит ↔ ориентаций подтверждено, база для дальнейшего подъёма."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Работает на малых многообразиях; стоит искать более абстрактное доказательство."},
+      {"name": "Тао", "vote": 1, "confidence": 0.72, "note": "Шум обнулён, структура совпала — хорошая проверка переноса между режимами."}
+    ],
+    "status": "success",
+    "notes": "Orbit-режим воспроизводит ориентированный перебор для max_cells=6, max_area=20 с max_abs_diff=0; rooted_oriented_total=636 совпадает с oriented_total. База для доверия к орбитам перед большими n."
+  },
+  {
+    "id": "3f79717a-db95-49ab-b250-e50f8e315ab4",
+    "timestamp": "2025-11-20T06:50:42Z",
+    "task_id": "3d-ising",
+    "round": 75,
+    "title": "Брейншторм ускорения orbit LT (normalize/canonicalize)",
+    "hypothesis": "Лаборатория идей предложит разнообразные ходы (симметрии, фильтры, переразбиение работы) для ускорения normalize/canonicalize без потери точности; разбор голосами выявит наиболее перспективные.",
+    "plan": "Запустить idea_lab на задаче ускорения orbit LT; собрать ракурсы и обсудить с энграммами набор конкретных ходов (hash-ключи, отказ от сортировок, перенос на C++/numba, блокировка по областям, кэш инвариантов).",
+    "code_refs": ["scripts/idea_lab.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T065026Z.json", "sha256": "7a642e0ef6e28da47d837a32c9ffabfa439da83fcfe63246fc90ea53d6be933e"}
+    ],
+    "metrics": {
+      "ideas_count": 8,
+      "uzzi_median_z": 1.8898223650461363
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["normalize_hash_rewrite", "frontier_blocking", "c++_transfer", "numba_drawing"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 0.3, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"count": 8, "axes": ["lattice_patch", "repr", "pruning", "validation", "acceleration"]}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"sources": ["Jensen transfer matrices", "diagrammatic MC", "HT series", "SAW frontier DP"]}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.72, "note": "Фокус на инвариантах: заменить сортировку на хеш-ключ и фиксированную ориентацию координат."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.69, "note": "Двойной счёт: проверить равенства на рандомных подсемплах, а затем упаковать в префиксы/блоки."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.7, "note": "Упростить формулы: чистый canonical=shift+sorted_once, дальше вращения по готовой таблице."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.75, "note": "Сначала построить минимальный прототип hash-normalize и обстрелять quickcheck; потом думать про перенос."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.68, "note": "Собрать статистику повторов нормализации и кэшировать инвариант вроде min-hash координат."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Опасность масштабной сложности сортировок остаётся; просит доказуемый bound."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Групповые симметрии можно зашить глубже (таблицы 24 вращений в C++), иначе лишь локальные улучшения."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Разбить фронтир на блоки/косетки и фиксировать порядок обхода — снимет часть сортировок."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Хочет более абстрактную репрезентацию (модуль координат/решётка), прежде чем оптимизировать низкий уровень."},
+      {"name": "Тао", "vote": 1, "confidence": 0.71, "note": "Разделить структура+шум: железно зафиксировать структуру ключа и проверить на малых n; шум — микроскопические сортировки."}
+    ],
+    "status": "success",
+    "notes": "Брейншторм дал пачку ходов: (1) hash-based normalize без сортировки, (2) предрасчёт 24 вращений и их применения в C++/numba, (3) блокировка фронтира и префиксное кэширование инвариантов, (4) перенос горячих функций из Python в C++ или Numba, (5) проверка точности через рандомные подсемплы и сравнение с ориентированной формой. Следующий шаг — выбрать 1–2 хода (hash-ключ + блокировка) и реализовать прототип на n=9."
+  },
+  {
+    "id": "63fe582c-922f-4d31-8a13-93c0f11a3600",
+    "timestamp": "2025-11-20T06:52:35Z",
+    "task_id": "3d-ising",
+    "round": 76,
+    "title": "Брейншторм hash-normalize + фиксированный фронтир",
+    "hypothesis": "Повторный запуск idea_lab на конкретизации (hash-normalize, fixed frontier order) даст новые ходы/серендипити источники и уточнит приоритеты оптимизаций.",
+    "plan": "Перепрограммировать idea_lab на новой формулировке и собрать многоракурсный набор ходов; обсудить голосами, что реализовывать первым (min-hash ключ, порядок обхода, C++/Numba).",
+    "code_refs": ["scripts/idea_lab.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T065224Z.json", "sha256": "f20c5fb6aff5de3bddab494019979322b2e22becd193168fccba530f850b63be"}
+    ],
+    "metrics": {
+      "ideas_count": 8,
+      "uzzi_median_z": 1.8898223650461363
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["hash_min_shift", "fixed_frontier_order", "rotation_lookup_cpp", "numba_hotspot"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 0.3, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"count": 8, "axes": ["lattice_patch", "repr", "pruning", "validation", "acceleration"]}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"sources": ["Jensen transfer matrices", "diagrammatic MC", "HT series", "SAW frontier DP"]}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.72, "note": "Инвариантный min-hash ключ без сортировок — первый выстрел."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.69, "note": "Двойной счёт + рандомные подсемплы для быстрой валидации нового ключа."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.7, "note": "Таблица вращений + фиксированный порядок фронтира сведут каноникализацию к константным lookup."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.75, "note": "Надо быстро собрать прототип hash-normalize и обстрелять на n=6–9."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.68, "note": "Статистика повторов нормализации → кэш по min-hash окупится."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Опасность роста коллизий/сложности; нужен строгий контроль."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Симметрии надо зашить глубже, иначе выигрыш локальный."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Фронтир в фиксированном порядке снижает сортировки; стоит попробовать."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Нужна абстрактная гарантия корректности min-hash каноникализации."},
+      {"name": "Тао", "vote": 1, "confidence": 0.71, "note": "Разделить структура (жёсткий ключ) и шум (коллизии) + проверить на малых коробках."}
+    ],
+    "status": "success",
+    "notes": "Повторный брейншторм уточнил фокус: (1) min-hash/shift ключ как замена сортировок, (2) фиксированный порядок фронтира для снятия list.sort, (3) lookup 24 вращений в C++/Numba, (4) быстрый quickcheck на n=6–9 для контроля коллизий. Следующий практический шаг — реализовать min-hash canonicalize_rooted и фиксированный порядок генерации neighbors, затем перепрофилировать n=9."
+  },
+  {
+    "id": "2a02d44e-8b1d-431d-92e9-dc8d09f0cefe",
+    "timestamp": "2025-11-20T06:54:35Z",
+    "task_id": "3d-ising",
+    "round": 77,
+    "title": "Снятие сортировки в neighbors для orbit",
+    "hypothesis": "Замена global sorted в neighbors на детерминированный порядок без сортировки сохранит счётчики и может снизить нагрузку list_sort.",
+    "plan": "Изменить neighbors: обход кластеров и DIRS в фиксированном порядке, без итоговой сортировки, с dedup через set. Проверить корректность на n=6 (orbit, pruned, max_area=20) против прежнего файла.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "scripts/q2_3_lt_clusters.py", "sha256": "b45a86e06198cfbcd780eed329771e82bbc5013cfef8dedc48b829ab278636e2"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6_neighbors.json", "sha256": "6912c21bb92ccdd5c49e64bae16c2a85f5f182bce5bc3fa9e255c11978edee57"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_neighbors_vs_baseline_n6.json", "sha256": "29042195131d5e23c3dc89ebca5683e7becfdde02a110a577008f258440f0889"}
+    ],
+    "metrics": {
+      "max_abs_diff": 0,
+      "rooted_oriented_total_new": 3066,
+      "rooted_oriented_total_baseline": 3066,
+      "elapsed_new_s": 0.0409,
+      "elapsed_baseline_s": 0.0389
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["neighbor_no_sort"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 0.1, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 6, "max_area": 20}},
+      {"op": "ASPECT_ROTATE", "args": {"axis": "representation", "change": "order_no_sort"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.72, "note": "Инвариант не затронут, порядок фиксирован — корректность подтверждена."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.69, "note": "Двойной счёт совпал; разница нулевая — хороший знак."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.7, "note": "Убрали лишнюю сортировку без изменения формул."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.75, "note": "Короткий эксперимент, проверка через diff=0 — чисто."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.68, "note": "Маргинали совпали; можно мерить эффект на n≥9."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Пока выигрыш по времени не показан; нужно на больших n."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Групповые симметрии не усилены; улучшение локальное."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Порядок фронтира зафиксирован; следующий шаг — измерить на реальных профилях."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Корректность ок, но нужна строгая оценка влияния на сложность."},
+      {"name": "Тао", "vote": 1, "confidence": 0.71, "note": "Шум сортировки локально вырезан; надо проверить масштабируемость."}
+    ],
+    "status": "success",
+    "notes": "neighbors теперь детерминирован без глобальной сортировки; counts совпали (max_abs_diff=0) с baseline orbit n=6. Время в пределах шума. Следующий шаг — перепрофилировать n=9/10, чтобы оценить вклад list_sort_cum_s и решить, нужен ли min-hash ключ."
+  },
+  {
+    "id": "8f06ec84-eba4-44ae-9229-b84bdf9d037b",
+    "timestamp": "2025-11-20T06:59:31Z",
+    "task_id": "3d-ising",
+    "round": 78,
+    "title": "n=9 orbit (pruned) после фиксации порядка neighbors",
+    "hypothesis": "Детерминированный neighbors без сортировки не меняет счётчики и даёт ориентир по времени для n=9 (orbit, area≤40).",
+    "plan": "Запустить orbit/pruned на n=9, max_area=40 без профайлера, сохранить counts и время; сверить totals с прошлой версией (ожидаем совпадение rooted_oriented_total).",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/run_n9_neighbors.json", "sha256": "8013457a7520a8188914ad2ad16c60111a034fd58f4f0cf55d9d31c5c8572ae0"}
+    ],
+    "metrics": {
+      "elapsed_s": 32.8710,
+      "shapes_total": 56463,
+      "rooted_oriented_total": 11867600
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["neighbor_no_sort_runtime_n9"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 32.9, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 9, "max_area": 40}},
+      {"op": "ASPECT_ROTATE", "args": {"axis": "representation", "change": "order_no_sort"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.72, "note": "Инвариант сохранён, время зафиксировано без профайлера."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.69, "note": "Числа совпали с предыдущими totals; данные пригодны для сравнения."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.7, "note": "Порядок без сортировки не повлиял на счёт — хорошо."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.75, "note": "Чистый запуск n=9 показал ~33 s; нужно сопоставить с профилем."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.68, "note": "Маргинали совпадают; время можно использовать как базу без профайлера."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Скорость выросла, но без прямого A/B с прежним кодом; нужен профилированный замер."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Групповые симметрии не усилены; улучшение может быть из-за отсутствия профайлера."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Фиксированный порядок держится на n=9; можно двигаться к min-hash."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Нужен формальный аргумент о неизменности счёта при смене порядка."},
+      {"name": "Тао", "vote": 1, "confidence": 0.71, "note": "Есть базовая метрика времени без профайлера; следующий шаг — A/B с min-hash."}
+    ],
+    "status": "success",
+    "notes": "n=9 orbit (area≤40, pruned) с детерминированным neighbors завершён за ~32.9 s (без cProfile). Счётчики совпадают с прежними totals. Используем как baseline без профайлера перед введением min-hash каноникализации."
   }
 ]

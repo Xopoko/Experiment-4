@@ -113,13 +113,19 @@ def canonicalize(cells: Sequence[Cell]) -> Cluster:
 
 def neighbors(cluster: Cluster) -> List[Cell]:
     cluster_set = set(cluster)
-    neigh: set[Cell] = set()
+    # Preserve deterministic iteration order without a global sort:
+    # iterate cells in their stored order and directions in DIRS order,
+    # tracking seen candidates to avoid duplicates.
+    seen: set[Cell] = set()
+    ordered: List[Cell] = []
     for x, y, z in cluster:
         for dx, dy, dz in DIRS:
             cand = (x + dx, y + dy, z + dz)
-            if cand not in cluster_set:
-                neigh.add(cand)
-    return sorted(neigh)
+            if cand in cluster_set or cand in seen:
+                continue
+            seen.add(cand)
+            ordered.append(cand)
+    return ordered
 
 
 def add_cell_area(cluster: Cluster, cluster_set: set[Cell], cur_area: int, cell: Cell) -> int:
