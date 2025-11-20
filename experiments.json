@@ -9765,5 +9765,99 @@
     ],
     "status": "success",
     "notes": "Orbit-mode встроен в scripts/q2_3_lt_clusters.py. Валидирован на n=7, area≤30: полное совпадение counts/coeffs с oriented базой и 153× сжатие. Готово к запуску n>10 (area≤40) с кэшированием вращений/стабов."
+  },
+  {
+    "id": "a71e2543-2015-4746-8673-4a9114b5dbfa",
+    "timestamp": "2025-11-20T05:35:09.831089+00:00",
+    "task_id": "3d-ising",
+    "round": 66,
+    "title": "Q2.3: orbit-mode прогоны n=9 и n=10 (area≤40)",
+    "hypothesis": "Интегрированный orbit-mode даст то же качество, что shape_probe, с ускорением для n=9 и приемлемым временем для n=10.",
+    "plan": "Запустить scripts/q2_3_lt_clusters.py --mode orbit на n=9,10 (area≤40, pruned); сравнить время/сжатие с базой n=9 и shape_probe n=10; сохранить артефакты.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/orbit_cells9_area40.json", "sha256": "3306ee4bcd6f32d468d41ffaf02324cadcab4948b5372e2c7f31633fc6d01b5c"},
+      {"path": "artifacts/q2_3_lt_free_energy/orbit_cells10_area40.json", "sha256": "f42c2479a2b5e548c7a8cdafe8c3be8b8c8dd7ba689557d78ecec62811ef2d9c"}
+    ],
+    "metrics": {
+      "n9_shapes_total": 56463,
+      "n9_rooted_oriented_total": 11867600,
+      "n9_runtime_s": 75.84093689918518,
+      "n9_reduction_factor": 210.18366009599205,
+      "n10_shapes_total": 175511,
+      "n10_rooted_oriented_total": 40342950,
+      "n10_runtime_s": 338.9072618484497,
+      "n10_reduction_factor": 229.85995179789302
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_runs_n9_n10"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 414.75, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"state_repr": "shape_with_root_orbits", "pruning": "area_bound"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.78, "note": "n=9 время в 2.15× быстрее базы при точности; n=10 завершилось."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.73, "note": "Сжатие 210–230× на обоих запусках, числа пригодны для ряда."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.72, "note": "Гистограммы в orbit-mode совпадают с прежними shape_probe результатами."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.8, "note": "Запуски воспроизводимы, логи сохранены."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.7, "note": "Управляемые времена, особенно на n=9; n=10 требует оптимизаций."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "n=10 занял ~339 s; нужно ускорение вращений/кэшей."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Высокосимметричные формы n>10 потребуют проверки стабилизаторов."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Топология соблюдена, путь к масштабированию открыт."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Контроль автогруппы при больших площадях остаётся задачей."},
+      {"name": "Тао", "vote": 1, "confidence": 0.75, "note": "Структура/шум разделены; следующий шаг — профиль и кэширование."}
+    ],
+    "status": "success",
+    "notes": "Orbit-mode в основном enumerator воспроизвёл данные shape_probe: n=9 — 75.8 s vs 163 s базы, точные коэффициенты; n=10 — 338.9 s (без базы, но соответствует shape_probe). Следующее — профилировать/кэшировать вращения/стабилизаторы и запускать n>10."
+  },
+  {
+    "id": "8d39880f-0ae7-4f1d-b55d-c846328a1bc2",
+    "timestamp": "2025-11-20T06:00:18.682082+00:00",
+    "task_id": "3d-ising",
+    "round": 67,
+    "title": "Q2.3: orbit-mode n=9 ускорен (compute_area rollback), n=10 orbit timeout",
+    "hypothesis": "Возврат compute_area без lru_cache вернёт время n=9 к ~75 s; n=10 orbit остаётся тяжёлым (возможен таймаут).",
+    "plan": "Перезапустить orbit-mode после удаления кэша compute_area: n=9 (area≤40) и n=10 (area≤40, pruned); сравнить время, зафиксировать таймаут, если будет.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/orbit_cells9_area40.json", "sha256": "2682123769a347aa417940c433292c5d690dd9acc19d626d8f4b915bad02b7bc"}
+    ],
+    "metrics": {
+      "n9_shapes_total": 56463,
+      "n9_rooted_oriented_total": 11867600,
+      "n9_runtime_s": 73.603,
+      "n9_reduction_factor": 210.18366009599205,
+      "n10_attempt": "timeout",
+      "n10_timeout_s": 900.0
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_rerun_n9_timeout_n10"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 973.6, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"state_repr": "shape_with_root_orbits", "pruning": "area_bound"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 0, "confidence": 0.7, "note": "n=9 вернулся к прежней скорости, n=10 всё ещё тяжёлый."},
+      {"name": "Эрдёш", "vote": 0, "confidence": 0.68, "note": "Контрольное число подтвердилось; таймаут n=10 требует иной ходы."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.72, "note": "Гистограмма n=9 сохранена, артефакт обновлён."},
+      {"name": "Фейнман", "vote": 0, "confidence": 0.65, "note": "Нужен профиль для n=10, запуск остановился по таймауту."},
+      {"name": "Колмогоров", "vote": 0, "confidence": 0.64, "note": "Хорошо, что время n=9 восстановлено; видно узкое место на n=10."},
+      {"name": "Мандельброт", "vote": -1, "confidence": 0.55, "note": "n=10 не масштабируется, вращения/кэши всё ещё долгие."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Автогруппы n>10 остаются незакрыты; нужен иной алгоритм."},
+      {"name": "Пуанкаре", "vote": 0, "confidence": 0.6, "note": "Данные n=9 ок; путь к n>10 требует оптимизации."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Следить за ростом состояний и стабилизаторами."},
+      {"name": "Тао", "vote": 0, "confidence": 0.7, "note": "Структура/шум сохранены; нужно profiling/caching для n=10."}
+    ],
+    "status": "error",
+    "notes": "Возврат compute_area без кэша восстановил время n=9 (73.6 s) при тех же counts (sha обновлён). Запуск n=10 orbit (area≤40) не уложился в 900 s и был прерван. Следующее — профилировать горячие функции (rotations/rooted_orientations) и добавить parallel/caching."
   }
 ]
