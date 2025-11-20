@@ -267,6 +267,12 @@ def parse_args() -> argparse.Namespace:
         default=Path("artifacts/q2_3_lt_free_energy/shape_counts.json"),
         help="Where to store the JSON results",
     )
+    parser.add_argument(
+        "--backend",
+        choices=["python", "cpp"],
+        default="python",
+        help="Which canonicalize implementation to use (python or C++ via ctypes)",
+    )
     return parser.parse_args()
 
 
@@ -274,24 +280,44 @@ def main() -> None:
     args = parse_args()
     args.output.parent.mkdir(parents=True, exist_ok=True)
 
+    canonicalize_impl = canonicalize
+    if args.backend == "cpp":
+        # Lazy import to avoid loading the shared library when not requested.
+        import sys
+        from pathlib import Path
+
+        repo_root = Path(__file__).resolve().parent.parent
+        if str(repo_root) not in sys.path:
+            sys.path.append(str(repo_root))
+        import canonicalize_cpp  # type: ignore
+
+        canonicalize_impl = canonicalize_cpp.canonicalize_shape_cpp
+
     t0 = time.time()
-    (
-        counts_by_area,
-        shapes_by_size,
-        oriented_by_area,
-        oriented_by_size,
-        rooted_oriented_by_area,
-        rooted_oriented_by_size,
-        shapes_total,
-        oriented_total,
-        rooted_oriented_total,
-    ) = enumerate_shapes(args.max_cells, args.max_area, args.use_pruned)
+    # Swap the global canonicalize reference during the run to reuse the existing code path.
+    orig_canonicalize = globals()["canonicalize"]
+    globals()["canonicalize"] = canonicalize_impl
+    try:
+        (
+            counts_by_area,
+            shapes_by_size,
+            oriented_by_area,
+            oriented_by_size,
+            rooted_oriented_by_area,
+            rooted_oriented_by_size,
+            shapes_total,
+            oriented_total,
+            rooted_oriented_total,
+        ) = enumerate_shapes(args.max_cells, args.max_area, args.use_pruned)
+    finally:
+        globals()["canonicalize"] = orig_canonicalize
     elapsed = time.time() - t0
 
     result = {
         "max_cells": args.max_cells,
         "max_area": args.max_area,
         "use_pruned": args.use_pruned,
+        "backend": args.backend,
         "shapes_total": shapes_total,
         "oriented_total_reconstructed": oriented_total,
         "rooted_oriented_total": rooted_oriented_total,

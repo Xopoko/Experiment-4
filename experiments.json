@@ -10532,5 +10532,258 @@
     ],
     "status": "success",
     "notes": "cProfile n=9 (neighbors stable, canonical sorted) подтвердил основные узкие места: normalize_translation (~35 s), canonicalize_shape (~30 s), canonicalize_rooted (~29.6 s), list_sort (~9 s). Эти функции — цели для min-hash или переноса в Numba/C++."
+  },
+  {
+    "id": "4d3ffa2d-1f19-4a57-b4d6-00eafa79c265",
+    "timestamp": "2025-11-20T07:35:19Z",
+    "task_id": "3d-ising",
+    "round": 82,
+    "title": "Попытка minhash для rooted: выявлена ошибка (diff≠0)",
+    "hypothesis": "Замена frozenset на scan-based minhash может ускорить rooted_orientations без изменения счётчиков; проверка на n=6 выявит расхождения, если инвариант нарушен.",
+    "plan": "Добавить флаг rooted-mode (frozenset|minhash). Прогнать n=6 orbit/pruned (area≤20) в обоих режимах, сравнить rooted_oriented_by_area и totals.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "scripts/q2_3_lt_clusters.py", "sha256": "e4074c2b5a41b81bab5cfd01d8dbb38c501b16231cf123f41689599c05cbfd13"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6_minhash.json", "sha256": "09ed0c3bd3e9f071e5081c7a0edc17058975e4506bf15c9e8e8dd2e3efe968f7"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6_frozenset.json", "sha256": "54078cc34110480b6adc40c9c033bde192b508eb6fd9ef0294a7eb6dedc59e59"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6_frozenset_vs_minhash.json", "sha256": "1a916af5a4efd162ca27f9177c1b84ba36d414389d309058eff5e742ed5f0d63"}
+    ],
+    "metrics": {
+      "max_abs_diff": 249,
+      "mismatched_areas": {"10": 3, "14": 30, "16": 9, "18": 249, "20": 192},
+      "rooted_oriented_total_frozenset": 3066,
+      "rooted_oriented_total_minhash": 639,
+      "elapsed_frozenset_s": 0.0410,
+      "elapsed_minhash_s": 0.0480
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["rooted_minhash_ab_n6"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 0.2, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "ASPECT_ROTATE", "args": {"axis": "representation", "change": "rooted_minhash_flag"}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 6}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 0, "confidence": 0.6, "note": "Инвариант нарушен (diff≠0); minhash в текущем виде непригоден."},
+      {"name": "Эрдёш", "vote": 0, "confidence": 0.59, "note": "Счётчики упали с 3066 до 639 — явный сбой."},
+      {"name": "Эйлер", "vote": 0, "confidence": 0.6, "note": "Scan-order не сохраняет эквивалентность — нужно другой ключ."},
+      {"name": "Фейнман", "vote": 0, "confidence": 0.65, "note": "Честный тест показал ошибку; возвращаемся к frozenset."},
+      {"name": "Колмогоров", "vote": 0, "confidence": 0.6, "note": "Маргинали не совпали — инвариант нарушен."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Эксперимент провален; время тоже не лучше."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Группа не учтена; minhash ломает симметрию."},
+      {"name": "Пуанкаре", "vote": 0, "confidence": 0.58, "note": "Нужен другой хеш или оставить базу."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Отсутствует абстрактная эквивалентность; ключ неверен."},
+      {"name": "Тао", "vote": 0, "confidence": 0.6, "note": "Шум коллизий/потерь разрушает структуру; minhash испорчен."}
+    ],
+    "status": "fail",
+    "notes": "Флаг rooted-mode добавлен. Проверка n=6: minhash ломает счётчики (totals 639 vs 3066, diff по областям ≠0) и не быстрее. Вывод: minhash в текущей реализации непригоден; остаёмся на frozenset и ищем другие оптимизации (Numba/C++, кэширование без потери инварианта)."
+  },
+  {
+    "id": "fa10b2f1-08cd-41c5-a0c1-0dd344d4b60f",
+    "timestamp": "2025-11-20T07:56:00Z",
+    "task_id": "3d-ising",
+    "round": 83,
+    "title": "Кэширование normalize + повторный тест minhash (всё ещё сломано)",
+    "hypothesis": "LRU-кэш для normalize_translation(_scan) уменьшит накладные, а minhash всё же может стать корректным; повторная проверка на n=6 выявит состояние.",
+    "plan": "Добавить normalize_translation_cached, normalize_translation_scan_cached и использовать в canonicalize_shape/rooted (minhash). Прогнать n=6 (frozenset vs minhash) и сравнить счётчики/время.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "scripts/q2_3_lt_clusters.py", "sha256": "e4074c2b5a41b81bab5cfd01d8dbb38c501b16231cf123f41689599c05cbfd13"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6_frozenset_cached.json", "sha256": "26ebafb3e6ab0ec41c6a581c2d6121432492b63dd2841a3b5fb357cab25d0a5a"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6_minhash_cached.json", "sha256": "5100e1a7c909ebf391ed9c52b516babe76356778bd67fc4af85e719f98ddd18a"},
+      {"path": "artifacts/q2_3_lt_free_energy/validation_orbit_n6_frozenset_vs_minhash_cached.json", "sha256": "13e473e7ba05083f7ebe1a4a599cd4e671dc1aa359dd6b6faf02bfd9fd6aec65"}
+    ],
+    "metrics": {
+      "max_abs_diff": 249,
+      "mismatched_areas": {"10": 3, "14": 30, "16": 9, "18": 249, "20": 192},
+      "rooted_oriented_total_frozenset": 3066,
+      "rooted_oriented_total_minhash": 639,
+      "elapsed_frozenset_s": 0.1097,
+      "elapsed_minhash_s": 0.1280
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["normalize_cache_minhash_ab_n6"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 0.3, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "CACHE", "args": {"functions": ["normalize_translation", "normalize_translation_scan"]}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 6}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 0, "confidence": 0.6, "note": "Инвариант всё ещё нарушен; кэш не лечит minhash."},
+      {"name": "Эрдёш", "vote": 0, "confidence": 0.59, "note": "Diff по областям остался; минхэш плох."},
+      {"name": "Эйлер", "vote": 0, "confidence": 0.6, "note": "Суммы не сходятся — оставляем frozenset."},
+      {"name": "Фейнман", "vote": 0, "confidence": 0.65, "note": "Честный повтор подтвердил ошибку; кэш лишь сервисен."},
+      {"name": "Колмогоров", "vote": 0, "confidence": 0.6, "note": "Маргинали всё ещё не совпадают."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Регресс по корректности; кэширование не помогает."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Групповые симметрии сломаны; нужно иное решение."},
+      {"name": "Пуанкаре", "vote": 0, "confidence": 0.58, "note": "Минхэш не годится; зафиксировать провал и двигаться дальше."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Проблема инварианта остаётся."},
+      {"name": "Тао", "vote": 0, "confidence": 0.6, "note": "Ошибка стабильна — нужен другой подход (компиляция/другой ключ)." }
+    ],
+    "status": "fail",
+    "notes": "Добавлено кэширование normalize_translation(_scan) и повторный тест minhash. Инвариант всё равно ломается (diff по площадям ≠0, totals 639 vs 3066), время без улучшения. Решение: minhash отклонён; оставаться на frozenset и двигаться к компилируемому ускорению корректных функций."
+  },
+  {
+    "id": "ddd7593f-bf8e-4929-a3de-35d92f791bc8",
+    "timestamp": "2025-11-20T08:10:33Z",
+    "task_id": "3d-ising",
+    "round": 84,
+    "title": "C++ canonicalize_shape + A/B n=9",
+    "hypothesis": "Перенос canonicalize_shape в C++ (через ctypes) сохранит инвариант и даст хотя бы паритет времени с Python реализацией.",
+    "plan": "Написать C++ shared lib (build/libcanonicalize.so) с canonicalize_shape; добавить флаг --canonical-backend (python|cpp); прогнать orbit/pruned n=9 area≤40 (stable neighbors, sorted canonical, frozenset rooted) в обоих режимах, сравнить счётчики и время.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py", "scripts/canonicalize_cpp.py", "cpp/canonicalize.cpp"],
+    "artifacts": [
+      {"path": "cpp/canonicalize.cpp", "sha256": "d9c3ded73662c549d71e4f4a2c04d46dcdefb9eeb0e2c218f14ac75a0c8b4bb3"},
+      {"path": "build/libcanonicalize.so", "sha256": "48809b8fe7eaaab6220dc8512cfc0b6d4403e3b098ee506d3f7080ed5eeea67e"},
+      {"path": "scripts/canonicalize_cpp.py", "sha256": "2b2358a5edab82f9a562b3b25a62b153492f5927a6c195fcae5c268ef8c5b80c"},
+      {"path": "artifacts/q2_3_lt_free_energy/run_n9_cpp.json", "sha256": "bb23f0d0cf8ba4fb7e37b565f80bec7e958e73001c62d19f1b075cc89142642d"},
+      {"path": "artifacts/q2_3_lt_free_energy/run_n9_python.json", "sha256": "edbf5bfb792565c2fdbed360d3acd91bc06fe2f32862a566ea156eed0ae7552d"}
+    ],
+    "metrics": {
+      "elapsed_cpp_s": 114.75,
+      "elapsed_python_s": 116.43,
+      "max_abs_diff": 0,
+      "rooted_oriented_total_cpp": 11867600,
+      "rooted_oriented_total_python": 11867600
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["cpp_canonicalize_ab_n9"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 231.2, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "ASPECT_ROTATE", "args": {"axis": "implementation", "change": "cpp_backend"}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 9}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.7, "note": "Инвариант сохранён, перенос на C++ безопасен."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.68, "note": "Diff=0, время сопоставимо — база для дальнейшей оптимизации."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.69, "note": "Компактная C++ формула сдвинула часть работы из Python."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.72, "note": "Эксперимент чистый: счётчики совпали, runtime +/- одинаков."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.65, "note": "Маргинали совпадают; можно профилировать C++ вариант."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Выигрыш маленький; нужно смотреть профили."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Групповые симметрии не усилились, лишь перенос вычислений."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.67, "note": "Контролируемый флаг backend — база для последующих C++ оптимизаций."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Нет абстрактного обоснования ускорения; эффект мал."},
+      {"name": "Тао", "vote": 1, "confidence": 0.7, "note": "Структура сохранена, шум перенесён; следующий шаг — профилировать C++ версию."}
+    ],
+    "status": "success",
+    "notes": "Реализован C++ backend canonicalize_shape (build/libcanonicalize.so) + флаг --canonical-backend. A/B на n=9 (orbit, pruned, area≤40) показал diff=0, время ~114.7 s (cpp) vs 116.4 s (python) без профайлера. Выигрыш небольшой; нужно профиль C++ режима и перенос normalize_translation/canonicalize_rooted для ощутимого эффекта."
+  },
+  {
+    "id": "ee0532fb-8a6f-4f5e-be2c-eae1a8fb3067",
+    "timestamp": "2025-11-20T08:22:08.910298Z",
+    "task_id": "3d-ising",
+    "round": 85,
+    "title": "A/B canonicalize backend (n=8, pruned)",
+    "hypothesis": "C++ canonicalize_shape можно подставить в shape_probe без изменения инвариантов; на n≤8 это даст совпадающие счетчики и хотя бы ~10% ускорение.",
+    "plan": "Запустить enumerate_shapes (max_cells=8, area≤36, pruned) дважды: (a) штатный Python canonicalize; (b) C++ backend через ctypes. Сравнить counts/орбиты/гистограммы и wall-clock.",
+    "code_refs": ["scripts/q2_3_shape_probe.py", "scripts/canonicalize_cpp.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/canonicalize_backend_benchmark_n8.json", "sha256": "6f3a88d2fd1623b4e8c672f7c2d9a9021453605ca68fddcfcd60f3cb30519684"}
+    ],
+    "metrics": {
+      "elapsed_python_s": 8.3981,
+      "elapsed_cpp_s": 7.0599,
+      "speedup": 1.1895,
+      "all_equal": true,
+      "shapes_total": 8152,
+      "oriented_total": 190535,
+      "rooted_oriented_total": 1491770
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["canonicalize_backend_benchmark_n8"]}
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "n/a",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 15.5,
+      "gpu_s": 0.0,
+      "max_mem_mb": 0
+    },
+    "operators_trace": [
+      {"op": "ASPECT_ROTATE", "args": {"axis": "backend", "change": "cpp_canonicalize"}},
+      {"op": "DOE_AB", "args": {"factor": "canonicalize_backend", "levels": ["python", "cpp"], "max_cells": 8, "use_pruned": true}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.68, "note": "Инвариант сохранён, оба бэкенда дают те же гистограммы."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.66, "note": "Чистое A/B с diff=0 и ~19% ускорением — хороший шаг перед большим n."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.67, "note": "Канонизация теперь в компактном C++; аналитический результат совпал."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.69, "note": "Чёткая проверка: один переключатель, измерен эффект, нет скрытых допущений."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.65, "note": "Все маргинали сохранены; можно считать этот бэкенд эквивалентным для тестов."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.56, "note": "Ускорение заметно, но только локально (n=8); нужно проверить хвосты масштабов."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.55, "note": "Геометрия групп не использована глубже, просто смена реализации."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.66, "note": "Эксперимент экономит вычисления без потери структуры — полезное упрощение."},
+      {"name": "Риман", "vote": 0, "confidence": 0.55, "note": "Новых инвариантов нет; усиление скорее инженерное."},
+      {"name": "Тао", "vote": 1, "confidence": 0.68, "note": "Перенос «структура vs шум» чистый, A/B подтверждает, можно масштабировать."}
+    ],
+    "status": "success",
+    "notes": "A/B shape_probe на max_cells=8, area≤36, pruned: C++ canonicalize_shape через ctypes даёт идентичные counts/orbits/гистограммы и ускорение ~1.19× (8.40s→7.06s). Артефакт с полными таблицами: artifacts/q2_3_lt_free_energy/canonicalize_backend_benchmark_n8.json."
+  },
+  {
+    "id": "1d9440ff-ca0c-4276-9575-7a90ce098aff",
+    "timestamp": "2025-11-20T08:28:01.548204Z",
+    "task_id": "3d-ising",
+    "round": 86,
+    "title": "CLI backend flag for shape_probe + A/B check",
+    "hypothesis": "Выбор backend (python vs C++ canonicalize_shape) через флаг в shape_probe сохранит инварианты и даст ≥20% ускорения на n=8.",
+    "plan": "Добавить флаг --backend={python,cpp} в shape_probe, подставляющий нужную canonicalize реализацию. Прогнать n=8, area≤36, pruned для обоих бэкендов, сравнить гистограммы и время.",
+    "code_refs": ["scripts/q2_3_shape_probe.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/shape_probe_backend_python_n8.json", "sha256": "5ce8ade1c47ad845f28de61d60dfddb92eacbd28935a5f9f20bc7d9de5993345"},
+      {"path": "artifacts/q2_3_lt_free_energy/shape_probe_backend_cpp_n8.json", "sha256": "84010b80ce146d34831f34f32172471040210331b157e994a9690446f637400b"}
+    ],
+    "metrics": {
+      "elapsed_python_s": 9.0963,
+      "elapsed_cpp_s": 6.9967,
+      "speedup": 1.3001,
+      "all_equal": true,
+      "shapes_total": 8152
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["shape_probe_backend_flag_n8"]}
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "n/a",
+      "driver": "n/a",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 16.1,
+      "gpu_s": 0.0,
+      "max_mem_mb": 0
+    },
+    "operators_trace": [
+      {"op": "ASPECT_ROTATE", "args": {"axis": "interface", "change": "cli_backend_flag"}},
+      {"op": "DOE_AB", "args": {"factor": "canonicalize_backend", "levels": ["python", "cpp"], "max_cells": 8, "use_pruned": true}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.68, "note": "Инварианты сохранены при переключении флагом; управление стало явным."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.66, "note": "Чистый A/B через CLI, ускорение ~30% — пригодно для серии."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.67, "note": "Небольшое изменение интерфейса, но теперь канонизация выбирается символом флага."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.69, "note": "Один новый флаг, один тест: чёткий эксперимент без скрытых допущений."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.65, "note": "Все маргинали совпали; дескриптор бэкенда зафиксирован в артефактах."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Локальный ускоритель, пока не видно эффекта на больших размерах."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.55, "note": "Геометрические симметрии не усилены — только смена реализации."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.66, "note": "Чёткая конвенция через флаг упрощает дальнейшие эксперименты."},
+      {"name": "Риман", "vote": 0, "confidence": 0.55, "note": "Новых инвариантов нет; шаг инструментальный, не теоретический."},
+      {"name": "Тао", "vote": 1, "confidence": 0.68, "note": "Структура vs шум сохраняется, флаг облегчает перенос на большие n."}
+    ],
+    "status": "success",
+    "notes": "В shape_probe добавлен флаг --backend (python|cpp). A/B на max_cells=8, area≤36, pruned показал diff=0 и ускорение ~1.30× (9.10s→7.00s). Оба вывода сохранены отдельными артефактами."
   }
 ]

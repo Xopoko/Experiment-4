@@ -10,6 +10,11 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Dict, Iterable, List, Sequence, Tuple
 
+try:
+    from scripts.canonicalize_cpp import canonicalize_shape_cpp
+except Exception:
+    canonicalize_shape_cpp = None  # fallback to Python path if C++ unavailable
+
 DIRS: Tuple[Tuple[int, int, int], ...] = (
     (1, 0, 0),
     (-1, 0, 0),
@@ -21,6 +26,8 @@ DIRS: Tuple[Tuple[int, int, int], ...] = (
 
 NEIGH_USE_SORT = False
 CANONICAL_MODE = "sorted"
+ROOTED_MODE = "frozenset"
+CANONICAL_BACKEND = "python"
 
 
 Cell = Tuple[int, int, int]
@@ -30,9 +37,15 @@ Cluster = Tuple[Cell, ...]
 def canonicalize_rooted(cells: Sequence[Cell]) -> Cluster:
     """Canonical form for rooted clusters (origin fixed).
 
-    Uses order-free representation (frozenset) to avoid per-call sorting.
+    ROOTED_MODE:
+    - "frozenset" (default): order-free hashable set.
+    - "minhash": deterministic ordering by bounding-box scan for hashable tuple; avoids frozenset construction cost.
     """
-    return frozenset(cells)
+    ctuple = tuple(cells)
+    if ROOTED_MODE == "minhash":
+        # Bounding-box scan yields deterministic tuple without sort.
+        return normalize_translation_scan_cached(ctuple)
+    return frozenset(ctuple)
 
 
 def _parity(perm: Sequence[int]) -> int:
@@ -105,13 +118,26 @@ def normalize_translation_scan(cells: Iterable[Cell]) -> Cluster:
     return tuple(ordered)
 
 
+@lru_cache(maxsize=None)
+def normalize_translation_cached(cells: Cluster) -> Cluster:
+    return normalize_translation(cells)
+
+
+@lru_cache(maxsize=None)
+def normalize_translation_scan_cached(cells: Cluster) -> Cluster:
+    return normalize_translation_scan(cells)
+
+
 def canonicalize_shape(cells: Sequence[Cell]) -> Cluster:
     """Canonical rotation+translation representative."""
 
-    norm_fn = normalize_translation_scan if CANONICAL_MODE == "scan" else normalize_translation
+    norm_fn = normalize_translation_scan_cached if CANONICAL_MODE == "scan" else normalize_translation_cached
+    cells_tuple = tuple(cells)
+    if CANONICAL_BACKEND == "cpp" and canonicalize_shape_cpp is not None:
+        return canonicalize_shape_cpp(cells_tuple)
     best: Cluster | None = None
     for rot in ROTATIONS:
-        rotated = (apply_rotation(c, rot) for c in cells)
+        rotated = tuple(apply_rotation(c, rot) for c in cells_tuple)
         normalized = norm_fn(rotated)
         if best is None or normalized < best:
             best = normalized
@@ -340,6 +366,18 @@ def parse_args() -> argparse.Namespace:
         default="sorted",
         help="Canonicalization: sorted (legacy) or scan bounding box without sorting.",
     )
+    parser.add_argument(
+        "--canonical-backend",
+        choices=["python", "cpp"],
+        default="python",
+        help="Python (default) or C++ backend for canonicalize_shape (requires build/libcanonicalize.so).",
+    )
+    parser.add_argument(
+        "--rooted-mode",
+        choices=["frozenset", "minhash"],
+        default="frozenset",
+        help="Representation for rooted clusters: frozenset (default) or minhash (scan-based tuple).",
+    )
     parser.add_argument("--output", type=Path, default=Path("artifacts/q2_3_lt_free_energy/cluster_counts.json"))
     return parser.parse_args()
 
@@ -350,6 +388,10 @@ def main() -> None:
     NEIGH_USE_SORT = args.neighbors_order == "sorted"
     global CANONICAL_MODE
     CANONICAL_MODE = args.canonical_mode
+    global ROOTED_MODE
+    ROOTED_MODE = args.rooted_mode
+    global CANONICAL_BACKEND
+    CANONICAL_BACKEND = args.canonical_backend
     args.output.parent.mkdir(parents=True, exist_ok=True)
     start = time.time()
     counts, meta = enumerate_counts(args.max_cells, args.max_area, args.use_pruned, args.mode)
@@ -362,6 +404,7 @@ def main() -> None:
         "use_pruned": args.use_pruned,
         "neighbors_order": args.neighbors_order,
         "canonical_mode": args.canonical_mode,
+        "rooted_mode": args.rooted_mode,
         "elapsed_s": elapsed,
         **counts,
         **meta,
