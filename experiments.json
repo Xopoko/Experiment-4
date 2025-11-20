@@ -9438,5 +9438,332 @@
     ],
     "status": "success",
     "notes": "Shape-канонизация при n<=7 дала 153× меньше состояний и ~2.25× быстрее времени при одинаковых параметрах; пока это сжатие без учёта rooted/oriented мультипликаторов. Следующий шаг — добавить веса орбит/корней для восстановления коэффициентов и попробовать n>=8."
+  },
+  {
+    "id": "1b388c47-f5bc-4e3b-bf9d-12c85c3f8998",
+    "timestamp": "2025-11-20T04:59:13.459535+00:00",
+    "task_id": "3d-ising",
+    "round": 59,
+    "title": "Q2.3: стабилизаторы форм и реконструкция oriented-счёта (n=7)",
+    "hypothesis": "Орбитные веса 24/|stab| на shape-кластерах позволят приблизить oriented-счёт и понять вклад симметрий; ожидается существенный недосчёт из-за отсутствия сдвигов/корней.",
+    "plan": "1) IdeaLab. 2) Добавить стабилизаторы в shape-пробник. 3) Запустить n<=7, area<=30, pruned. 4) Сравнить реконструированный oriented счёт с базовым файлом.",
+    "code_refs": ["scripts/q2_3_shape_probe.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T045758Z.json", "sha256": "05e7c76f8f31bc306387fc47d5b2f33f3410bae99d9e3b559f4852882b158ece"},
+      {"path": "artifacts/tools/tricks_20251120T045758Z.txt", "sha256": "05e7c76f8f31bc306387fc47d5b2f33f3410bae99d9e3b559f4852882b158ece"},
+      {"path": "artifacts/q2_3_lt_free_energy/shape_cells7_area30.json", "sha256": "7fbca4aa3ee8cb3aaf3e12c928961c309b5d78e089d638d0e59674541ab2201c"}
+    ],
+    "metrics": {
+      "shapes_total": 1230,
+      "oriented_total_reconstructed": 27622,
+      "oriented_cluster_count_baseline": 188466,
+      "baseline_over_reconstructed_ratio": 6.823039606111071,
+      "area_ratio_min": 1.0,
+      "area_ratio_max": 7.0,
+      "elapsed_s_shape_probe": 0.2848513126373291
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_weights_probe"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 0.28, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"state_repr": "shape_with_stabilizer", "pruning": "area_bound"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.78, "note": "Инвариант стаба из симметрии куба закрепил структуру форм."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.73, "note": "Числа дают ясный недосчёт, нужен дополнительный множитель."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.72, "note": "Орбитные веса собрали корректные гистограммы по площадям."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.8, "note": "Запуск <1 c, воспроизводимо; сравнение с базой явное."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.7, "note": "Асимметрия между площадями (1→7×) фиксирована, позволит строить модель."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Нет учёта сдвигов/корней — нужен масштабный фактор по объёму."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Автоморфизмы учтены, но стабилизаторы корня отсутствуют."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Топология форм ясна, следующий шаг — фиксировать опорный узел."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Нужна нормировка по сдвигам (фундаментальная область) для точного соответствия."},
+      {"name": "Тао", "vote": 1, "confidence": 0.74, "note": "Структура (shape+stab) выделена, шум (сдвиги/корни) остаётся учесть."}
+    ],
+    "status": "success",
+    "notes": "Стабилизаторы форм дают орбитные веса 24/|stab|; реконструированный oriented счёт (27622) в 6.8× меньше базового (188466) — ожидаемо из-за отсутствия сдвигов/корней. По площадям коэффициент разрыва растёт 1→7. Следующий шаг — включить фактор числа сдвигов/корневых меток или перенести орбитный расчёт в основной перечислитель."
+  },
+  {
+    "id": "d1b9495b-809d-46a3-a5c1-f4a440da4a39",
+    "timestamp": "2025-11-20T05:02:26.631526+00:00",
+    "task_id": "3d-ising",
+    "round": 60,
+    "title": "Q2.3: rooted+oriented восстановление через формы (n=7)",
+    "hypothesis": "Учёт (root, rotation) для каждой формы восстановит точные oriented-счётчики без перебора ориентаций в DFS.",
+    "plan": "Добавить rooted_orientations в shape-пробник; запустить n<=7, area<=30, сверить rooted_oriented_* с базовым oriented enumerator.",
+    "code_refs": ["scripts/q2_3_shape_probe.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T045758Z.json", "sha256": "05e7c76f8f31bc306387fc47d5b2f33f3410bae99d9e3b559f4852882b158ece"},
+      {"path": "artifacts/tools/tricks_20251120T045758Z.txt", "sha256": "05e7c76f8f31bc306387fc47d5b2f33f3410bae99d9e3b559f4852882b158ece"},
+      {"path": "artifacts/q2_3_lt_free_energy/shape_cells7_area30.json", "sha256": "a41c382a95ece42ec539654c7978921c0f58daf83bc3ab0d4ef4a349f132a145"}
+    ],
+    "metrics": {
+      "shapes_total": 1230,
+      "oriented_total_reconstructed": 27622,
+      "rooted_oriented_total": 188466,
+      "rooted_equals_baseline": true,
+      "elapsed_s_shape_probe": 0.9886727333068848
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["rooted_orbit_reconstruction"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 0.99, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"state_repr": "shape_with_root_orbits", "pruning": "area_bound"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.8, "note": "Инвариант формы + фиксированный корень восстановили полную статистику."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.75, "note": "Числа совпали с базой — 'доказательство из Книги' для n<=7."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.74, "note": "Гистограммы по площадям теперь идентичны."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.82, "note": "Запуск <1 s воспроизводит baseline 1:1."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.72, "note": "Маргинали совпали; можно переносить схему на n>=8."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.56, "note": "Рост для больших n ещё не оценён."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.57, "note": "Нужно проверить стабилизаторы корня на более симметричных формах."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.71, "note": "Топологически корректная реконструкция; путь к переносу в основной код."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Для больших площадей нужно следить за авто group."},
+      {"name": "Тао", "vote": 1, "confidence": 0.76, "note": "Структура (shape+root) отделена от шума — готовое преобразование."}
+    ],
+    "status": "success",
+    "notes": "rooted_oriented_* счётчики из shape-пробника точно совпали с oriented enumerator для n<=7, area<=30. Это даёт основание переносить орбитный подход в полноценный перечислитель и тестировать n>=8 с экономией памяти/CPU."
+  },
+  {
+    "id": "53a17f10-d86d-423f-82e8-ede435d1626c",
+    "timestamp": "2025-11-20T05:05:13.046501+00:00",
+    "task_id": "3d-ising",
+    "round": 61,
+    "title": "Q2.3: shape+root валидация на n=8 (area≤36)",
+    "hypothesis": "Схема shapes+root+rotation сохраняет точные counts для n=8, area≤36, что подтверждает переносимость на более крупные кластеры.",
+    "plan": "Запустить oriented базовый перебор (n=8, area≤36, pruned) и shape-пробник с rooted_oriented; сверить гистограммы и totals.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py", "scripts/q2_3_shape_probe.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/oriented_cells8_area36.json", "sha256": "324feab0b9885488d354e395df3de61ea1d8760a89b6026f33962e3eedb46978"},
+      {"path": "artifacts/q2_3_lt_free_energy/shape_cells8_area36.json", "sha256": "0dfe529969c78d14db42845447bd8de943648dc3135a0f5aa1327b5571bbd22f"}
+    ],
+    "metrics": {
+      "oriented_cluster_count": 1491770,
+      "shape_count": 8152,
+      "oriented_total_reconstructed": 190535,
+      "rooted_oriented_total": 1491770,
+      "runtime_oriented_s": 5.705593585968018,
+      "runtime_shape_s": 8.565579891204834
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["rooted_orbit_validation_n8"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 14.27, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"state_repr": "shape_with_root_orbits", "pruning": "area_bound"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.8, "note": "Корень+форма масштабируются до n=8 без потери точности."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.74, "note": "Числа совпали с базой; новые формы всего 8k против 1.49M кластеров."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.73, "note": "Гистограммы совпадают; можно строить генератор коэффициентов."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.82, "note": "Прямое сравнение логов подтверждает идентичность результатов."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.72, "note": "Редукция мощностей в 183× при сохранении статистики."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.56, "note": "Время пока больше из-за root-циклов; нужно профилировать."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.57, "note": "Следить за стабилизаторами на высокосимметричных формах n>8."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.7, "note": "Топологическая корректность выдержана; перенос в основной код уместен."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Нужно проверить рост автоморфизмов и время при больших площадях."},
+      {"name": "Тао", "vote": 1, "confidence": 0.76, "note": "Структура/шум разделены; остаётся оптимизировать вычисления."}
+    ],
+    "status": "success",
+    "notes": "rooted_oriented_* из shape-пробника совпадают с oriented базой для n=8, area≤36. Форм всего 8.1k против 1.49M кластеров, но время ~1.5× больше из-за пер-форменного корневого перебора; нужен профилинг/кэширование, затем перенос в основной перечислитель и запуск n>=9."
+  },
+  {
+    "id": "ceb556f8-42a8-447f-a176-2dbfe13d3124",
+    "timestamp": "2025-11-20T05:08:18.517564+00:00",
+    "task_id": "3d-ising",
+    "round": 62,
+    "title": "Q2.3: shape+root на n=9 (area≤40) быстрее базы",
+    "hypothesis": "Формы + (root, rotation) дадут точные counts при n=9 и уменьшат время относительно полного oriented перебора.",
+    "plan": "Запустить базовый oriented n=9 (area≤40, pruned) и shape-пробник; сверить totals/гистограммы и сравнить время.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py", "scripts/q2_3_shape_probe.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells9_area40.json", "sha256": "49b217c3233336e379764da61aa475962a90b238f0a20c7c07c3be1837bccdf3"},
+      {"path": "artifacts/q2_3_lt_free_energy/shape_cells9_area40.json", "sha256": "258293d46a4317fe8463d2d654148db9a063b7956648075a033dc14105228d66"}
+    ],
+    "metrics": {
+      "oriented_cluster_count": 11867600,
+      "shape_count": 56463,
+      "rooted_oriented_total": 11867600,
+      "oriented_total_reconstructed": 1343405,
+      "runtime_oriented_s": 163.39431262016296,
+      "runtime_shape_s": 75.88138961791992
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["rooted_orbit_validation_n9"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 239.28, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"state_repr": "shape_with_root_orbits", "pruning": "area_bound"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.8, "note": "Метод сохраняет точность при n=9, время лучше базы."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.75, "note": "Сжатие ~210× и ускорение ~2.15× — сильная граница."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.74, "note": "Гистограммы по площадям совпали полностью."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.82, "note": "Прямой перебор confirmé логами; воспроизводимо."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.72, "note": "Маргинали и totals идентичны; подход валиден."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.56, "note": "Время ещё велико; нужна оптимизация вращений/корней."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.57, "note": "Для высоких симметрий n>9 стоит перепроверить стабилизаторы."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.7, "note": "Топология сохранена; готово к интеграции в основной код."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Нужно контролировать рост автогруппы при больших площадях."},
+      {"name": "Тао", "vote": 1, "confidence": 0.76, "note": "Структура/шум разделены, но требуется профилирование для n≥10."}
+    ],
+    "status": "success",
+    "notes": "rooted_oriented_* из shape-пробника совпадают с базовым enumerator для n=9, area≤40. Форм 56k против 11.9M кластеров, время 75.9 s vs 163.4 s. Дальше: вынести root+orbit подсчёт в основной enumerator и оптимизировать вращения."
+  },
+  {
+    "id": "e1efe75f-f56c-45a6-b614-0b8d8a2940ca",
+    "timestamp": "2025-11-20T05:11:42.466900+00:00",
+    "task_id": "3d-ising",
+    "round": 63,
+    "title": "Q2.3: shape+root n=10 (area≤32) без базы",
+    "hypothesis": "Схема shapes+root даст управляемое время при n=10 и позволит получить прогноз по коэффициентам до y^{32} даже без ориентированного baseline.",
+    "plan": "Запустить shape-пробник с n<=10, area<=32 (pruned), собрать counts/время; оценить масштаб для последующего полного запуска.",
+    "code_refs": ["scripts/q2_3_shape_probe.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/shape_cells10_area32.json", "sha256": "c7d15c8d9162a6ace40f42f11bcc8f218c98baa40fa8e97beaabcffda4a571ce"}
+    ],
+    "metrics": {
+      "shapes_total": 56487,
+      "rooted_oriented_total": 11871800,
+      "oriented_total_reconstructed": 1343825,
+      "area_support": [6, 10, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32],
+      "runtime_shape_s": 74.9859230518341
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["rooted_orbit_probe_n10_area32"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 74.99, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"state_repr": "shape_with_root_orbits", "pruning": "area_bound"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.78, "note": "Время остаётся управляемым, инварианты форм сохраняются."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.72, "note": "Получены числа до y^{32} без базы; пригодно как верхняя оценка."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.71, "note": "Гистограммы ограничены площадью; структура корректна."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.8, "note": "Запуск <75 s, воспроизводимость полная."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.7, "note": "Состояний ~5.6e4 — редукция огромная относительно полного перебора."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Зона y>32 не покрыта; рост для полного набора неизвестен."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Для симметричных форм n=10 нужны проверки стабилизаторов."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Топология соблюдена; шаг полезен как частичный слой ряда."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Не хватает контроля по большим площадям; нужно продолжение."},
+      {"name": "Тао", "vote": 1, "confidence": 0.75, "note": "Структура выделена; шаг даёт данные и масштаб времени."}
+    ],
+    "status": "success",
+    "notes": "Shape+root для n=10, area≤32 завершился за ~75 s, дал rooted_oriented_total=11.87M и коэффициенты до y^{32}. Нет ориентированного baseline для валидации; нужно либо поднять area, либо интегрировать орбитный подсчёт в основной enumerator для полного покрытия с профилингом."
+  },
+  {
+    "id": "f865062f-c8ea-48cf-a08f-5ca8b3daa966",
+    "timestamp": "2025-11-20T05:18:30.310594+00:00",
+    "task_id": "3d-ising",
+    "round": 64,
+    "title": "Q2.3: shape+root n=10 при area≤40",
+    "hypothesis": "Расширение area до 40 для n=10 останется управляемым (<10 мин) и даст коэффициенты до y^{40} с симметрийным сжатием.",
+    "plan": "Запустить shape-пробник n<=10, area<=40, pruned; собрать counts/время, зафиксировать хэш.",
+    "code_refs": ["scripts/q2_3_shape_probe.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/shape_cells10_area40.json", "sha256": "e380e24371c9df9b192911f3af03799f137d1fa588e072ed372bb38683f66c03"}
+    ],
+    "metrics": {
+      "shapes_total": 175511,
+      "rooted_oriented_total": 40342950,
+      "oriented_total_reconstructed": 4190940,
+      "area_support": [6, 10, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40],
+      "runtime_shape_s": 283.11599493026733
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["rooted_orbit_probe_n10_area40"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 283.12, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"state_repr": "shape_with_root_orbits", "pruning": "area_bound"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.77, "note": "Покрытие до y^{40} получено за <5 мин CPU."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.72, "note": "Сжатие по состояниям велико, числа пригодны для ряда."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.71, "note": "Все нужные площади присутствуют в поддержке."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.8, "note": "Запуск воспроизводим, лог понятен."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.7, "note": "Объём состояний 1.75e5 остаётся управляемым."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Время выросло до ~283 s; нужно ускорять вращения."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Следует перепроверить стабилизаторы для симметричных фигур."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.69, "note": "Топологически корректно; полезный слой ряда."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Для более высоких площадей важно контролировать рост автоморфизмов."},
+      {"name": "Тао", "vote": 1, "confidence": 0.75, "note": "Структура закреплена; следующий шаг — интеграция в основной код."}
+    ],
+    "status": "success",
+    "notes": "Shape+root с area≤40 (n=10) завершился за ~4.72 мин, дал коэффициенты до y^{40}. Базы нет, но ранее метод совпадал с базой на n<=9. Дальше: перенести орбитный подсчёт в основной enumerator и профилировать вращения/кэширование для n>10."
+  },
+  {
+    "id": "24453d3b-9e84-4c41-acf4-7db1f1290b82",
+    "timestamp": "2025-11-20T05:25:53.726202+00:00",
+    "task_id": "3d-ising",
+    "round": 65,
+    "title": "Q2.3: интеграция orbit-mode в основной enumerator (валид n=7)",
+    "hypothesis": "Встроенный orbit-mode (shape+root+rotation) в scripts/q2_3_lt_clusters.py воспроизводит базовый oriented счёт для n=7, area≤30, позволяя использовать его для n>10.",
+    "plan": "Добавить canonicalize_shape, стабилизаторы и (root, rotation) веса в основной enumerator; запустить mode=orbit на n=7, area≤30; сверить totals/гистограммы с базой.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/orbit_cells7_area30.json", "sha256": "acf2d1c60293b9c4fe0a5dc654e60b76eab9e07404c1790e20045019878fd3fe"}
+    ],
+    "metrics": {
+      "shapes_total": 1230,
+      "oriented_total_reconstructed": 27622,
+      "rooted_oriented_total": 188466,
+      "cluster_count_baseline": 188466,
+      "count_reduction_factor": 153.22439024390243,
+      "runtime_s": 0.9964873790740967,
+      "counts_match_baseline": true
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_mode_integration"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 1.0, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"state_repr": "shape_with_root_orbits", "pruning": "area_bound"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.8, "note": "Интеграция в основной код дала точное совпадение с базой."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.75, "note": "Сжатие 153× сохранено; числа подтверждены."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.74, "note": "Гистограммы в orbit-mode совпадают с oriented."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.82, "note": "Запуск <1 s воспроизводим, код интегрирован."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.72, "note": "Маргинали совпали; можно уходить на n>10."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Следует профилировать вращения для больших n."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Нужно проверить стабилизаторы на высоких симметриях n>10."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.7, "note": "Топологическая корректность сохранена, интеграция готова."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Контроль автогруппы важен при росте площадей."},
+      {"name": "Тао", "vote": 1, "confidence": 0.76, "note": "Структура/шум разделены; инструмент можно масштабировать."}
+    ],
+    "status": "success",
+    "notes": "Orbit-mode встроен в scripts/q2_3_lt_clusters.py. Валидирован на n=7, area≤30: полное совпадение counts/coeffs с oriented базой и 153× сжатие. Готово к запуску n>10 (area≤40) с кэшированием вращений/стабов."
   }
 ]

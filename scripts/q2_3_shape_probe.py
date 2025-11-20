@@ -94,6 +94,54 @@ def canonicalize(cells: Sequence[Cell]) -> Cluster:
     return best
 
 
+def canonicalize_rooted(cells: Sequence[Cell]) -> Cluster:
+    """Canonical form for rooted clusters: sort coordinates (origin is fixed)."""
+    return tuple(sorted(cells))
+
+
+def compute_area(cluster: Cluster) -> int:
+    """Surface area (number of exposed faces)."""
+    cluster_set = set(cluster)
+    area = 0
+    for x, y, z in cluster:
+        for dx, dy, dz in DIRS:
+            if (x + dx, y + dy, z + dz) not in cluster_set:
+                area += 1
+    return area
+
+
+def stabilizer_size(shape: Cluster) -> int:
+    """Number of cube rotations that keep the shape invariant up to translation."""
+    count = 0
+    for rot in ROTATIONS:
+        rotated = normalize_translation(apply_rotation(c, rot) for c in shape)
+        if rotated == shape:
+            count += 1
+    return count
+
+
+def rooted_orientations(shape: Cluster) -> Tuple[int, Dict[int, int]]:
+    """Count unique rooted+oriented embeddings with origin fixed.
+
+    For each cell as root: shift it to origin, rotate around origin, dedup by sorted
+    coordinates (no translation). Returns total count and histogram by area.
+    """
+    oriented: set[Cluster] = set()
+    by_area: Dict[int, int] = {}
+    for root in shape:
+        shift = tuple(-c for c in root)
+        shifted = tuple((x + shift[0], y + shift[1], z + shift[2]) for x, y, z in shape)
+        for rot in ROTATIONS:
+            rotated = tuple(apply_rotation(c, rot) for c in shifted)
+            rooted = canonicalize_rooted(rotated)
+            if rooted in oriented:
+                continue
+            oriented.add(rooted)
+            area = compute_area(rooted)
+            by_area[area] = by_area.get(area, 0) + 1
+    return len(oriented), by_area
+
+
 def neighbors(cluster: Cluster) -> List[Cell]:
     cluster_set = set(cluster)
     neigh: set[Cell] = set()
@@ -120,7 +168,13 @@ def enumerate_shapes(max_cells: int, max_area: int, use_pruned: bool):
     Returns:
       counts_by_area: number of shapes whose area ≤ max_area
       shapes_by_size: number of shapes per cell count
+      oriented_by_area: area histogram reconstructed via orbit sizes (24/|stab|)
+      oriented_by_size: size histogram reconstructed via orbit sizes
+      rooted_oriented_by_area: histogram for rooted+rotated embeddings (origin fixed)
+      rooted_oriented_by_size: histogram for rooted+rotated embeddings (origin fixed)
       shapes_total: total distinct shapes visited (all areas)
+      oriented_total: total reconstructed oriented (orbit) count
+      rooted_oriented_total: total rooted+oriented embeddings (no translations)
     """
 
     start = canonicalize(((0, 0, 0),))
@@ -130,7 +184,18 @@ def enumerate_shapes(max_cells: int, max_area: int, use_pruned: bool):
 
     counts_by_area: Dict[int, int] = {start_area: 1} if start_area <= max_area else {}
     shapes_by_size: Dict[int, int] = {1: 1}
+    oriented_by_area: Dict[int, int] = {}
+    oriented_by_size: Dict[int, int] = {1: 24}  # single cube has stab=24, orbit=1
+    rooted_oriented_by_area: Dict[int, int] = {start_area: 1}
+    rooted_oriented_by_size: Dict[int, int] = {1: 1}  # only one rooted orientation
+
+    # For the seed shape, stab=24 -> orbit size = 1
+    if start_area <= max_area:
+        oriented_by_area[start_area] = 1
+
     shapes_total = 1
+    oriented_total = 1  # already counted seed
+    rooted_oriented_total = 1
 
     while stack:
         cluster, area = stack.pop()
@@ -155,13 +220,36 @@ def enumerate_shapes(max_cells: int, max_area: int, use_pruned: bool):
 
             seen.add(new_cluster)
             shapes_total += 1
+
+            stab = stabilizer_size(new_cluster)
+            orbit = len(ROTATIONS) // stab
+
+            rooted_count, rooted_area_hist = rooted_orientations(new_cluster)
             new_size = size + 1
             shapes_by_size[new_size] = shapes_by_size.get(new_size, 0) + 1
             if new_area <= max_area:
                 counts_by_area[new_area] = counts_by_area.get(new_area, 0) + 1
+                oriented_by_area[new_area] = oriented_by_area.get(new_area, 0) + orbit
+            oriented_by_size[new_size] = oriented_by_size.get(new_size, 0) + orbit
+            rooted_oriented_total += rooted_count
+            rooted_oriented_by_size[new_size] = rooted_oriented_by_size.get(new_size, 0) + rooted_count
+            for a, cnt in rooted_area_hist.items():
+                if a <= max_area:
+                    rooted_oriented_by_area[a] = rooted_oriented_by_area.get(a, 0) + cnt
+            oriented_total += orbit
             stack.append((new_cluster, new_area))
 
-    return counts_by_area, shapes_by_size, shapes_total
+    return (
+        counts_by_area,
+        shapes_by_size,
+        oriented_by_area,
+        oriented_by_size,
+        rooted_oriented_by_area,
+        rooted_oriented_by_size,
+        shapes_total,
+        oriented_total,
+        rooted_oriented_total,
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -187,9 +275,17 @@ def main() -> None:
     args.output.parent.mkdir(parents=True, exist_ok=True)
 
     t0 = time.time()
-    counts_by_area, shapes_by_size, shapes_total = enumerate_shapes(
-        args.max_cells, args.max_area, args.use_pruned
-    )
+    (
+        counts_by_area,
+        shapes_by_size,
+        oriented_by_area,
+        oriented_by_size,
+        rooted_oriented_by_area,
+        rooted_oriented_by_size,
+        shapes_total,
+        oriented_total,
+        rooted_oriented_total,
+    ) = enumerate_shapes(args.max_cells, args.max_area, args.use_pruned)
     elapsed = time.time() - t0
 
     result = {
@@ -197,10 +293,16 @@ def main() -> None:
         "max_area": args.max_area,
         "use_pruned": args.use_pruned,
         "shapes_total": shapes_total,
+        "oriented_total_reconstructed": oriented_total,
+        "rooted_oriented_total": rooted_oriented_total,
         "counts_by_area": counts_by_area,
         "shapes_by_size": shapes_by_size,
+        "oriented_by_area": oriented_by_area,
+        "oriented_by_size": oriented_by_size,
+        "rooted_oriented_by_area": rooted_oriented_by_area,
+        "rooted_oriented_by_size": rooted_oriented_by_size,
         "elapsed_s": elapsed,
-        "note": "Shapes are canonicalized by 24 rotations + translation; rooted multiplicities are not included.",
+        "note": "Shapes are canonicalized by 24 rotations + translation; oriented counts reconstructed via orbit size = 24/|stab|. rooted_oriented_* counts enumerate (root, rotation) embeddings with origin fixed; translations still not applied.",
     }
     args.output.write_text(json.dumps(result, indent=2))
 
