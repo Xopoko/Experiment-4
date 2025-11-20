@@ -9859,5 +9859,55 @@
     ],
     "status": "error",
     "notes": "Возврат compute_area без кэша восстановил время n=9 (73.6 s) при тех же counts (sha обновлён). Запуск n=10 orbit (area≤40) не уложился в 900 s и был прерван. Следующее — профилировать горячие функции (rotations/rooted_orientations) и добавить parallel/caching."
+  },
+  {
+    "id": "caaa4f91-883c-40b2-b405-1311a2d63af2",
+    "timestamp": "2025-11-20T06:12:05Z",
+    "task_id": "3d-ising",
+    "round": 68,
+    "title": "Профилирование orbit n=9 (pruned, area≤40)",
+    "hypothesis": "Профиль на n=9 (orbit, pruning) покажет, какие функции определяют время ≥90% и подтвердит, что узкое место — rooted_orientations/compute_area; общее время останется <10 мин.",
+    "plan": "Запустить cProfile на scripts/q2_3_lt_clusters.py с max-cells=9, max-area=40, mode=orbit, use-pruned; сохранить профайл и топ-20 функций; зафиксировать счётчики форм и время.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T060625Z.json", "sha256": "d79a0e0faf83cd4a7350075ccb02eac1c6dfdea6f815a3b383455d25692cc38b"},
+      {"path": "artifacts/q2_3_lt_free_energy/cluster_counts.json", "sha256": "0a0556473933955ce1e4b866bb4e79c8c6c9a34581851fe2d1b32ef68d7dacc7"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit.prof", "sha256": "e1651ea748960484b336665f98b81c31101cef0215bdd5f7aeceb5bf8c41a163"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_top.txt", "sha256": "15522569714e37a94c00be3ae2a683dff8d03ee8bb85fc19b8f2d74c3f2581ac"}
+    ],
+    "metrics": {
+      "elapsed_s": 128.2793,
+      "shapes_total": 56463,
+      "rooted_oriented_total": 11867600,
+      "oriented_total": 1343405,
+      "rooted_orientations_cum_s": 88.771,
+      "compute_area_cum_s": 40.61,
+      "normalize_translation_cum_s": 34.034,
+      "stabilizer_size_cum_s": 7.956
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_profile_n9_pruned"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 128.3, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 9, "max_area": 40}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.62, "note": "Профиль показал инвариантные узкие места; пора искать геометрические сокращения объёма вращений."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.64, "note": "Цифры ясны: оцениваем верх/низ по времени; следующая ставка — уменьшить счётчик обращений к compute_area."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.66, "note": "Нужно аналитизировать — переключить compute_area/normalize_translation на более короткие формулы или мемоизацию форм."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.71, "note": "Эксперимент честный: узкие места наглядны; следующий шаг — переписать горячие функции и проверить снова."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.67, "note": "Локализованы хвостовые события времени; нужно использовать согласование блоков/стабилизаторов для уменьшения объёма."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.53, "note": "Время выросло из-за профиля; следить за масштабной структурой вызовов — может потребовать каскадного сокращения."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.55, "note": "Профиль не даёт геометрического прорыва, но подтверждает, что симметрии можно сильнее использовать."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.64, "note": "Качественная картина сложилась: сечение (rooted_orientations) доминирует; ищем нормальные формы."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Инварианты вычислены; стоит продлить к более глобальной формуле, но пока без изменения общей структуры."},
+      {"name": "Тао", "vote": 1, "confidence": 0.69, "note": "Хорошая декомпозиция структура+шум: главное — уменьшить псевдослучайные вызовы compute_area."}
+    ],
+    "status": "success",
+    "notes": "cProfile на n=9 orbit (pruned, area≤40) дал 128.3 s; rooted_orientations ~69% времени, compute_area ~32%; normalize_translation ~27%. Счётчики совпадают с прошлым n=9. Следующий шаг — оптимизировать compute_area/normalize_translation и кэширование ориентаций перед повтором n=10."
   }
 ]
