@@ -9214,5 +9214,229 @@
     ],
     "status": "success",
     "notes": "LT-ряд: -3K - y^6 - 6 y^{10} - 45 y^{14} - 12 y^{16} - 332 y^{18} - 240 y^{20} - 2538 y^{22} - 3040 y^{24} - 20448 y^{26} - 33024 y^{28} - 170068 y^{30} - 288216 y^{32} - 973800 y^{34} + O(y^{36}). Следующий шаг — ускорить перечислитель (симметрии, memo) перед запуском 9-спиновых фигур."
+  },
+  {
+    "id": "0566810d-4586-460a-8d65-3ab6707accbb",
+    "timestamp": "2025-11-20T03:57:18Z",
+    "task_id": "3d-ising",
+    "round": 54,
+    "title": "Q2.2: фронтир 2×2×5 с связностью (≤10 рёбер)",
+    "hypothesis": "Фронтирный DP с учётом связности на коробке 2×2×5 даст counts_by_length до 10 рёбер и управляемый рост состояний (<4e6) за <10 мин.",
+    "plan": "Использовать scripts/q2_2_frontier_probe.py с nx=2, ny=2, nz=5, max_edges=10; собрать states_per_step, counts_by_length, время исполнения и сохранить артефакты.",
+    "code_refs": ["scripts/q2_2_frontier_probe.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T035518Z.json", "sha256": "fc58d0dcb677b9a9f6ef049bfbf50a6273da73fb9c24b4515e7573d5f8826af7"},
+      {"path": "artifacts/q2_2_frontier_probe/results_2x2x5_conn.json", "sha256": "81fb6cc1de0c35b88ba10bf288310782398e4e0353686479fae15bf620ef1533"}
+    ],
+    "metrics": {
+      "runtime_s": 77.76,
+      "counts_by_length": {"1":3,"2":10,"3":33,"4":92,"5":340,"6":895,"7":2740,"8":6747,"9":18658,"10":41785},
+      "peak_states": 3885860,
+      "final_state_count": 3885860
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898223650461363, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["frontier_2x2x5_conn"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 77.76, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"lattice_patch": "2x3x3", "state_repr": "python_dfs"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"top": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.76, "note": "инвариант связности подтверждён"},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.7, "note": "counts_by_length чистые"},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.74, "note": "таблица удобна для χ"},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.82, "note": "лог/перебор воспроизводим"},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.7, "note": "рост σ-алгебры зафиксирован"},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.5, "note": "следить за масштабом при большем z"},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.52, "note": "симметрии фронтира не использованы"},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.72, "note": "топология пути закреплена"},
+      {"name": "Риман", "vote": 0, "confidence": 0.55, "note": "нужно оценить параметры на больших коробках"},
+      {"name": "Тао", "vote": 1, "confidence": 0.76, "note": "структура/шум разделены"}
+    ],
+    "status": "success",
+    "notes": "Фронтир с связностью на 2×2×5 укладывается в <80 c; counts_by_length готовы для χ(K). Следующий шаг — сжать фронтир (симметрии/разбиение по z) перед переходом к 2×3×3 или 3×3×3."
+  },
+  {
+    "id": "2a5206ab-244b-43d5-b864-e6c92867e3bb",
+    "timestamp": "2025-11-20T04:04:36.519101Z",
+    "task_id": "3d-ising",
+    "round": 55,
+    "title": "Q2.3: 9-spin clusters up to y^38",
+    "hypothesis": "Перечисление связанных кластеров до 9 спинов даст коэффициенты LT-ряда по площадям ≤38 (включая новые y^36,y^38) при времени <10 мин.",
+    "plan": "IdeaLab для поиска ходов; запустить q2_3_lt_clusters.py с max_cells=9,max_area=40; зафиксировать counts_by_area и sha.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T040107Z.json", "sha256": "7a9672b94c33bfaa6ef0e36b9949f170031d98a7b243b156005de74960d4cdf0"},
+      {"path": "artifacts/tools/tricks_20251120T040107Z.txt", "sha256": "7a9672b94c33bfaa6ef0e36b9949f170031d98a7b243b156005de74960d4cdf0"},
+      {"path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells9_area40.json", "sha256": "49b217c3233336e379764da61aa475962a90b238f0a20c7c07c3be1837bccdf3"}
+    ],
+    "metrics": {
+      "cluster_count": 11867600,
+      "counts_by_area": {"6":1,"10":6,"14":45,"16":12,"18":332,"20":240,"22":2538,"24":3040,"26":20448,"28":33240,"30":171499,"32":338112,"34":1433070,"36":2598588,"38":7266429},
+      "elapsed_s": 163.39
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["lt_cluster_nona"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 163.39, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"lattice_patch": "2x3x3", "state_repr": "python_dfs"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.72, "note": "Инвариант площади соблюдён; нужна канонизация по симметриям."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.7, "note": "Чистый перебор и рост до y^38 виден; стоит дать верхние оценки."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.74, "note": "Генфункция по площадям обновлена; число членов выросло ожидаемо."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.82, "note": "Эксперимент воспроизводим, логи артефактов есть."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.7, "note": "Маргинали для малых площадей монотонно растут, модель согласована."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.5, "note": "Без симметрий дальнейшее n взорвёт вычисления."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.52, "note": "Ротационные дублеты не убраны, возможен лишний счёт."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.72, "note": "Топология кластеров фиксирована; следующий шаг — фильтр по родам."},
+      {"name": "Риман", "vote": 0, "confidence": 0.55, "note": "Нужно нормализовать координаты и проверить, покрыты ли все формы при площади ≤38."},
+      {"name": "Тао", "vote": 1, "confidence": 0.76, "note": "Структура+шум разложение готово; можно отсечь шум симметриями."}
+    ],
+    "status": "success",
+    "notes": "Получены коэффициенты до y^38, но малые площади выросли: вклад 9-спиновых кластеров. Покрытие порядка ≤38 ещё неполное без оценки минимальной площади для n>9; нужно либо доказать границу, либо перечислить n=10+ с симметрийной канонизацией."
+  },
+  {
+    "id": "9dcb3cfc-367b-4acb-a92f-ecf6f94a894e",
+    "timestamp": "2025-11-20T04:23:26.763410Z",
+    "task_id": "3d-ising",
+    "round": 56,
+    "title": "Q2.3: pruned enumerator setup for n=10 (timeout)",
+    "hypothesis": "Прунинг по минимально возможной площади позволит перечислить кластеры до 10 спинов (area<=40) <10 мин и закрыть y^38.",
+    "plan": "Добавить безопасный bound min_possible_area=new_area−6*remaining и опцию --use-pruned, затем запустить n=10, area<=40.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T041055Z.json", "sha256": "1f4a241fab17e6742644e6d112fbbb5546b66cc467a461d58e57f526bc4aa66b"},
+      {"path": "artifacts/tools/tricks_20251120T041055Z.txt", "sha256": "1f4a241fab17e6742644e6d112fbbb5546b66cc467a461d58e57f526bc4aa66b"}
+    ],
+    "metrics": {"elapsed_s": 600.0, "result": "timeout", "output_file": null},
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["pruned_n10_probe"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 600.0, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"lattice_patch": "2x3x3", "state_repr": "python_dfs"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.7, "note": "прунинг по площади корректен"},
+      {"name": "Эрдёш", "vote": 0, "confidence": 0.5, "note": "нет цифр по counts"},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.6, "note": "структура вывода сохранена"},
+      {"name": "Фейнман", "vote": 0, "confidence": 0.55, "note": "таймаут — нужен повтор"},
+      {"name": "Колмогоров", "vote": 0, "confidence": 0.5, "note": "оценки роста не обновлены"},
+      {"name": "Мандельброт", "vote": -1, "confidence": 0.55, "note": "экспоненциальный рост без симметрий"},
+      {"name": "Пенроуз", "vote": -1, "confidence": 0.52, "note": "нет ротационной канонизации"},
+      {"name": "Пуанкаре", "vote": 0, "confidence": 0.5, "note": "структура топологии ок, но данных нет"},
+      {"name": "Риман", "vote": 0, "confidence": 0.5, "note": "нужен бокс-бонд для прунинга"},
+      {"name": "Тао", "vote": 1, "confidence": 0.6, "note": "код готов для следующего ускорения"}
+    ],
+    "status": "error",
+    "notes": "Запуск n=10 с --use-pruned не уложился в 600 s, файл не создан. Прунинг обновлён на безопасный bound (6*remaining). Нужна канонизация симметрий и более жёсткие бонды перед повтором."
+  },
+  {
+    "id": "134e8495-fd5b-4a31-a821-325133c1f52c",
+    "timestamp": "2025-11-20T04:34:04Z",
+    "task_id": "3d-ising",
+    "round": 57,
+    "title": "Q2.3: streaming counts in LT enumerator",
+    "hypothesis": "Подсчёт площадей в одном проходе DFS снизит время перебора при сохранении коэффициентов LT-ряда.",
+    "plan": "Убрать второй проход compute_counts; считать area и counts в DFS; проверить на n=8,9 (area<=36/40) с прунингом.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T042552Z.json", "sha256": "a98894c47374db9b8e422e8ce73bcf838d34d4da8f3551bb9fe9c0c06dbde557"},
+      {"path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells8_area36_stream.json", "sha256": "ca9df9e1da323a8e0b3f467fb77a77519a2a4e118ab1e788a8c262a87fdda497"},
+      {"path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells9_area40_stream.json", "sha256": "710d89d2e096c27c232cc261692d08653543a78ce61f4c5587389fe5c3a9fb31"}
+    ],
+    "metrics": {
+      "runtime_s_cells8_area36": 9.6841907501,
+      "runtime_s_cells9_area40": 281.1948533058,
+      "cluster_count_cells9": 11867600,
+      "counts_match_prev": true
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["stream_counts"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 290.879, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"lattice_patch": "2x3x3", "state_repr": "python_dfs"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 0, "confidence": 0.62, "note": "Инвариант сохранён, ускорения нет."},
+      {"name": "Эрдёш", "vote": 0, "confidence": 0.60, "note": "Счёт совпал, но времени не выиграли."},
+      {"name": "Эйлер", "vote": 0, "confidence": 0.58, "note": "Алгебра ясна, эффект нулевой."},
+      {"name": "Фейнман", "vote": -1, "confidence": 0.65, "note": "Гипотеза об ускорении опровергнута."},
+      {"name": "Колмогоров", "vote": 0, "confidence": 0.57, "note": "Маргинали ок, но цель скорости не достигнута."},
+      {"name": "Мандельброт", "vote": -1, "confidence": 0.66, "note": "Без симметрий время растёт экспоненциально."},
+      {"name": "Пенроуз", "vote": -1, "confidence": 0.63, "note": "Нужен иной геометрический ход."},
+      {"name": "Пуанкаре", "vote": 0, "confidence": 0.59, "note": "Конвенция не дала экономии мысли."},
+      {"name": "Риман", "vote": 0, "confidence": 0.55, "note": "Инварианты ок, выигрыш отсутствует."},
+      {"name": "Тао", "vote": -1, "confidence": 0.64, "note": "Шум не уменьшен; искать новый фактор."}
+    ],
+    "status": "fail",
+    "notes": "Коэффициенты совпали, но время выросло (281 s vs ~163 s). Нужна канонизация по симметриям или перенос перечня в ускоренный backend перед запуском n=10."
+  },
+  {
+    "id": "d2329b64-74d0-4897-8fd9-63581d1e36ec",
+    "timestamp": "2025-11-20T04:55:29.475710Z",
+    "task_id": "3d-ising",
+    "round": 58,
+    "title": "Q2.3: shape vs oriented probe (n=7, area≤30)",
+    "hypothesis": "Симметрийная канонизация (24 вращения + сдвиг) сильно уменьшит число состояний; на малом примере оценим фактор сжатия поискового пространства.",
+    "plan": "1) IdeaLab. 2) Запустить ориентированный перебор (max_cells=7, area<=30, pruned). 3) Запустить shape-probe с канонизацией по вращениям/сдвигам. 4) Сравнить counts/time и записать артефакты.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py", "scripts/q2_3_shape_probe.py"],
+    "artifacts": [
+      {"path": "artifacts/tools/tricks_20251120T045234Z.json", "sha256": "f18bf38d3741b9d5837f41ca8e536c9251efcf0fd8ebc439e453cf6a2bbadbe4"},
+      {"path": "artifacts/tools/tricks_20251120T045234Z.txt", "sha256": "f18bf38d3741b9d5837f41ca8e536c9251efcf0fd8ebc439e453cf6a2bbadbe4"},
+      {"path": "artifacts/q2_3_lt_free_energy/oriented_cells7_area30.json", "sha256": "8464d4d043d19b8bfb8055395371f5126873d1dcd9d976eef5b022aad6f3b820"},
+      {"path": "artifacts/q2_3_lt_free_energy/shape_cells7_area30.json", "sha256": "f5f75a0be2f42d64778813b5975fe4298020e3d63d61822982a52c828fbd575a"}
+    ],
+    "metrics": {
+      "oriented_cluster_count": 188466,
+      "shape_count": 1230,
+      "count_reduction_factor": 153.22439024390243,
+      "oriented_elapsed_s": 0.5099124908447266,
+      "shape_elapsed_s": 0.2267320156097412,
+      "time_ratio_oriented_to_shape": 2.2489655440738687
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["shape_probe"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 0.74, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"state_repr": "shape_canonical", "pruning": "area_bound"}},
+      {"op": "TRIZ_CONTRADICTION", "args": {"improve": "order_depth", "worsen": "runtime"}},
+      {"op": "SERENDIPITY_HOOK", "args": {"source": "code: Jensen transfer matrices"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.78, "note": "Симметрия/инвариантность дала компактный репертуар фигур."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.74, "note": "~153× уменьшение состояний — сильная граница сверху."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.73, "note": "Гистограммы площадей для shape vs oriented сопоставимы по поддержке."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.8, "note": "Два запуска с артефактами и временем <1 c воспроизводимы."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.72, "note": "Комбинаторная мощность стала управляемой; можно добавить веса орбит."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Пока нет перерасчёта вкладов, лишь оценка сжатия."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Требуется учесть стабилизаторы/орбиты для корректных коэффициентов."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.71, "note": "Топологические типы покрыты; следующий шаг — метки корня."},
+      {"name": "Риман", "vote": 0, "confidence": 0.58, "note": "Нужна нормировка по автоморфизмам перед переносом в LT-ряд."},
+      {"name": "Тао", "vote": 1, "confidence": 0.74, "note": "Чёткое разделение структуры (shape) и шума (ориентации) намечено."}
+    ],
+    "status": "success",
+    "notes": "Shape-канонизация при n<=7 дала 153× меньше состояний и ~2.25× быстрее времени при одинаковых параметрах; пока это сжатие без учёта rooted/oriented мультипликаторов. Следующий шаг — добавить веса орбит/корней для восстановления коэффициентов и попробовать n>=8."
   }
 ]
