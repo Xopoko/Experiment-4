@@ -9909,5 +9909,253 @@
     ],
     "status": "success",
     "notes": "cProfile на n=9 orbit (pruned, area≤40) дал 128.3 s; rooted_orientations ~69% времени, compute_area ~32%; normalize_translation ~27%. Счётчики совпадают с прошлым n=9. Следующий шаг — оптимизировать compute_area/normalize_translation и кэширование ориентаций перед повтором n=10."
+  },
+  {
+    "id": "43e54365-690c-4f4a-9ff1-20a9c5ce12d8",
+    "timestamp": "2025-11-20T06:16:29Z",
+    "task_id": "3d-ising",
+    "round": 69,
+    "title": "Ускорение orbit n=9: вынос площади из rooted_orientations",
+    "hypothesis": "Если не пересчитывать площадь для каждой ориентации (area инвариантна), время n=9 orbit уменьшится ≥30% без изменения коэффициентов.",
+    "plan": "Переписать rooted_orientations: использовать заранее вычисленную площадь формы, считать только уникальные rooted ориентации; перепрофилировать n=9 (area≤40, pruned) и сравнить со 128s базой.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after.prof", "sha256": "9b5d7af3ca89f0981e95304c8af158a4af652edd38c71d13a4c03d947834f5cd"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after_top.txt", "sha256": "4c935a94b72be7ba4f33d995f720c0955012443fd7548b42591c7bb378409405"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after_summary.txt", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      {"path": "artifacts/q2_3_lt_free_energy/cluster_counts.json", "sha256": "6de21b0362d74f9b51dd4902f6730754502334484358e8420674ea24f5a56393"},
+      {"path": "scripts/q2_3_lt_clusters.py", "sha256": "5ab176459ceee809b17790070e6d029a03a6a0dc6f7c891c73262c599ddb3ffa"}
+    ],
+    "metrics": {
+      "elapsed_s": 78.0495,
+      "speedup_vs_prev": 1.64,
+      "shapes_total": 56463,
+      "rooted_oriented_total": 11867600,
+      "oriented_total": 1343405,
+      "rooted_orientations_cum_s": 38.460,
+      "compute_area_cum_s": 0.433,
+      "normalize_translation_cum_s": 34.275,
+      "canonicalize_rooted_cum_s": 31.967
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_profile_n9_pruned_after_area_cache"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 78.1, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "area_invariant": true}},
+      {"op": "ASPECT_ROTATE", "args": {"axis": "representation", "change": "area precompute"}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.7, "note": "Инвариант площади снял значимую часть работы; хороший принципиальный ход."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.71, "note": "Скорость выросла без потери счётчиков — это «книжный» ход сэкономить подсчёты."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.74, "note": "Аналитизация площади дала чистый выигрыш; можно дальше оптимизировать сортировки."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.75, "note": "Эксперимент показал +64% ускорение; честная проверка и совпадающие коэффициенты."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.72, "note": "Использование инварианта снизило хвост времени; структура процесса сохранилась."},
+      {"name": "Мандельброт", "vote": 1, "confidence": 0.56, "note": "Масштаб времени улучшился; дальше смотреть на степенной рост sorted()."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.55, "note": "Геометрия учтена, но симметрии можно усилить ещё; шаг положительный."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.68, "note": "Нормальная форма площади убрала лишний труд; теперь фокус на сортировках/сечениях."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Инвариант использован, но ещё возможна глобальная переформулировка root-счёта."},
+      {"name": "Тао", "vote": 1, "confidence": 0.73, "note": "Декомпозиция структура+шум улучшена: шум compute_area почти исчез."}
+    ],
+    "status": "success",
+    "notes": "Площадь вынесена из rooted_orientations; compute_area теперь зовётся ~8k раз вместо 1190w, время упало c 128.3 s до 78.0 s при тех же коэффициентах и счётчиках. Узкие места теперь sorted() и normalize_translation/canonicalize_rooted; следующий шаг — уменьшить сортировки (например, фиксированный порядок/хеш) и попробовать n=10."
+  },
+  {
+    "id": "85ab05bb-80df-4491-bc96-6b32f028c941",
+    "timestamp": "2025-11-20T06:21:12Z",
+    "task_id": "3d-ising",
+    "round": 70,
+    "title": "Orbit n=9: key= frozenset, ещё -3s",
+    "hypothesis": "Замена sorted-ключа в rooted_orientations на order-free frozenset ещё уменьшит cumtime sorted() и даст ≥5% ускорения без изменения коэффициентов.",
+    "plan": "Использовать frozenset для ключа rooted ориентаций; перепрофилировать n=9 (area≤40, pruned), зафиксировать профиль и проверку коэффициентов.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "scripts/q2_3_lt_clusters.py", "sha256": "4deb2a897d32127aee46f4c3b84aba73b91ef82a114fbcbff34616993349ae7b"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after2.prof", "sha256": "611fdad015e7dc43c62e72facdcfd9ecedc513b651ceb5402d5cdbc8f3082a6e"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after2_top.txt", "sha256": "2d33b42bb68afe0f201f3a486cac294d636f333fcfb5ee78f0bb5a1471dc5c09"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after2_summary.txt", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      {"path": "artifacts/q2_3_lt_free_energy/cluster_counts.json", "sha256": "edcc671721e91592ce17e612a68d1006c84556a40e102a5f035830fc537287df"}
+    ],
+    "metrics": {
+      "elapsed_s": 75.8439,
+      "speedup_vs_prev": 1.69,
+      "shapes_total": 56463,
+      "rooted_oriented_total": 11867600,
+      "oriented_total": 1343405,
+      "rooted_orientations_cum_s": 35.375,
+      "compute_area_cum_s": 0.424,
+      "normalize_translation_cum_s": 34.218,
+      "canonicalize_rooted_cum_s": 29.555,
+      "sorted_cum_s": 9.849
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_profile_n9_frozenset_key"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 75.9, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "ASPECT_ROTATE", "args": {"axis": "representation", "change": "order_free_key"}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "area_invariant": true}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.7, "note": "Небольшая, но честная экономия за счёт инварианта порядка; время ещё ближе к целевому."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.7, "note": "Снижение sorted() подтверждено, коэффициенты совпадают; можно переходить к большей решётке."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.72, "note": "Ключ без сортировки логичен; теперь главный шум — normalize_translation."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.74, "note": "Эксперимент чистый: +3 s выигрыш, метрики сохранены."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.71, "note": "Хвост sorted() прижат; дальнейшая экономия требует другой нормализации."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Прирост мал, но тренд стабильный; следить за масштабной сложностью сортировок."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Геометрия помогла, но симметрий можно больше; следующий шаг — убрать сортировки."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.66, "note": "Нормальная форма по порядку сделана; пора менять сечение (normalize) на более дешевое."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Инвариант ключа использован; стоит переосмыслить глобальную нормировку фронтира."},
+      {"name": "Тао", "vote": 1, "confidence": 0.72, "note": "Шум sorted() уменьшен; следующая декомпозиция — нормализация координат."}
+    ],
+    "status": "success",
+    "notes": "rooted_orientations использует frozenset вместо sorted tuple; wall-time n=9 orbit упал до 75.84 s (ещё -2.2 s от area-precompute и -52.5 s от базы 128.3 s). Коэффициенты/счётчики идентичны. Основное узкое место теперь normalize_translation (34 s) и canonicalize_rooted (29.6 s). Следующее — снизить сортировки/нормализацию (фиксированный порядок/хеш) и попробовать n=10."
+  },
+  {
+    "id": "592fba31-73f0-419b-a059-fc3e4d0b228e",
+    "timestamp": "2025-11-20T06:24:42Z",
+    "task_id": "3d-ising",
+    "round": 71,
+    "title": "Orbit n=9: сортировка в normalize зафиксирована",
+    "hypothesis": "Замена сортировки на стабильную нормализацию списка (вынесен явный sort) сохранит скорость ~75s и не ухудшит счётчики; отсрочка нормализации по set-ключу может перераспределить время.",
+    "plan": "Переписать normalize_translation с фиксированным сорт-ключом без пересортировки генераторов; перепрофилировать n=9 orbit (area≤40, pruned), сравнить с 75.84 s и обновить шумовые функции.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "scripts/q2_3_lt_clusters.py", "sha256": "5571bde687468028cf058b42673a7508867b7c96cba79f689e0eaaeaaac8d7fc"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after3.prof", "sha256": "a0746ba2802f4484d025b89b0eb02d6fdbaf663d0804dc563d21e573cc7fb5f6"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after3_top.txt", "sha256": "4aed3e960a9591d382224776e5087c729e51c7352c8e68bc682c8c682d0d6889"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after3_summary.txt", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      {"path": "artifacts/q2_3_lt_free_energy/cluster_counts.json", "sha256": "fdd0ccaed881f8d4601ab77518cb10abb424835230c77baa4e5783f45f88e09d"}
+    ],
+    "metrics": {
+      "elapsed_s": 76.4725,
+      "speedup_vs_prev": 1.68,
+      "shapes_total": 56463,
+      "rooted_oriented_total": 11867600,
+      "oriented_total": 1343405,
+      "rooted_orientations_cum_s": 35.331,
+      "compute_area_cum_s": 0.424,
+      "normalize_translation_cum_s": 34.898,
+      "canonicalize_rooted_cum_s": 29.568,
+      "list_sort_cum_s": 9.005
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_profile_n9_sort_fix"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 76.5, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "ASPECT_ROTATE", "args": {"axis": "representation", "change": "stable_normalize_sort"}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "area_invariant": true}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 0, "confidence": 0.62, "note": "Время почти без изменений; инварианты сохранены."},
+      {"name": "Эрдёш", "vote": 0, "confidence": 0.61, "note": "График времена стабилен; выигрыш почти нулевой."},
+      {"name": "Эйлер", "vote": 0, "confidence": 0.63, "note": "Сортировка осталась горячей; нужен другой порядок/хеш."},
+      {"name": "Фейнман", "vote": 0, "confidence": 0.65, "note": "Эксперимент честный, прироста нет; стоит менять подход к normalize."},
+      {"name": "Колмогоров", "vote": 0, "confidence": 0.62, "note": "Хвост времени почти тот же; требуется новая структура данных."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Масштаб времени не улучшился; следить за степенным ростом sorted()."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Геометрия не стала проще; нужно сильнее использовать симметрию."},
+      {"name": "Пуанкаре", "vote": 0, "confidence": 0.6, "note": "Нормализация всё ещё дорога; ищем другое сечение."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Инварианты сохранены, но выигрыш = шум; нужна новая репрезентация."},
+      {"name": "Тао", "vote": 0, "confidence": 0.6, "note": "Декомпозиция не дала улучшения; пора менять стратегию (хеш/таблица)."}
+    ],
+    "status": "fail",
+    "notes": "Попытка уменьшить сортировки в normalize_translation не дала прироста: время 76.47 s ≈ прошлым 75.84 s, профиль почти идентичен. Основное узкое место остаётся normalize_translation (~35 s) и canonicalize_rooted (~29.6 s). Следующее — заменить normalize_translation/canonicalize_rooted на хеш-ключ без сортировки (например, min-shift + tuple(sorted coords once globally)) или перейти к частичному кэшированию фронтира; затем попробовать n=10."
+  },
+  {
+    "id": "dd812095-299a-4849-af77-7e6a894c242e",
+    "timestamp": "2025-11-20T06:30:53Z",
+    "task_id": "3d-ising",
+    "round": 72,
+    "title": "Orbit n=10 (area≤40, pruned) с текущими оптимизациями",
+    "hypothesis": "С ускоренным n=9 (≈76 s) полный n=10 run уложится < 200–250 s и даст счётчики для ряда без таймаута.",
+    "plan": "Запустить scripts/q2_3_lt_clusters.py с max-cells=10, max-area=40, mode=orbit, use-pruned; сохранить counts в cluster_counts.json и сравнить прирост времени/счётчиков.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "scripts/q2_3_lt_clusters.py", "sha256": "5571bde687468028cf058b42673a7508867b7c96cba79f689e0eaaeaaac8d7fc"},
+      {"path": "artifacts/q2_3_lt_free_energy/cluster_counts.json", "sha256": "e0ada734aa62be1f0ffebc43f48ed2c8e5aa2439acaf4a55bcbada1a5f886828"}
+    ],
+    "metrics": {
+      "elapsed_s": 190.7757,
+      "shapes_total": 175511,
+      "rooted_oriented_total": 40342950,
+      "oriented_total": 4190940
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_run_n10_area40_pruned"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 190.8, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "max_cells": 10, "max_area": 40}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.64, "note": "n=10 завершён за ~3.2 мин; доказано, что оптимизации достаточны для area≤40."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.66, "note": "Числа получены без таймаута; следующий ход — улучшить порядок при тех же bound."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.67, "note": "Набор коэффициентов расширен до n=10; можно извлекать y^{≤40} вклады."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.72, "note": "Эксперимент честный и воспроизводимый; лог сохранён."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.65, "note": "Теперь есть контролируемый runtime для n=10; хвосты времени известны."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Рост времени ~2.5× — приемлем при area bound, но сортировки остаются фактором."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Геометрия не оптимальна, но результат достигнут — можно смещать акцент на симметрии."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.63, "note": "Качественная карта для n=10 готова; нужно сделать сечение дешевле."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Инварианты собраны, но нормировка всё ещё дорога."},
+      {"name": "Тао", "vote": 1, "confidence": 0.7, "note": "Структура+шум разделены, данные n=10 есть; можно планировать следующий перенос."}
+    ],
+    "status": "success",
+    "notes": "n=10 orbit (area≤40, pruned) завершён за 190.8 s без таймаута; counts по областям записаны. Основные узкие места прежние (normalize_translation, canonicalize_rooted). Следующее — убрать сортировки/нормализацию через хеш-ключ или кэш фронтира и использовать этот же код для y^40 вкладов."
+  },
+  {
+    "id": "af158ac8-b28b-41c7-a35f-60e7e9e99830",
+    "timestamp": "2025-11-20T06:38:30Z",
+    "task_id": "3d-ising",
+    "round": 73,
+    "title": "Кэш normalize_translation оказался регрессией; откат",
+    "hypothesis": "Попытка LRU-кэша для normalize_translation ускорит n=9; если нет — вернуться к предыдущей версии.",
+    "plan": "Включить кэш normalize_translation, перепрофилировать n=9, оценить время; если деградация — откатить и зафиксировать метрики после отката.",
+    "code_refs": ["scripts/q2_3_lt_clusters.py"],
+    "artifacts": [
+      {"path": "scripts/q2_3_lt_clusters.py", "sha256": "a4d9ebe566b97361f1d7c7b32e0d22f8284c70e773b87f815c84b99fdef6705b"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after5.prof", "sha256": "d3a6a166a650ff1085b6944f33c28b53a066669311e9d83d98c852bbf35eca84"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after5_top.txt", "sha256": "d003559f16136fd9770059f2c664e98847ac5bf9b1cfa7893210389a8d9b90a8"},
+      {"path": "artifacts/q2_3_lt_free_energy/profile_n9_orbit_after5_summary.txt", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+    ],
+    "metrics": {
+      "elapsed_s": 76.733,
+      "rooted_orientations_cum_s": 35.512,
+      "normalize_translation_cum_s": 34.946,
+      "canonicalize_rooted_cum_s": 29.755,
+      "list_sort_cum_s": 9.084
+    },
+    "novelty": {
+      "uzzi": {"median_z": 1.8898, "p10_z": 0.0},
+      "mmr": {"lambda": 0.6, "selected": ["orbit_profile_n9_revert_cache"]}
+    },
+    "env": {"python": "3.12.3", "cuda": "n/a", "driver": "n/a", "seed": 0},
+    "compute": {"cpu_s": 76.7, "gpu_s": 0.0, "max_mem_mb": 0},
+    "operators_trace": [
+      {"op": "ASPECT_ROTATE", "args": {"axis": "representation", "change": "cache_revert"}},
+      {"op": "MORPHOLOGY", "args": {"mode": "orbit_pruned", "area_invariant": true}}
+    ],
+    "voices": [
+      {"name": "Эйнштейн", "vote": 1, "confidence": 0.7, "note": "Откат оправдан: кэш дал деградацию; база восстановлена."},
+      {"name": "Эрдёш", "vote": 1, "confidence": 0.7, "note": "Вернулись к ~76 s; фиксируем провальный эксперимент."},
+      {"name": "Эйлер", "vote": 1, "confidence": 0.72, "note": "Факт: кэш не помог, запись сделана — можно искать другие ходы."},
+      {"name": "Фейнман", "vote": 1, "confidence": 0.73, "note": "Честно зафиксировали регрессию и откатили."},
+      {"name": "Колмогоров", "vote": 1, "confidence": 0.69, "note": "Хорошо, что хвост времени вернули к контролю; кэш был лишним."},
+      {"name": "Мандельброт", "vote": 0, "confidence": 0.55, "note": "Масштаб времени вернулся; кэш избыточен."},
+      {"name": "Пенроуз", "vote": 0, "confidence": 0.56, "note": "Симметрии не улучшились, но откат вернул стабильность."},
+      {"name": "Пуанкаре", "vote": 1, "confidence": 0.66, "note": "Топология работы восстановлена; кэш без пользы зачёркнут."},
+      {"name": "Риман", "vote": 0, "confidence": 0.57, "note": "Инварианты удержаны, но подход к нормализации надо менять."},
+      {"name": "Тао", "vote": 1, "confidence": 0.71, "note": "Эксперимент провалился, но теперь есть чёткая граница: кэш вреден."}
+    ],
+    "status": "fail",
+    "notes": "Попытка LRU-кэша normalize_translation повысила time до 179 s → откат. Текущая версия вернулась к ~76.7 s с прежним профилем. Кэширование нормализации признано вредным; фокус далее — хеш-ключ без сортировки или иное представление фронтира."
   }
 ]

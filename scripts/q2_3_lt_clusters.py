@@ -25,8 +25,11 @@ Cluster = Tuple[Cell, ...]
 
 
 def canonicalize_rooted(cells: Sequence[Cell]) -> Cluster:
-    """Canonical form for rooted clusters (origin fixed)."""
-    return tuple(sorted(cells))
+    """Canonical form for rooted clusters (origin fixed).
+
+    Uses order-free representation (frozenset) to avoid per-call sorting.
+    """
+    return frozenset(cells)
 
 
 def _parity(perm: Sequence[int]) -> int:
@@ -76,7 +79,9 @@ def normalize_translation(cells: Iterable[Cell]) -> Cluster:
     cells_list = list(cells)
     xs, ys, zs = zip(*cells_list)
     min_x, min_y, min_z = min(xs), min(ys), min(zs)
-    return tuple(sorted((x - min_x, y - min_y, z - min_z) for x, y, z in cells_list))
+    normalized = [(x - min_x, y - min_y, z - min_z) for x, y, z in cells_list]
+    normalized.sort(key=lambda p: (p[0], p[1], p[2]))
+    return tuple(normalized)
 
 
 def canonicalize_shape(cells: Sequence[Cell]) -> Cluster:
@@ -139,22 +144,23 @@ def stabilizer_size(shape: Cluster) -> int:
 
 
 @lru_cache(maxsize=None)
-def rooted_orientations(shape: Cluster) -> Tuple[int, Dict[int, int]]:
-    """Count distinct (root, rotation) embeddings with origin fixed; area histogram."""
+def rooted_orientations(shape: Cluster, shape_area: int | None = None) -> Tuple[int, Dict[int, int]]:
+    """Count distinct (root, rotation) embeddings with origin fixed; area histogram.
+
+    Area is invariant under rotations/translations, so we compute it once per shape.
+    """
+
+    area = shape_area if shape_area is not None else compute_area(shape)
     oriented: set[Cluster] = set()
-    by_area: Dict[int, int] = {}
     for root in shape:
         shift = (-root[0], -root[1], -root[2])
         shifted = tuple((x + shift[0], y + shift[1], z + shift[2]) for x, y, z in shape)
         for rot in ROTATIONS:
-            rotated = tuple(apply_rotation(c, rot) for c in shifted)
-            rooted = canonicalize_rooted(rotated)
-            if rooted in oriented:
-                continue
+            rooted = canonicalize_rooted(apply_rotation(c, rot) for c in shifted)
             oriented.add(rooted)
-            area = compute_area(rooted)
-            by_area[area] = by_area.get(area, 0) + 1
-    return len(oriented), by_area
+
+    root_count = len(oriented)
+    return root_count, {area: root_count}
 
 
 def enumerate_counts(
