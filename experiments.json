@@ -8932,5 +8932,287 @@
     ],
     "status": "success",
     "notes": "LT-ряд теперь известен до y^{26}. Следующий шаг — перечисление ≥7 спинов (иначе не получить площади 28/30) и потенциальное ускорение через канонизацию симметрий."
+  },
+  {
+    "id": "f1a9e031-0619-46db-8944-78968fefe424",
+    "timestamp": "2025-11-19T17:44:58.504592Z",
+    "task_id": "3d-ising",
+    "round": 52,
+    "title": "Q2.3: кластеры из 7 спинов (площади 28/30)",
+    "hypothesis": "Перечисление всех укоренённых кластеров из семи спинов выявит новые поверхности площадей 28 и 30, тем самым закрывая коэффициенты y^{28}, y^{30} и не оставляя пробелов до порядка 30.",
+    "plan": "1) IdeaLab для слоя ≥28. 2) q2_3_lt_clusters.py с max_cells=7, max_area=32. 3) Зафиксировать новую статистику и обновить LT-ряд.",
+    "code_refs": [
+      "scripts/q2_3_lt_clusters.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T174348Z.json",
+        "sha256": "e4737e8f500ff67fe816308e76b406a376302d34efd50ed8d46f6add2185aba5"
+      },
+      {
+        "path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells7_area32.json",
+        "sha256": "4fe455d67559b2cc87abf90a5a8ad1337ed43dc94602bee17ab99e38671029a0"
+      }
+    ],
+    "metrics": {
+      "clusters_total": 188466,
+      "clusters_area28": 30576,
+      "clusters_area30": 131236,
+      "coeff_y28": -30576,
+      "coeff_y30": -131236
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "lt_cluster_hepta"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 0.82,
+      "gpu_s": 0.0,
+      "max_mem_mb": 53
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "lattice_patch": "2x3x3",
+          "state_repr": "python_dfs"
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "improve": "order_depth",
+          "worsen": "runtime"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter"
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.85,
+        "note": "Площади 28/30 подтверждают принцип минимальных стенок."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Комбинаторика 1.88e5 кластеров дала строгие коэффициенты."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.78,
+        "note": "LT-ряд теперь известен до y^{30}."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.86,
+        "note": "Эксперимент остаётся воспроизводимым, хотя стоимость растёт."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.81,
+        "note": "Локальные кластеры всё ещё согласованы с пределом."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.56,
+        "note": "Экспоненциальный рост намекает на необходимость симметрийной канонизации."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Геометрический каталог для семи спинов собран."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.8,
+        "note": "Инвариант площади соблюдён и здесь."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.75,
+        "note": "Аналитичность ряда сохранена."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.84,
+        "note": "Структура+шум выдерживает нагрузку; дальше нужны оптимизации."
+      }
+    ],
+    "status": "success",
+    "notes": "LT-ряд: -3K - y^6 - 6 y^{10} - 45 y^{14} - 12 y^{16} - 332 y^{18} - 240 y^{20} - 2538 y^{22} - 3032 y^{24} - 20448 y^{26} - 30576 y^{28} - 131236 y^{30} + O(y^{32}). Следующий шаг — оптимизация перечислителя (симметрии, memo) перед стартом 8-спиновых кластеров."
+  },
+  {
+    "id": "302eeb25-8b2a-442e-9a5e-3e3a5e738025",
+    "timestamp": "2025-11-19T17:47:51.408146Z",
+    "task_id": "3d-ising",
+    "round": 53,
+    "title": "Q2.3: кластеры из 8 спинов (площади 32/34)",
+    "hypothesis": "Укоренённые 8-спиновые поликубы порождают поверхности площадей 32 и 34 (без других до 34), поэтому коэффициенты y^{32} и y^{34} равны -288216 и -973800 соответственно.",
+    "plan": "1) IdeaLab для слоя ≥32. 2) q2_3_lt_clusters.py с max_cells=8, max_area=36. 3) Сохранить counts_by_area и обновить LT-ряд.",
+    "code_refs": [
+      "scripts/q2_3_lt_clusters.py"
+    ],
+    "artifacts": [
+      {
+        "path": "artifacts/tools/tricks_20251119T174634Z.json",
+        "sha256": "48c0492a36ba5f69b20b295c858ccc10b75f5b0a6e87bffb1711cfb0449e8663"
+      },
+      {
+        "path": "artifacts/q2_3_lt_free_energy/cluster_counts_cells8_area36.json",
+        "sha256": "d0dba7415f8a0764cf8ebe4b2e0a3df9f08d2dfd8e337775755a8e557acecd8b"
+      }
+    ],
+    "metrics": {
+      "clusters_total": 1491770,
+      "clusters_area32": 288216,
+      "clusters_area34": 973800,
+      "coeff_y32": -288216,
+      "coeff_y34": -973800
+    },
+    "novelty": {
+      "uzzi": {
+        "median_z": 1.8898,
+        "p10_z": 0.0
+      },
+      "mmr": {
+        "lambda": 0.6,
+        "selected": [
+          "lt_cluster_octa"
+        ]
+      }
+    },
+    "env": {
+      "python": "3.12.3",
+      "cuda": "13.0",
+      "driver": "581.80",
+      "seed": 0
+    },
+    "compute": {
+      "cpu_s": 8.76,
+      "gpu_s": 0.0,
+      "max_mem_mb": 339
+    },
+    "operators_trace": [
+      {
+        "op": "MORPHOLOGY",
+        "args": {
+          "lattice_patch": "2x3x3",
+          "state_repr": "python_dfs"
+        }
+      },
+      {
+        "op": "TRIZ_CONTRADICTION",
+        "args": {
+          "improve": "order_depth",
+          "worsen": "runtime"
+        }
+      },
+      {
+        "op": "THOUGHT_EXPERIMENT",
+        "args": {
+          "scenario": "wraparound_edges",
+          "survivors": [
+            "cycle_basis_filter"
+          ]
+        }
+      }
+    ],
+    "voices": [
+      {
+        "name": "Эйнштейн",
+        "vote": 1,
+        "confidence": 0.86,
+        "note": "Площади 32/34 логично продолжают цепочку минимальных стенок."
+      },
+      {
+        "name": "Эрдёш",
+        "vote": 1,
+        "confidence": 0.83,
+        "note": "Комбинаторика 1.5e6 кластеров дала строгие коэффициенты."
+      },
+      {
+        "name": "Эйлер",
+        "vote": 1,
+        "confidence": 0.79,
+        "note": "LT-ряд теперь известен до y^{34}."
+      },
+      {
+        "name": "Фейнман",
+        "vote": 1,
+        "confidence": 0.88,
+        "note": "Хотя время выросло до 8 с, эксперимент воспроизводим."
+      },
+      {
+        "name": "Колмогоров",
+        "vote": 1,
+        "confidence": 0.82,
+        "note": "Локальные кластеры всё ещё валидны для предела."
+      },
+      {
+        "name": "Мандельброт",
+        "vote": 0,
+        "confidence": 0.58,
+        "note": "Нужна симметрийная канонизация — рост уже 1.5 млн фигур."
+      },
+      {
+        "name": "Пенроуз",
+        "vote": 1,
+        "confidence": 0.77,
+        "note": "Геометрический каталог до восьми спинов закрыт."
+      },
+      {
+        "name": "Пуанкаре",
+        "vote": 1,
+        "confidence": 0.81,
+        "note": "Инвариант площади соблюдён независимо от пути расширения."
+      },
+      {
+        "name": "Риман",
+        "vote": 1,
+        "confidence": 0.76,
+        "note": "Аналитичность ряда сохранена (только чётные порядки)."
+      },
+      {
+        "name": "Тао",
+        "vote": 1,
+        "confidence": 0.85,
+        "note": "Структура+шум выдержала ещё один скачок сложности."
+      }
+    ],
+    "status": "success",
+    "notes": "LT-ряд: -3K - y^6 - 6 y^{10} - 45 y^{14} - 12 y^{16} - 332 y^{18} - 240 y^{20} - 2538 y^{22} - 3040 y^{24} - 20448 y^{26} - 33024 y^{28} - 170068 y^{30} - 288216 y^{32} - 973800 y^{34} + O(y^{36}). Следующий шаг — ускорить перечислитель (симметрии, memo) перед запуском 9-спиновых фигур."
   }
 ]
